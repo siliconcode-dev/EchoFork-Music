@@ -12,7 +12,7 @@ plugins {
 kotlin {
     jvmToolchain(21)
     android {
-        namespace = "echo.music.iad1tya.domain"
+        namespace = "echo.music.enhanced.domain"
         compileSdk = 37
         minSdk = 26
     }

@@ -1,9 +1,9 @@
 
 
-package echo.music.iad1tya.di
+package echo.music.enhanced.di
 
 import android.content.Context
-import echo.music.iad1tya.utils.NetworkConnectivityObserver
+import echo.music.enhanced.utils.NetworkConnectivityObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

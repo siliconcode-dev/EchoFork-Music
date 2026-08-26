@@ -13,7 +13,7 @@ kotlin {
 }
 
 android {
-    namespace = "echo.music.iad1tya.media3"
+    namespace = "echo.music.enhanced.media3"
     compileSdk = 37
 
     defaultConfig {

@@ -2,18 +2,18 @@
 
 @file:OptIn(ExperimentalCoroutinesApi::class)
 
-package echo.music.iad1tya.viewmodels
+package echo.music.enhanced.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import echo.music.iad1tya.constants.AddToPlaylistSortDescendingKey
-import echo.music.iad1tya.constants.AddToPlaylistSortTypeKey
-import echo.music.iad1tya.constants.PlaylistSortType
-import echo.music.iad1tya.db.MusicDatabase
-import echo.music.iad1tya.extensions.toEnum
-import echo.music.iad1tya.utils.SyncUtils
-import echo.music.iad1tya.utils.dataStore
+import echo.music.enhanced.constants.AddToPlaylistSortDescendingKey
+import echo.music.enhanced.constants.AddToPlaylistSortTypeKey
+import echo.music.enhanced.constants.PlaylistSortType
+import echo.music.enhanced.db.MusicDatabase
+import echo.music.enhanced.extensions.toEnum
+import echo.music.enhanced.utils.SyncUtils
+import echo.music.enhanced.utils.dataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens
+package echo.music.enhanced.ui.screens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -8,11 +8,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import echo.music.iad1tya.applecanvas.AppleMusicCanvasProvider
-import echo.music.iad1tya.echomusiccanvas.echomusicCanvasProvider
-import echo.music.iad1tya.canvas.CanvasArtwork
-import echo.music.iad1tya.canvas.TidalCanvasProvider
-import echo.music.iad1tya.ui.player.CanvasArtworkPlaybackCache
+import echo.music.enhanced.applecanvas.AppleMusicCanvasProvider
+import echo.music.enhanced.echomusiccanvas.echomusicCanvasProvider
+import echo.music.enhanced.canvas.CanvasArtwork
+import echo.music.enhanced.canvas.TidalCanvasProvider
+import echo.music.enhanced.ui.player.CanvasArtworkPlaybackCache
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Locale

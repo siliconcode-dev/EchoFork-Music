@@ -1,10 +1,10 @@
-package echo.music.iad1tya.db.daos
+package echo.music.enhanced.db.daos
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import echo.music.iad1tya.db.entities.SpeedDialItem
+import echo.music.enhanced.db.entities.SpeedDialItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao

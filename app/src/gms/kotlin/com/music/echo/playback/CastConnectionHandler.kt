@@ -1,4 +1,4 @@
-package echo.music.iad1tya.playback
+package echo.music.enhanced.playback
 
 import android.content.Context
 import android.net.Uri
@@ -20,10 +20,10 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient
 import com.google.android.gms.cast.framework.media.RemoteMediaClient.MediaChannelResult
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.images.WebImage
-import echo.music.iad1tya.extensions.metadata
-import echo.music.iad1tya.models.MediaMetadata as AppMediaMetadata
-import echo.music.iad1tya.ui.component.CastDeviceType
-import echo.music.iad1tya.ui.utils.resize
+import echo.music.enhanced.extensions.metadata
+import echo.music.enhanced.models.MediaMetadata as AppMediaMetadata
+import echo.music.enhanced.ui.component.CastDeviceType
+import echo.music.enhanced.ui.utils.resize
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

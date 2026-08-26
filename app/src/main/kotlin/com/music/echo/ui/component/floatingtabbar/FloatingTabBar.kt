@@ -20,7 +20,7 @@
  *   animation morphs around the center instead of the start edge.
  */
 
-package echo.music.iad1tya.ui.component.floatingtabbar
+package echo.music.enhanced.ui.component.floatingtabbar
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibilityScope

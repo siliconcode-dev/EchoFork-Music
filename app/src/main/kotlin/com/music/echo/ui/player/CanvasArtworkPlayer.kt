@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.player
+package echo.music.enhanced.ui.player
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

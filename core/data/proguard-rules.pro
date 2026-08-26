@@ -114,7 +114,7 @@
 -keep interface com.liskovsoft.** { *; }
 -keep class com.eclipsesource.v8.** { *; }
 -keep class com.liskovsoft.**
--keep class echo.music.iad1tya.kotlinytmusicscraper.** { *; }
+-keep class echo.music.enhanced.kotlinytmusicscraper.** { *; }
 
 
 ## Rules for NewPipeExtractor
@@ -122,49 +122,49 @@
 -keep class org.mozilla.classfile.ClassFileWriter
 -dontwarn org.mozilla.javascript.tools.**
 
--keep class echo.music.iad1tya.data.di.loader.LoaderKt { *; }
--keep class echo.music.iad1tya.data.mapping.MappingKt { *; }
--keep class echo.music.iad1tya.data.extension.** { *; }
+-keep class echo.music.enhanced.data.di.loader.LoaderKt { *; }
+-keep class echo.music.enhanced.data.mapping.MappingKt { *; }
+-keep class echo.music.enhanced.data.extension.** { *; }
 
--keep class echo.music.iad1tya.kotlinytmusicscraper.extension.** { *; }
--keep class echo.music.iad1tya.kotlinytmusicscraper.models.** { *; }
--keep class echo.music.iad1tya.kotlinytmusicscraper.parser.** { *; }
--keep class echo.music.iad1tya.kotlinytmusicscraper.pages.** { *; }
--keep class echo.music.iad1tya.kotlinytmusicscraper.utils.** { *; }
+-keep class echo.music.enhanced.kotlinytmusicscraper.extension.** { *; }
+-keep class echo.music.enhanced.kotlinytmusicscraper.models.** { *; }
+-keep class echo.music.enhanced.kotlinytmusicscraper.parser.** { *; }
+-keep class echo.music.enhanced.kotlinytmusicscraper.pages.** { *; }
+-keep class echo.music.enhanced.kotlinytmusicscraper.utils.** { *; }
 
--keep class echo.music.iad1tya.lyrics.parser.** { *; }
--keep class echo.music.iad1tya.lyrics.models.** { *; }
+-keep class echo.music.enhanced.lyrics.parser.** { *; }
+-keep class echo.music.enhanced.lyrics.models.** { *; }
 -keep class com.simpmusic.lyrics.parser.** { *; }
 
--dontwarn echo.music.iad1tya.kotlinytmusicscraper.YouTube$SearchFilter$Companion
--dontwarn echo.music.iad1tya.kotlinytmusicscraper.YouTube$SearchFilter
--dontwarn echo.music.iad1tya.kotlinytmusicscraper.YouTube
--dontwarn echo.music.iad1tya.media3.di.Media3ServiceModuleKt
--dontwarn echo.music.iad1tya.media3.exoplayer.ExoPlayerAdapter
--dontwarn echo.music.iad1tya.spotify.Spotify
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.CanvasResponse$Canvas$ThumbOfCanva
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.CanvasResponse$Canvas
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.CanvasResponse
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.ClientTokenResponse$GrantedToken
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.ClientTokenResponse
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.PersonalTokenResponse
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.SpotifyLyricsResponse$Lyrics$Line
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.SpotifyLyricsResponse$Lyrics
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.SpotifyLyricsResponse
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search$TracksV2$Items$Item$DataX$Duration
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search$TracksV2$Items$Item$DataX
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search$TracksV2$Items$Item
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search$TracksV2$Items
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search$TracksV2
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.search.SpotifySearchResponse$Data
--dontwarn echo.music.iad1tya.spotify.model.response.spotify.search.SpotifySearchResponse
--dontwarn echo.music.iad1tya.aiservice.AIHost
--dontwarn echo.music.iad1tya.aiservice.AiClient
--dontwarn echo.music.iad1tya.lyrics.SimpMusicLyricsClient
--dontwarn echo.music.iad1tya.lyrics.domain.Lyrics$LyricsX$Line
--dontwarn echo.music.iad1tya.lyrics.domain.Lyrics$LyricsX
--dontwarn echo.music.iad1tya.lyrics.domain.Lyrics
+-dontwarn echo.music.enhanced.kotlinytmusicscraper.YouTube$SearchFilter$Companion
+-dontwarn echo.music.enhanced.kotlinytmusicscraper.YouTube$SearchFilter
+-dontwarn echo.music.enhanced.kotlinytmusicscraper.YouTube
+-dontwarn echo.music.enhanced.media3.di.Media3ServiceModuleKt
+-dontwarn echo.music.enhanced.media3.exoplayer.ExoPlayerAdapter
+-dontwarn echo.music.enhanced.spotify.Spotify
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.CanvasResponse$Canvas$ThumbOfCanva
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.CanvasResponse$Canvas
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.CanvasResponse
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.ClientTokenResponse$GrantedToken
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.ClientTokenResponse
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.PersonalTokenResponse
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.SpotifyLyricsResponse$Lyrics$Line
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.SpotifyLyricsResponse$Lyrics
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.SpotifyLyricsResponse
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search$TracksV2$Items$Item$DataX$Duration
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search$TracksV2$Items$Item$DataX
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search$TracksV2$Items$Item
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search$TracksV2$Items
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search$TracksV2
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.search.SpotifySearchResponse$Data$Search
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.search.SpotifySearchResponse$Data
+-dontwarn echo.music.enhanced.spotify.model.response.spotify.search.SpotifySearchResponse
+-dontwarn echo.music.enhanced.aiservice.AIHost
+-dontwarn echo.music.enhanced.aiservice.AiClient
+-dontwarn echo.music.enhanced.lyrics.SimpMusicLyricsClient
+-dontwarn echo.music.enhanced.lyrics.domain.Lyrics$LyricsX$Line
+-dontwarn echo.music.enhanced.lyrics.domain.Lyrics$LyricsX
+-dontwarn echo.music.enhanced.lyrics.domain.Lyrics
 
 -keep class org.apache.commons.io.** { *; }
 

@@ -5,7 +5,7 @@
  * Do not remove or alter this notice. - Per GPL-3.0 Section 4 & Section 5
  */
 
-package echo.music.iad1tya.spotify.models
+package echo.music.enhanced.spotify.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

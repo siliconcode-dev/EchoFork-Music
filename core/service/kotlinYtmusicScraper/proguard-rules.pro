@@ -119,7 +119,7 @@
 -keep class org.mozilla.classfile.ClassFileWriter
 -dontwarn org.mozilla.javascript.tools.**
 
--keep class echo.music.iad1tya.kotlinytmusicscraper.** { *; }
+-keep class echo.music.enhanced.kotlinytmusicscraper.** { *; }
 
 -keep class com.liskovsoft.**
 

@@ -1,9 +1,9 @@
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import echo.music.iad1tya.BuildConfig
-import echo.music.iad1tya.R
+import echo.music.enhanced.BuildConfig
+import echo.music.enhanced.R
 
 data class SearchableSetting(
     val title: String,

@@ -25,8 +25,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        submodules: recursive
+      # core modules are vendored in-repo; no submodules to initialise.
 
     - name: Setup Java
       uses: actions/setup-java@v4

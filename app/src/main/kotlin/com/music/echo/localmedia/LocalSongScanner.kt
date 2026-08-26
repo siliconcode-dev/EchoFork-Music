@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.localmedia
+package echo.music.enhanced.localmedia
 
 import android.content.ContentUris
 import android.content.Context
@@ -10,16 +10,16 @@ import android.provider.MediaStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import echo.music.iad1tya.R
-import echo.music.iad1tya.db.MusicDatabase
-import echo.music.iad1tya.db.entities.AlbumArtistMap
-import echo.music.iad1tya.db.entities.AlbumEntity
-import echo.music.iad1tya.db.entities.ArtistEntity
-import echo.music.iad1tya.db.entities.FormatEntity
-import echo.music.iad1tya.db.entities.Song
-import echo.music.iad1tya.db.entities.SongAlbumMap
-import echo.music.iad1tya.db.entities.SongArtistMap
-import echo.music.iad1tya.db.entities.SongEntity
+import echo.music.enhanced.R
+import echo.music.enhanced.db.MusicDatabase
+import echo.music.enhanced.db.entities.AlbumArtistMap
+import echo.music.enhanced.db.entities.AlbumEntity
+import echo.music.enhanced.db.entities.ArtistEntity
+import echo.music.enhanced.db.entities.FormatEntity
+import echo.music.enhanced.db.entities.Song
+import echo.music.enhanced.db.entities.SongAlbumMap
+import echo.music.enhanced.db.entities.SongArtistMap
+import echo.music.enhanced.db.entities.SongEntity
 import java.nio.charset.StandardCharsets
 import java.time.Instant
 import java.time.LocalDateTime

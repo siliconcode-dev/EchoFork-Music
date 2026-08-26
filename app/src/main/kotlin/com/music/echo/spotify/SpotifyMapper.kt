@@ -5,10 +5,10 @@
  * Do not remove or alter this notice. - Per GPL-3.0 Section 4 & Section 5
  */
 
-package echo.music.iad1tya.spotify
+package echo.music.enhanced.spotify
 
-import echo.music.iad1tya.spotify.models.SpotifyPlaylist
-import echo.music.iad1tya.spotify.models.SpotifyTrack
+import echo.music.enhanced.spotify.models.SpotifyPlaylist
+import echo.music.enhanced.spotify.models.SpotifyTrack
 
 /**
  * Utility object for creating search queries from Spotify track data.

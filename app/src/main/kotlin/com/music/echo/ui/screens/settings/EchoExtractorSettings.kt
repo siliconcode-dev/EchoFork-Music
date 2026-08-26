@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
@@ -46,18 +46,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.CipherLastUpdatedKey
-import echo.music.iad1tya.constants.CipherManualUpdate1Key
-import echo.music.iad1tya.constants.CipherManualUpdate2Key
-import echo.music.iad1tya.constants.CipherManualUpdate3Key
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.Material3SettingsGroup
-import echo.music.iad1tya.ui.component.Material3SettingsItem
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.utils.cipher.PlayerConfigStore
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.CipherLastUpdatedKey
+import echo.music.enhanced.constants.CipherManualUpdate1Key
+import echo.music.enhanced.constants.CipherManualUpdate2Key
+import echo.music.enhanced.constants.CipherManualUpdate3Key
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.Material3SettingsGroup
+import echo.music.enhanced.ui.component.Material3SettingsItem
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.utils.cipher.PlayerConfigStore
+import echo.music.enhanced.utils.rememberPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

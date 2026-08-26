@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.screens
+package echo.music.enhanced.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,19 +20,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.music.innertube.utils.parseCookieString
-import echo.music.iad1tya.BuildConfig
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.AccountEmailKey
-import echo.music.iad1tya.constants.InnerTubeCookieKey
-import echo.music.iad1tya.constants.UseLoginForBrowse
-import echo.music.iad1tya.constants.YtmSyncKey
-import echo.music.iad1tya.constants.AudioQualityKey
-import echo.music.iad1tya.constants.AudioQuality
-import echo.music.iad1tya.ui.component.Material3SettingsGroup
-import echo.music.iad1tya.ui.component.Material3SettingsItem
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.utils.rememberPreference
-import echo.music.iad1tya.viewmodels.HomeViewModel
+import echo.music.enhanced.BuildConfig
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.AccountEmailKey
+import echo.music.enhanced.constants.InnerTubeCookieKey
+import echo.music.enhanced.constants.UseLoginForBrowse
+import echo.music.enhanced.constants.YtmSyncKey
+import echo.music.enhanced.constants.AudioQualityKey
+import echo.music.enhanced.constants.AudioQuality
+import echo.music.enhanced.ui.component.Material3SettingsGroup
+import echo.music.enhanced.ui.component.Material3SettingsItem
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.utils.rememberPreference
+import echo.music.enhanced.viewmodels.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

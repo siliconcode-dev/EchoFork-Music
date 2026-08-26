@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.models
+package echo.music.enhanced.models
 
 import com.music.innertube.models.YTItem
 

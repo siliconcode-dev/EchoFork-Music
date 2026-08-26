@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.artist
+package echo.music.enhanced.ui.screens.artist
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -42,20 +42,20 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.CONTENT_TYPE_ALBUM
-import echo.music.iad1tya.constants.CONTENT_TYPE_HEADER
-import echo.music.iad1tya.constants.GridItemSize
-import echo.music.iad1tya.constants.GridItemsSizeKey
-import echo.music.iad1tya.constants.GridThumbnailHeight
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.LibraryAlbumGridItem
-import echo.music.iad1tya.ui.component.LocalMenuState
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.viewmodels.ArtistAlbumsViewModel
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.CONTENT_TYPE_ALBUM
+import echo.music.enhanced.constants.CONTENT_TYPE_HEADER
+import echo.music.enhanced.constants.GridItemSize
+import echo.music.enhanced.constants.GridItemsSizeKey
+import echo.music.enhanced.constants.GridThumbnailHeight
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.LibraryAlbumGridItem
+import echo.music.enhanced.ui.component.LocalMenuState
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.viewmodels.ArtistAlbumsViewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable

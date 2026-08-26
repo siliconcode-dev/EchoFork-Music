@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.search
+package echo.music.enhanced.ui.screens.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -74,22 +74,22 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import com.music.innertube.models.WatchEndpoint
 import com.music.innertube.utils.YouTubeUrlParser
-import echo.music.iad1tya.LocalDatabase
-import echo.music.iad1tya.LocalIsPlayerExpanded
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.PauseSearchHistoryKey
-import echo.music.iad1tya.constants.SearchSource
-import echo.music.iad1tya.constants.SearchSourceKey
-import echo.music.iad1tya.db.entities.SearchHistory
-import echo.music.iad1tya.playback.queues.YouTubeQueue
-import echo.music.iad1tya.ui.component.NavigationTitle
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.utils.rememberPreference
-import echo.music.iad1tya.viewmodels.MoodAndGenresViewModel
-import echo.music.iad1tya.viewmodels.ExploreViewModel
-import echo.music.iad1tya.ui.screens.search.suggestions.SuggestionsTabContent
+import echo.music.enhanced.LocalDatabase
+import echo.music.enhanced.LocalIsPlayerExpanded
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.PauseSearchHistoryKey
+import echo.music.enhanced.constants.SearchSource
+import echo.music.enhanced.constants.SearchSourceKey
+import echo.music.enhanced.db.entities.SearchHistory
+import echo.music.enhanced.playback.queues.YouTubeQueue
+import echo.music.enhanced.ui.component.NavigationTitle
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.utils.rememberPreference
+import echo.music.enhanced.viewmodels.MoodAndGenresViewModel
+import echo.music.enhanced.viewmodels.ExploreViewModel
+import echo.music.enhanced.ui.screens.search.suggestions.SuggestionsTabContent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.URLEncoder
@@ -107,12 +107,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import echo.music.iad1tya.ui.component.LocalMenuState
-import echo.music.iad1tya.ui.component.YouTubeGridItem
-import echo.music.iad1tya.ui.menu.YouTubeAlbumMenu
-import echo.music.iad1tya.constants.GridThumbnailHeight
-import echo.music.iad1tya.constants.GridItemsSizeKey
-import echo.music.iad1tya.constants.GridItemSize
+import echo.music.enhanced.ui.component.LocalMenuState
+import echo.music.enhanced.ui.component.YouTubeGridItem
+import echo.music.enhanced.ui.menu.YouTubeAlbumMenu
+import echo.music.enhanced.constants.GridThumbnailHeight
+import echo.music.enhanced.constants.GridItemsSizeKey
+import echo.music.enhanced.constants.GridItemSize
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

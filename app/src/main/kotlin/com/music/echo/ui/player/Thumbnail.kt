@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.player
+package echo.music.enhanced.ui.player
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
@@ -79,31 +79,31 @@ import coil3.SingletonImageLoader
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.CropAlbumArtKey
-import echo.music.iad1tya.constants.HidePlayerThumbnailKey
-import echo.music.iad1tya.constants.PlayerBackgroundStyle
-import echo.music.iad1tya.constants.PlayerBackgroundStyleKey
-import echo.music.iad1tya.constants.PlayerHorizontalPadding
-import echo.music.iad1tya.constants.RotatingThumbnailKey
-import echo.music.iad1tya.constants.SeekExtraSeconds
-import echo.music.iad1tya.constants.SwipeThumbnailKey
-import echo.music.iad1tya.constants.ThumbnailCornerRadiusKey
-import echo.music.iad1tya.constants.ThumbnailCornerRadius
-import echo.music.iad1tya.ui.component.CastButton
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.constants.CanvasThumbnailAnimationKey
-import echo.music.iad1tya.canvas.TidalCanvasProvider
-import echo.music.iad1tya.canvas.CanvasArtwork
-import echo.music.iad1tya.extensions.metadata
-import echo.music.iad1tya.ui.utils.resize
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.CropAlbumArtKey
+import echo.music.enhanced.constants.HidePlayerThumbnailKey
+import echo.music.enhanced.constants.PlayerBackgroundStyle
+import echo.music.enhanced.constants.PlayerBackgroundStyleKey
+import echo.music.enhanced.constants.PlayerHorizontalPadding
+import echo.music.enhanced.constants.RotatingThumbnailKey
+import echo.music.enhanced.constants.SeekExtraSeconds
+import echo.music.enhanced.constants.SwipeThumbnailKey
+import echo.music.enhanced.constants.ThumbnailCornerRadiusKey
+import echo.music.enhanced.constants.ThumbnailCornerRadius
+import echo.music.enhanced.ui.component.CastButton
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.constants.CanvasThumbnailAnimationKey
+import echo.music.enhanced.canvas.TidalCanvasProvider
+import echo.music.enhanced.canvas.CanvasArtwork
+import echo.music.enhanced.extensions.metadata
+import echo.music.enhanced.ui.utils.resize
+import echo.music.enhanced.utils.rememberPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.delay
-import echo.music.iad1tya.applecanvas.AppleMusicCanvasProvider
-import echo.music.iad1tya.echomusiccanvas.echomusicCanvasProvider
+import echo.music.enhanced.applecanvas.AppleMusicCanvasProvider
+import echo.music.enhanced.echomusiccanvas.echomusicCanvasProvider
 import java.util.Locale
 
 
@@ -563,7 +563,7 @@ private fun ThumbnailItem(
     textBackgroundColor: Color,
     layoutDirection: LayoutDirection,
     onSeek: (String, Boolean) -> Unit,
-    playerConnection: echo.music.iad1tya.playback.PlayerConnection,
+    playerConnection: echo.music.enhanced.playback.PlayerConnection,
     context: android.content.Context,
     lazyGridState: androidx.compose.foundation.lazy.grid.LazyGridState,
     isLandscape: Boolean = false,

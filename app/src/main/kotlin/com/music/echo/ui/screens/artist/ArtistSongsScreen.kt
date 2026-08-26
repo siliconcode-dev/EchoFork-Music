@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.artist
+package echo.music.enhanced.ui.screens.artist
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -34,27 +34,27 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.ArtistSongSortDescendingKey
-import echo.music.iad1tya.constants.ArtistSongSortType
-import echo.music.iad1tya.constants.ArtistSongSortTypeKey
-import echo.music.iad1tya.constants.CONTENT_TYPE_HEADER
-import echo.music.iad1tya.constants.HideExplicitKey
-import echo.music.iad1tya.extensions.toMediaItem
-import echo.music.iad1tya.playback.queues.ListQueue
-import echo.music.iad1tya.ui.component.HideOnScrollFAB
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.LocalMenuState
-import echo.music.iad1tya.ui.component.SongListItem
-import echo.music.iad1tya.ui.component.SortHeader
-import echo.music.iad1tya.ui.menu.SongMenu
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.utils.listItemShape
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.utils.rememberPreference
-import echo.music.iad1tya.viewmodels.ArtistSongsViewModel
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.ArtistSongSortDescendingKey
+import echo.music.enhanced.constants.ArtistSongSortType
+import echo.music.enhanced.constants.ArtistSongSortTypeKey
+import echo.music.enhanced.constants.CONTENT_TYPE_HEADER
+import echo.music.enhanced.constants.HideExplicitKey
+import echo.music.enhanced.extensions.toMediaItem
+import echo.music.enhanced.playback.queues.ListQueue
+import echo.music.enhanced.ui.component.HideOnScrollFAB
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.LocalMenuState
+import echo.music.enhanced.ui.component.SongListItem
+import echo.music.enhanced.ui.component.SortHeader
+import echo.music.enhanced.ui.menu.SongMenu
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.utils.listItemShape
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.utils.rememberPreference
+import echo.music.enhanced.viewmodels.ArtistSongsViewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable

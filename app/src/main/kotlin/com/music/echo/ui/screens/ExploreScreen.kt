@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens
+package echo.music.enhanced.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -58,25 +58,25 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.music.innertube.models.SongItem
 import com.music.innertube.models.WatchEndpoint
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.ListItemHeight
-import echo.music.iad1tya.models.toMediaMetadata
-import echo.music.iad1tya.playback.queues.YouTubeQueue
-import echo.music.iad1tya.ui.component.LocalMenuState
-import echo.music.iad1tya.ui.component.NavigationTitle
-import echo.music.iad1tya.ui.component.YouTubeGridItem
-import echo.music.iad1tya.ui.component.YouTubeListItem
-import echo.music.iad1tya.ui.component.shimmer.GridItemPlaceHolder
-import echo.music.iad1tya.ui.component.shimmer.ShimmerHost
-import echo.music.iad1tya.ui.component.shimmer.TextPlaceholder
-import echo.music.iad1tya.ui.menu.YouTubeAlbumMenu
-import echo.music.iad1tya.ui.menu.YouTubeSongMenu
-import echo.music.iad1tya.ui.utils.SnapLayoutInfoProvider
-import echo.music.iad1tya.utils.listItemShape
-import echo.music.iad1tya.viewmodels.ChartsViewModel
-import echo.music.iad1tya.viewmodels.ExploreViewModel
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.ListItemHeight
+import echo.music.enhanced.models.toMediaMetadata
+import echo.music.enhanced.playback.queues.YouTubeQueue
+import echo.music.enhanced.ui.component.LocalMenuState
+import echo.music.enhanced.ui.component.NavigationTitle
+import echo.music.enhanced.ui.component.YouTubeGridItem
+import echo.music.enhanced.ui.component.YouTubeListItem
+import echo.music.enhanced.ui.component.shimmer.GridItemPlaceHolder
+import echo.music.enhanced.ui.component.shimmer.ShimmerHost
+import echo.music.enhanced.ui.component.shimmer.TextPlaceholder
+import echo.music.enhanced.ui.menu.YouTubeAlbumMenu
+import echo.music.enhanced.ui.menu.YouTubeSongMenu
+import echo.music.enhanced.ui.utils.SnapLayoutInfoProvider
+import echo.music.enhanced.utils.listItemShape
+import echo.music.enhanced.viewmodels.ChartsViewModel
+import echo.music.enhanced.viewmodels.ExploreViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable

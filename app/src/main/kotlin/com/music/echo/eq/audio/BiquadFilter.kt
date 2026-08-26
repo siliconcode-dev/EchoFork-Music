@@ -1,6 +1,6 @@
-package echo.music.iad1tya.eq.audio
+package echo.music.enhanced.eq.audio
 
-import echo.music.iad1tya.eq.data.FilterType
+import echo.music.enhanced.eq.data.FilterType
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.pow

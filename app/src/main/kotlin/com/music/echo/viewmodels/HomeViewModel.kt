@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.viewmodels
+package echo.music.enhanced.viewmodels
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
@@ -23,24 +23,24 @@ import com.music.innertube.models.filterYoutubeShorts
 import com.music.innertube.pages.ExplorePage
 import com.music.innertube.pages.HomePage
 import com.music.innertube.utils.completed
-import echo.music.iad1tya.constants.HideExplicitKey
-import echo.music.iad1tya.constants.HideVideoSongsKey
-import echo.music.iad1tya.constants.HideYoutubeShortsKey
-import echo.music.iad1tya.constants.InnerTubeCookieKey
-import echo.music.iad1tya.constants.QuickPicks
-import echo.music.iad1tya.constants.QuickPicksKey
-import echo.music.iad1tya.db.MusicDatabase
-import echo.music.iad1tya.db.entities.Album
-import echo.music.iad1tya.db.entities.LocalItem
-import echo.music.iad1tya.db.entities.Song
-import echo.music.iad1tya.db.entities.SpeedDialItem
-import echo.music.iad1tya.extensions.filterVideoSongs
-import echo.music.iad1tya.extensions.toEnum
-import echo.music.iad1tya.models.SimilarRecommendation
-import echo.music.iad1tya.utils.SyncUtils
-import echo.music.iad1tya.utils.dataStore
-import echo.music.iad1tya.utils.get
-import echo.music.iad1tya.utils.reportException
+import echo.music.enhanced.constants.HideExplicitKey
+import echo.music.enhanced.constants.HideVideoSongsKey
+import echo.music.enhanced.constants.HideYoutubeShortsKey
+import echo.music.enhanced.constants.InnerTubeCookieKey
+import echo.music.enhanced.constants.QuickPicks
+import echo.music.enhanced.constants.QuickPicksKey
+import echo.music.enhanced.db.MusicDatabase
+import echo.music.enhanced.db.entities.Album
+import echo.music.enhanced.db.entities.LocalItem
+import echo.music.enhanced.db.entities.Song
+import echo.music.enhanced.db.entities.SpeedDialItem
+import echo.music.enhanced.extensions.filterVideoSongs
+import echo.music.enhanced.extensions.toEnum
+import echo.music.enhanced.models.SimilarRecommendation
+import echo.music.enhanced.utils.SyncUtils
+import echo.music.enhanced.utils.dataStore
+import echo.music.enhanced.utils.get
+import echo.music.enhanced.utils.reportException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers

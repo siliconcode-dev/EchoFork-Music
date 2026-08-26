@@ -28,6 +28,12 @@ plugins {
 // Force it to `always` so `Res` is generated for this app module.
 compose.resources {
     generateResClass = always
+    // Pinned explicitly. Compose otherwise derives this package from
+    // `rootProject.name`, so renaming the project would silently move the
+    // generated `Res` class and break ~755 import statements across the
+    // codebase. Keeping it fixed decouples the Gradle project name from
+    // the resource package.
+    packageOfResClass = "echomusic.composeapp.generated.resources"
 }
 
 kotlin {
@@ -38,7 +44,7 @@ kotlin {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
     android {
-        namespace = "echo.music.iad1tya.composeapp"
+        namespace = "echo.music.enhanced.composeapp"
         compileSdk = 37
         minSdk = 26
         withJava()
@@ -175,7 +181,7 @@ kotlin {
 
 
 buildkonfig {
-    packageName = "echo.music.iad1tya"
+    packageName = "echo.music.enhanced"
     exposeObjectWithName = "BuildKonfig"
     defaultConfigs {
         val versionName =

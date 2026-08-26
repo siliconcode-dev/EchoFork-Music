@@ -18,7 +18,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     android {
-        namespace = "echo.music.iad1tya.kotlinytmusicscraper"
+        namespace = "echo.music.enhanced.kotlinytmusicscraper"
         compileSdk = 37
         minSdk = 26
     }

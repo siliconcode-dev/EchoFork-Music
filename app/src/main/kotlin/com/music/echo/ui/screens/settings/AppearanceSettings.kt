@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import android.app.Activity
 import android.content.Context
@@ -56,77 +56,77 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.CanvasThumbnailAnimationKey
-import echo.music.iad1tya.constants.ChipSortTypeKey
-import echo.music.iad1tya.constants.CropAlbumArtKey
-import echo.music.iad1tya.constants.DefaultOpenTabKey
-import echo.music.iad1tya.constants.DensityScale
-import echo.music.iad1tya.constants.DensityScaleKey
-import echo.music.iad1tya.constants.DynamicThemeKey
-import echo.music.iad1tya.constants.EnableDynamicIconKey
-import echo.music.iad1tya.constants.EnableHighRefreshRateKey
-import echo.music.iad1tya.constants.EnableHapticsKey
-import echo.music.iad1tya.constants.EnableLyricsThumbnailPlayPauseKey
-import echo.music.iad1tya.constants.GridItemSize
-import echo.music.iad1tya.constants.GridItemsSizeKey
-import echo.music.iad1tya.constants.HidePlayerThumbnailKey
-import echo.music.iad1tya.constants.LibraryFilter
-import echo.music.iad1tya.constants.LyricsAnimationStyle
-import echo.music.iad1tya.constants.LyricsAnimationStyleKey
-import echo.music.iad1tya.constants.LyricsStandardBlurKey
-import echo.music.iad1tya.constants.LyricsTextPositionKey
-import echo.music.iad1tya.constants.LyricsTextSizeKey
-import echo.music.iad1tya.constants.PlayerBackgroundStyle
-import echo.music.iad1tya.constants.PlayerBackgroundStyleKey
-import echo.music.iad1tya.constants.PlayerButtonsStyle
-import echo.music.iad1tya.constants.PlayerButtonsStyleKey
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.CanvasThumbnailAnimationKey
+import echo.music.enhanced.constants.ChipSortTypeKey
+import echo.music.enhanced.constants.CropAlbumArtKey
+import echo.music.enhanced.constants.DefaultOpenTabKey
+import echo.music.enhanced.constants.DensityScale
+import echo.music.enhanced.constants.DensityScaleKey
+import echo.music.enhanced.constants.DynamicThemeKey
+import echo.music.enhanced.constants.EnableDynamicIconKey
+import echo.music.enhanced.constants.EnableHighRefreshRateKey
+import echo.music.enhanced.constants.EnableHapticsKey
+import echo.music.enhanced.constants.EnableLyricsThumbnailPlayPauseKey
+import echo.music.enhanced.constants.GridItemSize
+import echo.music.enhanced.constants.GridItemsSizeKey
+import echo.music.enhanced.constants.HidePlayerThumbnailKey
+import echo.music.enhanced.constants.LibraryFilter
+import echo.music.enhanced.constants.LyricsAnimationStyle
+import echo.music.enhanced.constants.LyricsAnimationStyleKey
+import echo.music.enhanced.constants.LyricsStandardBlurKey
+import echo.music.enhanced.constants.LyricsTextPositionKey
+import echo.music.enhanced.constants.LyricsTextSizeKey
+import echo.music.enhanced.constants.PlayerBackgroundStyle
+import echo.music.enhanced.constants.PlayerBackgroundStyleKey
+import echo.music.enhanced.constants.PlayerButtonsStyle
+import echo.music.enhanced.constants.PlayerButtonsStyleKey
 
-import echo.music.iad1tya.constants.RotatingThumbnailKey
-import echo.music.iad1tya.constants.SelectedThemeColorKey
-import echo.music.iad1tya.constants.ShowCachedPlaylistKey
-import echo.music.iad1tya.constants.ShowExportedPlaylistKey
-import echo.music.iad1tya.constants.ShowDownloadedPlaylistKey
-import echo.music.iad1tya.constants.ShowLikedPlaylistKey
-import echo.music.iad1tya.constants.ShowTopPlaylistKey
-import echo.music.iad1tya.constants.ShowUploadedPlaylistKey
-import echo.music.iad1tya.constants.SliderStyle
-import echo.music.iad1tya.constants.SliderStyleKey
-import echo.music.iad1tya.constants.SquigglySliderKey
-import echo.music.iad1tya.constants.SwipeSensitivityKey
-import echo.music.iad1tya.constants.SwipeThumbnailKey
-import echo.music.iad1tya.constants.SwipeLyricsKey
-import echo.music.iad1tya.constants.SwipeToRemoveSongKey
-import echo.music.iad1tya.constants.SwipeToSongKey
-import echo.music.iad1tya.constants.ThumbnailCornerRadiusKey
+import echo.music.enhanced.constants.RotatingThumbnailKey
+import echo.music.enhanced.constants.SelectedThemeColorKey
+import echo.music.enhanced.constants.ShowCachedPlaylistKey
+import echo.music.enhanced.constants.ShowExportedPlaylistKey
+import echo.music.enhanced.constants.ShowDownloadedPlaylistKey
+import echo.music.enhanced.constants.ShowLikedPlaylistKey
+import echo.music.enhanced.constants.ShowTopPlaylistKey
+import echo.music.enhanced.constants.ShowUploadedPlaylistKey
+import echo.music.enhanced.constants.SliderStyle
+import echo.music.enhanced.constants.SliderStyleKey
+import echo.music.enhanced.constants.SquigglySliderKey
+import echo.music.enhanced.constants.SwipeSensitivityKey
+import echo.music.enhanced.constants.SwipeThumbnailKey
+import echo.music.enhanced.constants.SwipeLyricsKey
+import echo.music.enhanced.constants.SwipeToRemoveSongKey
+import echo.music.enhanced.constants.SwipeToSongKey
+import echo.music.enhanced.constants.ThumbnailCornerRadiusKey
 
-import echo.music.iad1tya.constants.UseNewPlayerDesignKey
-import echo.music.iad1tya.ui.component.ThumbnailCornerRadiusModal
-import echo.music.iad1tya.ui.component.DefaultDialog
-import echo.music.iad1tya.ui.component.EnumDialog
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.Material3SettingsGroup
-import echo.music.iad1tya.ui.component.Material3SettingsItem
-import echo.music.iad1tya.ui.component.PlayerSliderTrack
-import echo.music.iad1tya.ui.component.SquigglySlider
-import echo.music.iad1tya.ui.component.WavySlider
-import echo.music.iad1tya.ui.theme.DefaultThemeColor
-import echo.music.iad1tya.ui.theme.PlayerSliderColors
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.utils.IconUtils
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.constants.UseNewPlayerDesignKey
+import echo.music.enhanced.ui.component.ThumbnailCornerRadiusModal
+import echo.music.enhanced.ui.component.DefaultDialog
+import echo.music.enhanced.ui.component.EnumDialog
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.Material3SettingsGroup
+import echo.music.enhanced.ui.component.Material3SettingsItem
+import echo.music.enhanced.ui.component.PlayerSliderTrack
+import echo.music.enhanced.ui.component.SquigglySlider
+import echo.music.enhanced.ui.component.WavySlider
+import echo.music.enhanced.ui.theme.DefaultThemeColor
+import echo.music.enhanced.ui.theme.PlayerSliderColors
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.utils.IconUtils
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.utils.rememberPreference
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
-import echo.music.iad1tya.constants.LyricsClickKey
-import echo.music.iad1tya.constants.AppleMusicLyricsBlurKey
-import echo.music.iad1tya.constants.LyricsGlowEffectKey
-import echo.music.iad1tya.constants.LyricsLineSpacingKey
-import echo.music.iad1tya.constants.LyricsScrollKey
-import echo.music.iad1tya.constants.HideStatusBarOnFullscreenKey
-import echo.music.iad1tya.constants.MiniPlayerBackgroundStyleKey
-import echo.music.iad1tya.constants.ShowCommentButtonKey
+import echo.music.enhanced.constants.LyricsClickKey
+import echo.music.enhanced.constants.AppleMusicLyricsBlurKey
+import echo.music.enhanced.constants.LyricsGlowEffectKey
+import echo.music.enhanced.constants.LyricsLineSpacingKey
+import echo.music.enhanced.constants.LyricsScrollKey
+import echo.music.enhanced.constants.HideStatusBarOnFullscreenKey
+import echo.music.enhanced.constants.MiniPlayerBackgroundStyleKey
+import echo.music.enhanced.constants.ShowCommentButtonKey
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -143,15 +143,15 @@ highlightKey: String? = null) {
         defaultValue = true
     )
     val (enableLegacyIcon, onEnableLegacyIconChange) = rememberPreference(
-        echo.music.iad1tya.constants.EnableLegacyIconKey,
+        echo.music.enhanced.constants.EnableLegacyIconKey,
         defaultValue = false
     )
     val (enableHighRefreshRate, onEnableHighRefreshRateChange) = rememberPreference(
-        echo.music.iad1tya.constants.EnableHighRefreshRateKey,
+        echo.music.enhanced.constants.EnableHighRefreshRateKey,
         defaultValue = true
     )
     val (enableHaptics, onEnableHapticsChange) = rememberPreference(
-        echo.music.iad1tya.constants.EnableHapticsKey,
+        echo.music.enhanced.constants.EnableHapticsKey,
         defaultValue = false
     )
     val (selectedThemeColorInt) = rememberPreference(
@@ -187,11 +187,11 @@ highlightKey: String? = null) {
         defaultValue = true
     )
     val (showCodecOnPlayer, onShowCodecOnPlayerChange) = rememberPreference(
-        echo.music.iad1tya.constants.ShowCodecOnPlayerKey,
+        echo.music.enhanced.constants.ShowCodecOnPlayerKey,
         defaultValue = false
     )
     val (hidePlayerSlider, onHidePlayerSliderChange) = rememberPreference(
-        echo.music.iad1tya.constants.HidePlayerSliderKey,
+        echo.music.enhanced.constants.HidePlayerSliderKey,
         defaultValue = false
     )
     val (hidePlayerThumbnail, onHidePlayerThumbnailChange) = rememberPreference(

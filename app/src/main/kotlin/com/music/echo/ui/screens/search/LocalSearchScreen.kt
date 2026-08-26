@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.search
+package echo.music.enhanced.ui.screens.search
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -42,28 +42,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.CONTENT_TYPE_LIST
-import echo.music.iad1tya.constants.ListItemHeight
-import echo.music.iad1tya.db.entities.Album
-import echo.music.iad1tya.db.entities.Artist
-import echo.music.iad1tya.db.entities.Playlist
-import echo.music.iad1tya.db.entities.Song
-import echo.music.iad1tya.extensions.toMediaItem
-import echo.music.iad1tya.playback.queues.ListQueue
-import echo.music.iad1tya.ui.component.AlbumListItem
-import echo.music.iad1tya.ui.component.ArtistListItem
-import echo.music.iad1tya.ui.component.ChipsRow
-import echo.music.iad1tya.ui.component.EmptyPlaceholder
-import echo.music.iad1tya.ui.component.LocalMenuState
-import echo.music.iad1tya.ui.component.PlaylistListItem
-import echo.music.iad1tya.ui.component.SongListItem
-import echo.music.iad1tya.ui.menu.SongMenu
-import echo.music.iad1tya.utils.listItemShape
-import echo.music.iad1tya.viewmodels.LocalFilter
-import echo.music.iad1tya.viewmodels.LocalSearchViewModel
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.CONTENT_TYPE_LIST
+import echo.music.enhanced.constants.ListItemHeight
+import echo.music.enhanced.db.entities.Album
+import echo.music.enhanced.db.entities.Artist
+import echo.music.enhanced.db.entities.Playlist
+import echo.music.enhanced.db.entities.Song
+import echo.music.enhanced.extensions.toMediaItem
+import echo.music.enhanced.playback.queues.ListQueue
+import echo.music.enhanced.ui.component.AlbumListItem
+import echo.music.enhanced.ui.component.ArtistListItem
+import echo.music.enhanced.ui.component.ChipsRow
+import echo.music.enhanced.ui.component.EmptyPlaceholder
+import echo.music.enhanced.ui.component.LocalMenuState
+import echo.music.enhanced.ui.component.PlaylistListItem
+import echo.music.enhanced.ui.component.SongListItem
+import echo.music.enhanced.ui.menu.SongMenu
+import echo.music.enhanced.utils.listItemShape
+import echo.music.enhanced.viewmodels.LocalFilter
+import echo.music.enhanced.viewmodels.LocalSearchViewModel
 import kotlinx.coroutines.flow.drop
 
 @OptIn(ExperimentalFoundationApi::class)

@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.component
+package echo.music.enhanced.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -45,7 +45,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.core.content.ContextCompat
-import echo.music.iad1tya.echomusic.updater.extractUrls
+import echo.music.enhanced.echomusic.updater.extractUrls
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontFamily
 @Composable

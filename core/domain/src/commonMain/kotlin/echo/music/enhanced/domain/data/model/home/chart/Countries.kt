@@ -1,0 +1,6 @@
+package echo.music.enhanced.domain.data.model.home.chart
+
+data class Countries(
+    val options: List<String>,
+    val selected: Selected,
+)

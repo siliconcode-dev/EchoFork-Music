@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.menu
+package echo.music.enhanced.ui.menu
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -35,18 +35,18 @@ import androidx.media3.exoplayer.offline.DownloadRequest
 import androidx.media3.exoplayer.offline.DownloadService
 import com.music.innertube.YouTube
 import com.music.innertube.models.SongItem
-import echo.music.iad1tya.LocalDatabase
-import echo.music.iad1tya.LocalDownloadUtil
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.LocalSyncUtils
-import echo.music.iad1tya.R
-import echo.music.iad1tya.extensions.toMediaItem
-import echo.music.iad1tya.models.toMediaMetadata
-import echo.music.iad1tya.playback.ExoDownloadService
-import echo.music.iad1tya.playback.queues.ListQueue
-import echo.music.iad1tya.ui.component.DefaultDialog
-import echo.music.iad1tya.ui.component.Material3MenuGroup
-import echo.music.iad1tya.ui.component.Material3MenuItemData
+import echo.music.enhanced.LocalDatabase
+import echo.music.enhanced.LocalDownloadUtil
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.LocalSyncUtils
+import echo.music.enhanced.R
+import echo.music.enhanced.extensions.toMediaItem
+import echo.music.enhanced.models.toMediaMetadata
+import echo.music.enhanced.playback.ExoDownloadService
+import echo.music.enhanced.playback.queues.ListQueue
+import echo.music.enhanced.ui.component.DefaultDialog
+import echo.music.enhanced.ui.component.Material3MenuGroup
+import echo.music.enhanced.ui.component.Material3MenuItemData
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
@@ -122,8 +122,8 @@ fun YouTubeSelectionSongMenu(
             songSelection.map { song ->
                 
                 val metadata = song.toMediaMetadata()
-                echo.music.iad1tya.db.entities.Song(
-                    song = echo.music.iad1tya.db.entities.SongEntity(
+                echo.music.enhanced.db.entities.Song(
+                    song = echo.music.enhanced.db.entities.SongEntity(
                         id = metadata.id,
                         title = metadata.title,
                         duration = metadata.duration,
@@ -138,13 +138,13 @@ fun YouTubeSelectionSongMenu(
                         libraryRemoveToken = metadata.libraryRemoveToken
                     ),
                     artists = metadata.artists.map { artist ->
-                        echo.music.iad1tya.db.entities.ArtistEntity(
+                        echo.music.enhanced.db.entities.ArtistEntity(
                             id = artist.id ?: "",
                             name = artist.name
                         )
                     },
                     album = metadata.album?.let { album ->
-                        echo.music.iad1tya.db.entities.AlbumEntity(
+                        echo.music.enhanced.db.entities.AlbumEntity(
                             id = album.id,
                             title = album.title,
                             thumbnailUrl = metadata.thumbnailUrl, 
@@ -400,7 +400,7 @@ fun YouTubeSelectionSongMenu(
                                         
                                         insert(metadata)
                                         
-                                        val songEntity = echo.music.iad1tya.db.entities.SongEntity(
+                                        val songEntity = echo.music.enhanced.db.entities.SongEntity(
                                             id = metadata.id,
                                             title = metadata.title,
                                             duration = metadata.duration,

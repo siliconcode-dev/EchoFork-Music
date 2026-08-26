@@ -1,2 +1,2 @@
 # core
-Echo Music app's core modules
+Enhanced Echo Music app's core modules

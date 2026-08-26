@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.component
+package echo.music.enhanced.ui.component
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
@@ -25,9 +25,9 @@ import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import echo.music.iad1tya.ui.screens.Screens
-import echo.music.iad1tya.ui.component.LocalGlassEffectConfig
-import echo.music.iad1tya.ui.component.liquidGlass
+import echo.music.enhanced.ui.screens.Screens
+import echo.music.enhanced.ui.component.LocalGlassEffectConfig
+import echo.music.enhanced.ui.component.liquidGlass
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 

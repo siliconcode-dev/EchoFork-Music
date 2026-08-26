@@ -1,13 +1,13 @@
-package echo.music.iad1tya.ui.screens.equalizer.axion
+package echo.music.enhanced.ui.screens.equalizer.axion
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import echo.music.iad1tya.eq.EqualizerService
-import echo.music.iad1tya.eq.data.EQProfileRepository
-import echo.music.iad1tya.eq.data.FilterType
-import echo.music.iad1tya.eq.data.ParametricEQBand
-import echo.music.iad1tya.eq.data.SavedEQProfile
+import echo.music.enhanced.eq.EqualizerService
+import echo.music.enhanced.eq.data.EQProfileRepository
+import echo.music.enhanced.eq.data.FilterType
+import echo.music.enhanced.eq.data.ParametricEQBand
+import echo.music.enhanced.eq.data.SavedEQProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow

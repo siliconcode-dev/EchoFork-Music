@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.db.entities
+package echo.music.enhanced.db.entities
 
 import androidx.room.Embedded
 import androidx.room.Relation

@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.component
+package echo.music.enhanced.ui.component
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package echo.music.iad1tya.echomusic.changelog
+package echo.music.enhanced.echomusic.changelog
 
 
 
@@ -80,11 +80,11 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import echo.music.iad1tya.BuildConfig
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.R
-import echo.music.iad1tya.echomusic.updater.extractUrls
-import echo.music.iad1tya.ui.component.parseMarkdown
+import echo.music.enhanced.BuildConfig
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.R
+import echo.music.enhanced.echomusic.updater.extractUrls
+import echo.music.enhanced.ui.component.parseMarkdown
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

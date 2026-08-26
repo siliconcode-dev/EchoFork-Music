@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.menu
+package echo.music.enhanced.ui.menu
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -63,26 +63,26 @@ import androidx.media3.exoplayer.offline.DownloadService
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.music.innertube.YouTube
-import echo.music.iad1tya.LocalDatabase
-import echo.music.iad1tya.LocalDownloadUtil
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.ListItemHeight
-import echo.music.iad1tya.constants.ListThumbnailSize
-import echo.music.iad1tya.db.entities.Album
-import echo.music.iad1tya.db.entities.SpeedDialItem
-import echo.music.iad1tya.db.entities.Song
-import echo.music.iad1tya.extensions.toMediaItem
-import echo.music.iad1tya.playback.ExoDownloadService
-import echo.music.iad1tya.playback.queues.ListQueue
-import echo.music.iad1tya.ui.component.AlbumListItem
-import echo.music.iad1tya.ui.component.ListDialog
-import echo.music.iad1tya.ui.component.ListItem
-import echo.music.iad1tya.ui.component.Material3MenuGroup
-import echo.music.iad1tya.ui.component.Material3MenuItemData
-import echo.music.iad1tya.ui.component.NewAction
-import echo.music.iad1tya.ui.component.NewActionGrid
-import echo.music.iad1tya.ui.component.SongListItem
+import echo.music.enhanced.LocalDatabase
+import echo.music.enhanced.LocalDownloadUtil
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.ListItemHeight
+import echo.music.enhanced.constants.ListThumbnailSize
+import echo.music.enhanced.db.entities.Album
+import echo.music.enhanced.db.entities.SpeedDialItem
+import echo.music.enhanced.db.entities.Song
+import echo.music.enhanced.extensions.toMediaItem
+import echo.music.enhanced.playback.ExoDownloadService
+import echo.music.enhanced.playback.queues.ListQueue
+import echo.music.enhanced.ui.component.AlbumListItem
+import echo.music.enhanced.ui.component.ListDialog
+import echo.music.enhanced.ui.component.ListItem
+import echo.music.enhanced.ui.component.Material3MenuGroup
+import echo.music.enhanced.ui.component.Material3MenuItemData
+import echo.music.enhanced.ui.component.NewAction
+import echo.music.enhanced.ui.component.NewActionGrid
+import echo.music.enhanced.ui.component.SongListItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,0 @@
-package echo.music.iad1tya.domain.data.model.mood.genre
-
-data class GenreObject(
-    val header: String,
-    val itemsPlaylist: List<ItemsPlaylist>,
-    val itemsSong: List<ItemsSong>?,
-)

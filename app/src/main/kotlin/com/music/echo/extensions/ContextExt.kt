@@ -1,15 +1,15 @@
 
 
-package echo.music.iad1tya.extensions
+package echo.music.enhanced.extensions
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.music.innertube.utils.parseCookieString
-import echo.music.iad1tya.constants.InnerTubeCookieKey
-import echo.music.iad1tya.constants.YtmSyncKey
-import echo.music.iad1tya.utils.dataStore
-import echo.music.iad1tya.utils.get
+import echo.music.enhanced.constants.InnerTubeCookieKey
+import echo.music.enhanced.constants.YtmSyncKey
+import echo.music.enhanced.utils.dataStore
+import echo.music.enhanced.utils.get
 import kotlinx.coroutines.runBlocking
 
 fun Context.isSyncEnabled(): Boolean {

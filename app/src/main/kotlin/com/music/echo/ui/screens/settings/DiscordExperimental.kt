@@ -19,19 +19,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.DiscordActivityButton1CustomUrlKey
-import echo.music.iad1tya.constants.DiscordActivityButton1EnabledKey
-import echo.music.iad1tya.constants.DiscordActivityButton1LabelKey
-import echo.music.iad1tya.constants.DiscordActivityButton1UrlSourceKey
-import echo.music.iad1tya.constants.DiscordActivityButton2CustomUrlKey
-import echo.music.iad1tya.constants.DiscordActivityButton2EnabledKey
-import echo.music.iad1tya.constants.DiscordActivityButton2LabelKey
-import echo.music.iad1tya.constants.DiscordActivityButton2UrlSourceKey
-import echo.music.iad1tya.ui.component.EditTextPreference
-import echo.music.iad1tya.ui.component.ListPreference
-import echo.music.iad1tya.ui.component.SwitchPreference
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.DiscordActivityButton1CustomUrlKey
+import echo.music.enhanced.constants.DiscordActivityButton1EnabledKey
+import echo.music.enhanced.constants.DiscordActivityButton1LabelKey
+import echo.music.enhanced.constants.DiscordActivityButton1UrlSourceKey
+import echo.music.enhanced.constants.DiscordActivityButton2CustomUrlKey
+import echo.music.enhanced.constants.DiscordActivityButton2EnabledKey
+import echo.music.enhanced.constants.DiscordActivityButton2LabelKey
+import echo.music.enhanced.constants.DiscordActivityButton2UrlSourceKey
+import echo.music.enhanced.ui.component.EditTextPreference
+import echo.music.enhanced.ui.component.ListPreference
+import echo.music.enhanced.ui.component.SwitchPreference
+import echo.music.enhanced.utils.rememberPreference
 
 private val DiscordExperimentalButtonUrlOptions =
     listOf("songurl", "artisturl", "albumurl", "custom")

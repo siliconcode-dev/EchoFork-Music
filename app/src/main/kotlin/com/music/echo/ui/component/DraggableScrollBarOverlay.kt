@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.component
+package echo.music.enhanced.ui.component
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.spring

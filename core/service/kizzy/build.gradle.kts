@@ -9,7 +9,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "echo.music.iad1tya.kizzy"
+        namespace = "echo.music.enhanced.kizzy"
         compileSdk = 37
         minSdk = 26
     }

@@ -3,7 +3,7 @@
  * Licensed under GPL-3.0 | See git history for contributors
  */
 
-package echo.music.iad1tya.ui.component
+package echo.music.enhanced.ui.component
 
 import android.os.Build
 import androidx.compose.foundation.shape.CornerBasedShape
@@ -18,17 +18,17 @@ import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import echo.music.iad1tya.ui.component.backdrop.Backdrop
-import echo.music.iad1tya.ui.component.backdrop.drawBackdrop
-import echo.music.iad1tya.ui.component.backdrop.effects.blur
-import echo.music.iad1tya.ui.component.backdrop.effects.colorControls
-import echo.music.iad1tya.ui.component.backdrop.effects.lens
-import echo.music.iad1tya.ui.component.backdrop.highlight.Highlight
-import echo.music.iad1tya.ui.component.backdrop.shadow.Shadow
+import echo.music.enhanced.ui.component.backdrop.Backdrop
+import echo.music.enhanced.ui.component.backdrop.drawBackdrop
+import echo.music.enhanced.ui.component.backdrop.effects.blur
+import echo.music.enhanced.ui.component.backdrop.effects.colorControls
+import echo.music.enhanced.ui.component.backdrop.effects.lens
+import echo.music.enhanced.ui.component.backdrop.highlight.Highlight
+import echo.music.enhanced.ui.component.backdrop.shadow.Shadow
 
 /**
  * User-configurable parameters of the liquid glass effect, sourced from DataStore
- * preferences in [echo.music.iad1tya.MainActivity] and distributed through
+ * preferences in [echo.music.enhanced.MainActivity] and distributed through
  * [LocalGlassEffectConfig].
  */
 @Stable

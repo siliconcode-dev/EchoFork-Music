@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -35,21 +35,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.R
-import echo.music.iad1tya.db.entities.Song
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.Material3SettingsGroup
-import echo.music.iad1tya.ui.component.Material3SettingsItem
-import echo.music.iad1tya.ui.menu.AddToPlaylistDialogOnline
-import echo.music.iad1tya.ui.menu.CsvColumnMappingDialog
-import echo.music.iad1tya.ui.menu.CsvImportProgressDialog
-import echo.music.iad1tya.ui.menu.LoadingScreen
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.viewmodels.BackupRestoreViewModel
-import echo.music.iad1tya.viewmodels.ConvertedSongLog
-import echo.music.iad1tya.viewmodels.CsvImportState
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.R
+import echo.music.enhanced.db.entities.Song
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.Material3SettingsGroup
+import echo.music.enhanced.ui.component.Material3SettingsItem
+import echo.music.enhanced.ui.menu.AddToPlaylistDialogOnline
+import echo.music.enhanced.ui.menu.CsvColumnMappingDialog
+import echo.music.enhanced.ui.menu.CsvImportProgressDialog
+import echo.music.enhanced.ui.menu.LoadingScreen
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.viewmodels.BackupRestoreViewModel
+import echo.music.enhanced.viewmodels.ConvertedSongLog
+import echo.music.enhanced.viewmodels.CsvImportState
+import echo.music.enhanced.utils.rememberPreference
 import android.app.backup.BackupManager
 import android.content.Intent
 import android.provider.Settings

@@ -11,7 +11,7 @@ kotlin {
 }
 
 android {
-    namespace = "echo.music.iad1tya.crashlytics"
+    namespace = "echo.music.enhanced.crashlytics"
     compileSdk = 37
 
     defaultConfig {

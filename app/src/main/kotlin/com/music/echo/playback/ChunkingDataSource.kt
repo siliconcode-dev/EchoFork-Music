@@ -1,4 +1,4 @@
-package echo.music.iad1tya.playback
+package echo.music.enhanced.playback
 
 import android.net.Uri
 import androidx.media3.common.C

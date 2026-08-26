@@ -36,6 +36,9 @@
         </intent>
     </queries>
     <queries>
+        <!-- Upstream Echo Music. Declared for package visibility (Android 11+) so
+             this app can detect an existing Echo Music install for playlist
+             migration. Deliberately NOT this app's own applicationId. -->
         <package android:name="echo.music.iad1tya" />
     </queries>
     <queries>
@@ -45,7 +48,7 @@
     </queries>
 
     <application
-        android:name="echo.music.iad1tya.EchoMusicApplication"
+        android:name="echo.music.enhanced.EchoMusicApplication"
         android:allowBackup="true"
         android:appCategory="audio"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -61,7 +64,7 @@
         tools:targetApi="tiramisu">
 
         <activity
-            android:name="echo.music.iad1tya.MainActivity"
+            android:name="echo.music.enhanced.MainActivity"
             android:configChanges="keyboardHidden|screenSize|screenLayout|smallestScreenSize"
             android:exported="true"
             android:supportsPictureInPicture="true"
@@ -220,7 +223,7 @@
                 android:value="true" />
         </service>
         <service
-            android:name="echo.music.iad1tya.media3.service.SimpleMediaService"
+            android:name="echo.music.enhanced.media3.service.SimpleMediaService"
             android:exported="true"
             android:foregroundServiceType="mediaPlayback"
             android:stopWithTask="false"
@@ -233,7 +236,7 @@
             </intent-filter>
         </service>
         <service
-            android:name="echo.music.iad1tya.media3.service.download.MusicDownloadService"
+            android:name="echo.music.enhanced.media3.service.download.MusicDownloadService"
             android:exported="true"
             android:foregroundServiceType="dataSync">
             <intent-filter>
@@ -260,7 +263,7 @@
             android:value="8" />
 
         <service
-            android:name="echo.music.iad1tya.media3.carapp.echoMusicCarAppService"
+            android:name="echo.music.enhanced.media3.carapp.EchoMusicCarAppService"
             android:exported="true"
             tools:ignore="ExportedService">
             <intent-filter>

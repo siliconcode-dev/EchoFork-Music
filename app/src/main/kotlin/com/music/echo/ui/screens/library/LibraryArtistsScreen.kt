@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.library
+package echo.music.enhanced.ui.screens.library
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -49,30 +49,30 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.ArtistFilter
-import echo.music.iad1tya.constants.ArtistFilterKey
-import echo.music.iad1tya.constants.ArtistSortDescendingKey
-import echo.music.iad1tya.constants.ArtistSortType
-import echo.music.iad1tya.constants.ArtistSortTypeKey
-import echo.music.iad1tya.constants.ArtistViewTypeKey
-import echo.music.iad1tya.constants.CONTENT_TYPE_ARTIST
-import echo.music.iad1tya.constants.CONTENT_TYPE_HEADER
-import echo.music.iad1tya.constants.GridItemSize
-import echo.music.iad1tya.constants.GridItemsSizeKey
-import echo.music.iad1tya.constants.GridThumbnailHeight
-import echo.music.iad1tya.constants.LibraryViewType
-import echo.music.iad1tya.constants.YtmSyncKey
-import echo.music.iad1tya.ui.component.ChipsRow
-import echo.music.iad1tya.ui.component.EmptyPlaceholder
-import echo.music.iad1tya.ui.component.LibraryArtistGridItem
-import echo.music.iad1tya.ui.component.LibraryArtistListItem
-import echo.music.iad1tya.ui.component.LocalMenuState
-import echo.music.iad1tya.ui.component.SortHeader
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.utils.rememberPreference
-import echo.music.iad1tya.viewmodels.LibraryArtistsViewModel
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.ArtistFilter
+import echo.music.enhanced.constants.ArtistFilterKey
+import echo.music.enhanced.constants.ArtistSortDescendingKey
+import echo.music.enhanced.constants.ArtistSortType
+import echo.music.enhanced.constants.ArtistSortTypeKey
+import echo.music.enhanced.constants.ArtistViewTypeKey
+import echo.music.enhanced.constants.CONTENT_TYPE_ARTIST
+import echo.music.enhanced.constants.CONTENT_TYPE_HEADER
+import echo.music.enhanced.constants.GridItemSize
+import echo.music.enhanced.constants.GridItemsSizeKey
+import echo.music.enhanced.constants.GridThumbnailHeight
+import echo.music.enhanced.constants.LibraryViewType
+import echo.music.enhanced.constants.YtmSyncKey
+import echo.music.enhanced.ui.component.ChipsRow
+import echo.music.enhanced.ui.component.EmptyPlaceholder
+import echo.music.enhanced.ui.component.LibraryArtistGridItem
+import echo.music.enhanced.ui.component.LibraryArtistListItem
+import echo.music.enhanced.ui.component.LocalMenuState
+import echo.music.enhanced.ui.component.SortHeader
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.utils.rememberPreference
+import echo.music.enhanced.viewmodels.LibraryArtistsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

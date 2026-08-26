@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.theme
+package echo.music.enhanced.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

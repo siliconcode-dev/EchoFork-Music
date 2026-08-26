@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.api
+package echo.music.enhanced.api
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

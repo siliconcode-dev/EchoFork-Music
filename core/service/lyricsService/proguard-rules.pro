@@ -37,6 +37,6 @@
 -dontwarn kotlinx.serialization.internal.ClassValueReferences
 -dontwarn org.slf4j.impl.StaticLoggerBinder
 
--keep class echo.music.iad1tya.lyrics.parser.** { *; }
--keep class echo.music.iad1tya.lyrics.models.** { *; }
+-keep class echo.music.enhanced.lyrics.parser.** { *; }
+-keep class echo.music.enhanced.lyrics.models.** { *; }
 -keep class com.simpmusic.lyrics.parser.** { *; }

@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,24 +33,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.AiProviderKey
-import echo.music.iad1tya.constants.DeeplApiKey
-import echo.music.iad1tya.constants.DeeplFormalityKey
-import echo.music.iad1tya.constants.LanguageCodeToName
-import echo.music.iad1tya.constants.OpenRouterApiKey
-import echo.music.iad1tya.constants.OpenRouterBaseUrlKey
-import echo.music.iad1tya.constants.OpenRouterModelKey
-import echo.music.iad1tya.constants.TranslateLanguageKey
-import echo.music.iad1tya.constants.TranslateModeKey
-import echo.music.iad1tya.constants.AutoTranslateKey
-import echo.music.iad1tya.constants.AiRecommendationsKey
-import echo.music.iad1tya.ui.component.EnumDialog
-import echo.music.iad1tya.ui.component.Material3SettingsGroup
-import echo.music.iad1tya.ui.component.Material3SettingsItem
-import echo.music.iad1tya.ui.component.TextFieldDialog
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.AiProviderKey
+import echo.music.enhanced.constants.DeeplApiKey
+import echo.music.enhanced.constants.DeeplFormalityKey
+import echo.music.enhanced.constants.LanguageCodeToName
+import echo.music.enhanced.constants.OpenRouterApiKey
+import echo.music.enhanced.constants.OpenRouterBaseUrlKey
+import echo.music.enhanced.constants.OpenRouterModelKey
+import echo.music.enhanced.constants.TranslateLanguageKey
+import echo.music.enhanced.constants.TranslateModeKey
+import echo.music.enhanced.constants.AutoTranslateKey
+import echo.music.enhanced.constants.AiRecommendationsKey
+import echo.music.enhanced.ui.component.EnumDialog
+import echo.music.enhanced.ui.component.Material3SettingsGroup
+import echo.music.enhanced.ui.component.Material3SettingsItem
+import echo.music.enhanced.ui.component.TextFieldDialog
+import echo.music.enhanced.utils.rememberPreference
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -625,7 +625,7 @@ highlightKey: String? = null) {
         )
 
         if (showRefreshDialog) {
-            echo.music.iad1tya.ui.component.RefreshAiRecommendationDialog(
+            echo.music.enhanced.ui.component.RefreshAiRecommendationDialog(
                 onDismiss = { showRefreshDialog = false }
             )
         }

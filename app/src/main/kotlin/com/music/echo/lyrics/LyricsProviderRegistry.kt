@@ -1,8 +1,8 @@
 
 
-package echo.music.iad1tya.lyrics
+package echo.music.enhanced.lyrics
 
-import echo.music.iad1tya.constants.PreferredLyricsProvider
+import echo.music.enhanced.constants.PreferredLyricsProvider
 
 
 object LyricsProviderRegistry {

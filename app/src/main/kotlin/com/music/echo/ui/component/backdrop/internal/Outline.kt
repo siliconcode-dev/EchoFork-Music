@@ -7,7 +7,7 @@
  * scale for cheaper effect rendering. KMP expect/actual declarations were
  * merged into this single Android source set. Package renamed accordingly.
  */
-package echo.music.iad1tya.ui.component.backdrop.internal
+package echo.music.enhanced.ui.component.backdrop.internal
 
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Outline

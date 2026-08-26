@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.db.entities
+package echo.music.enhanced.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.search
+package echo.music.enhanced.ui.screens.search
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -55,26 +55,26 @@ import com.music.innertube.models.AlbumItem
 import com.music.innertube.models.ArtistItem
 import com.music.innertube.models.PlaylistItem
 import com.music.innertube.models.SongItem
-import echo.music.iad1tya.LocalDatabase
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.SuggestionItemHeight
-import echo.music.iad1tya.models.toMediaMetadata
-import echo.music.iad1tya.playback.queues.YouTubeQueue
-import echo.music.iad1tya.ui.component.LocalMenuState
-import echo.music.iad1tya.ui.component.YouTubeListItem
-import echo.music.iad1tya.utils.listItemShape
-import echo.music.iad1tya.utils.getGroupedShape
+import echo.music.enhanced.LocalDatabase
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.SuggestionItemHeight
+import echo.music.enhanced.models.toMediaMetadata
+import echo.music.enhanced.playback.queues.YouTubeQueue
+import echo.music.enhanced.ui.component.LocalMenuState
+import echo.music.enhanced.ui.component.YouTubeListItem
+import echo.music.enhanced.utils.listItemShape
+import echo.music.enhanced.utils.getGroupedShape
 import androidx.compose.material3.Surface
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import com.music.innertube.utils.YouTubeUrlParser
-import echo.music.iad1tya.ui.menu.YouTubeAlbumMenu
-import echo.music.iad1tya.ui.menu.YouTubeArtistMenu
-import echo.music.iad1tya.ui.menu.YouTubePlaylistMenu
-import echo.music.iad1tya.ui.menu.YouTubeSongMenu
-import echo.music.iad1tya.viewmodels.OnlineSearchSuggestionViewModel
+import echo.music.enhanced.ui.menu.YouTubeAlbumMenu
+import echo.music.enhanced.ui.menu.YouTubeArtistMenu
+import echo.music.enhanced.ui.menu.YouTubePlaylistMenu
+import echo.music.enhanced.ui.menu.YouTubeSongMenu
+import echo.music.enhanced.viewmodels.OnlineSearchSuggestionViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce

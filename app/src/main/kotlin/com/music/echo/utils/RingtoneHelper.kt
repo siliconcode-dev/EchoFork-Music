@@ -1,4 +1,4 @@
-package echo.music.iad1tya.utils
+package echo.music.enhanced.utils
 
 import android.content.ContentValues
 import android.content.Context
@@ -11,7 +11,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
 import androidx.core.content.getSystemService
-import echo.music.iad1tya.constants.AudioQuality
+import echo.music.enhanced.constants.AudioQuality
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext

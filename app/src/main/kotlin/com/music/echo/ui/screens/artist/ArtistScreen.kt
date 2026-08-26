@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.artist
+package echo.music.enhanced.ui.screens.artist
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -91,58 +91,58 @@ import com.music.innertube.models.ArtistItem
 import com.music.innertube.models.PlaylistItem
 import com.music.innertube.models.SongItem
 import com.music.innertube.models.WatchEndpoint
-import echo.music.iad1tya.LocalDatabase
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.AppBarHeight
-import echo.music.iad1tya.constants.HideExplicitKey
-import echo.music.iad1tya.constants.ShowArtistDescriptionKey
-import echo.music.iad1tya.constants.ShowArtistSubscriberCountKey
-import echo.music.iad1tya.constants.ShowMonthlyListenersKey
-import echo.music.iad1tya.db.entities.ArtistEntity
-import echo.music.iad1tya.extensions.toMediaItem
-import echo.music.iad1tya.models.toMediaMetadata
-import echo.music.iad1tya.playback.queues.ListQueue
-import echo.music.iad1tya.playback.queues.YouTubeQueue
-import echo.music.iad1tya.ui.component.AlbumGridItem
-import echo.music.iad1tya.ui.component.ExpandableText
-import echo.music.iad1tya.ui.component.HideOnScrollFAB
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.LinkSegment
-import echo.music.iad1tya.ui.component.LocalMenuState
-import echo.music.iad1tya.ui.component.NavigationTitle
-import echo.music.iad1tya.ui.component.SongListItem
-import echo.music.iad1tya.ui.component.YouTubeGridItem
-import echo.music.iad1tya.ui.component.YouTubeListItem
-import echo.music.iad1tya.ui.component.shimmer.ButtonPlaceholder
-import echo.music.iad1tya.ui.component.shimmer.ListItemPlaceHolder
-import echo.music.iad1tya.ui.component.shimmer.ShimmerHost
-import echo.music.iad1tya.ui.component.shimmer.TextPlaceholder
-import echo.music.iad1tya.ui.menu.AlbumMenu
-import echo.music.iad1tya.ui.menu.SongMenu
-import echo.music.iad1tya.ui.menu.YouTubeAlbumMenu
-import echo.music.iad1tya.ui.menu.YouTubeArtistMenu
-import echo.music.iad1tya.ui.menu.YouTubePlaylistMenu
-import echo.music.iad1tya.ui.menu.YouTubeSongMenu
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.ui.utils.fadingEdge
-import echo.music.iad1tya.ui.utils.isScrollingUp
-import echo.music.iad1tya.ui.utils.resize
-import echo.music.iad1tya.utils.listItemShape
-import echo.music.iad1tya.utils.rememberPreference
-import echo.music.iad1tya.viewmodels.ArtistViewModel
+import echo.music.enhanced.LocalDatabase
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.AppBarHeight
+import echo.music.enhanced.constants.HideExplicitKey
+import echo.music.enhanced.constants.ShowArtistDescriptionKey
+import echo.music.enhanced.constants.ShowArtistSubscriberCountKey
+import echo.music.enhanced.constants.ShowMonthlyListenersKey
+import echo.music.enhanced.db.entities.ArtistEntity
+import echo.music.enhanced.extensions.toMediaItem
+import echo.music.enhanced.models.toMediaMetadata
+import echo.music.enhanced.playback.queues.ListQueue
+import echo.music.enhanced.playback.queues.YouTubeQueue
+import echo.music.enhanced.ui.component.AlbumGridItem
+import echo.music.enhanced.ui.component.ExpandableText
+import echo.music.enhanced.ui.component.HideOnScrollFAB
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.LinkSegment
+import echo.music.enhanced.ui.component.LocalMenuState
+import echo.music.enhanced.ui.component.NavigationTitle
+import echo.music.enhanced.ui.component.SongListItem
+import echo.music.enhanced.ui.component.YouTubeGridItem
+import echo.music.enhanced.ui.component.YouTubeListItem
+import echo.music.enhanced.ui.component.shimmer.ButtonPlaceholder
+import echo.music.enhanced.ui.component.shimmer.ListItemPlaceHolder
+import echo.music.enhanced.ui.component.shimmer.ShimmerHost
+import echo.music.enhanced.ui.component.shimmer.TextPlaceholder
+import echo.music.enhanced.ui.menu.AlbumMenu
+import echo.music.enhanced.ui.menu.SongMenu
+import echo.music.enhanced.ui.menu.YouTubeAlbumMenu
+import echo.music.enhanced.ui.menu.YouTubeArtistMenu
+import echo.music.enhanced.ui.menu.YouTubePlaylistMenu
+import echo.music.enhanced.ui.menu.YouTubeSongMenu
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.ui.utils.fadingEdge
+import echo.music.enhanced.ui.utils.isScrollingUp
+import echo.music.enhanced.ui.utils.resize
+import echo.music.enhanced.utils.listItemShape
+import echo.music.enhanced.utils.rememberPreference
+import echo.music.enhanced.viewmodels.ArtistViewModel
 import com.valentinilk.shimmer.shimmer
-import echo.music.iad1tya.artistvideo.ArtistVideo
-import echo.music.iad1tya.constants.ShowArtistVideoKey
-import echo.music.iad1tya.constants.ShowArtistBackgroundVideoKey
+import echo.music.enhanced.artistvideo.ArtistVideo
+import echo.music.enhanced.constants.ShowArtistVideoKey
+import echo.music.enhanced.constants.ShowArtistBackgroundVideoKey
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import echo.music.iad1tya.canvas.AppleMusicArtistBackgroundProvider
+import echo.music.enhanced.canvas.AppleMusicArtistBackgroundProvider
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -169,7 +169,7 @@ fun ArtistScreen(
     val showArtistDescription by rememberPreference(key = ShowArtistDescriptionKey, defaultValue = true)
     val showArtistSubscriberCount by rememberPreference(key = ShowArtistSubscriberCountKey, defaultValue = true)
     val showMonthlyListeners by rememberPreference(key = ShowMonthlyListenersKey, defaultValue = true)
-    val dataSaverEnabled by rememberPreference(key = echo.music.iad1tya.constants.DataSaverEnabledKey, defaultValue = false)
+    val dataSaverEnabled by rememberPreference(key = echo.music.enhanced.constants.DataSaverEnabledKey, defaultValue = false)
     val showArtistVideoPref by rememberPreference(key = ShowArtistVideoKey, defaultValue = true)
     val showArtistVideo = if (dataSaverEnabled) false else showArtistVideoPref
     val showArtistBackgroundVideoPref by rememberPreference(key = ShowArtistBackgroundVideoKey, defaultValue = true)

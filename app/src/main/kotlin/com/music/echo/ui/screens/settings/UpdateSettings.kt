@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import androidx.compose.foundation.layout.Column
 
@@ -32,28 +32,28 @@ import androidx.compose.ui.unit.dp
 import android.content.Intent
 import android.net.Uri
 import androidx.navigation.NavController
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.R
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.Material3SettingsGroup
-import echo.music.iad1tya.ui.component.Material3SettingsItem
-import echo.music.iad1tya.echomusic.component.UpdateInfoDialog
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.echomusic.updater.getAutoUpdateCheckSetting
-import echo.music.iad1tya.echomusic.updater.saveAutoUpdateCheckSetting
-import echo.music.iad1tya.echomusic.updater.getUpdateAvailableState
-import echo.music.iad1tya.echomusic.updater.saveUpdateAvailableState
-import echo.music.iad1tya.echomusic.updater.getUpdateNotificationsSetting
-import echo.music.iad1tya.echomusic.updater.saveUpdateNotificationsSetting
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.R
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.Material3SettingsGroup
+import echo.music.enhanced.ui.component.Material3SettingsItem
+import echo.music.enhanced.echomusic.component.UpdateInfoDialog
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.echomusic.updater.getAutoUpdateCheckSetting
+import echo.music.enhanced.echomusic.updater.saveAutoUpdateCheckSetting
+import echo.music.enhanced.echomusic.updater.getUpdateAvailableState
+import echo.music.enhanced.echomusic.updater.saveUpdateAvailableState
+import echo.music.enhanced.echomusic.updater.getUpdateNotificationsSetting
+import echo.music.enhanced.echomusic.updater.saveUpdateNotificationsSetting
 import android.widget.Toast
 import androidx.compose.ui.res.pluralStringResource
-import echo.music.iad1tya.echomusic.updater.getDownloadedApkCount
-import echo.music.iad1tya.echomusic.updater.clearDownloadedApks
-import echo.music.iad1tya.echomusic.updater.getBetaUpdatesSetting
-import echo.music.iad1tya.echomusic.updater.saveBetaUpdatesSetting
-import echo.music.iad1tya.echomusic.updater.autoClearOldApks
+import echo.music.enhanced.echomusic.updater.getDownloadedApkCount
+import echo.music.enhanced.echomusic.updater.clearDownloadedApks
+import echo.music.enhanced.echomusic.updater.getBetaUpdatesSetting
+import echo.music.enhanced.echomusic.updater.saveBetaUpdatesSetting
+import echo.music.enhanced.echomusic.updater.autoClearOldApks
 import androidx.compose.material3.MaterialTheme
-import echo.music.iad1tya.BuildConfig
+import echo.music.enhanced.BuildConfig
 
 
 

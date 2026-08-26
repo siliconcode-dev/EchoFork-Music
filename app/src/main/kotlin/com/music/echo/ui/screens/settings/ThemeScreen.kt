@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
@@ -68,16 +68,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicColorScheme
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.DarkModeKey
-import echo.music.iad1tya.constants.DynamicThemeKey
-import echo.music.iad1tya.constants.PureBlackKey
-import echo.music.iad1tya.constants.PureBlackMiniPlayerKey
-import echo.music.iad1tya.constants.SelectedThemeColorKey
-import echo.music.iad1tya.ui.theme.DefaultThemeColor
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.DarkModeKey
+import echo.music.enhanced.constants.DynamicThemeKey
+import echo.music.enhanced.constants.PureBlackKey
+import echo.music.enhanced.constants.PureBlackMiniPlayerKey
+import echo.music.enhanced.constants.SelectedThemeColorKey
+import echo.music.enhanced.ui.theme.DefaultThemeColor
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.utils.rememberPreference
 
 data class ThemePalette(
     val nameRes: Int,

@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.search.suggestions
+package echo.music.enhanced.ui.screens.search.suggestions
 
 data class SuggestionTrack(
     val rank: Int,

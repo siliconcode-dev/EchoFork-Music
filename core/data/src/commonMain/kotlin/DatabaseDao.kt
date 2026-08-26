@@ -7,44 +7,44 @@ import androidx.room.RawQuery
 import androidx.room.RoomRawQuery
 import androidx.room.Transaction
 import androidx.room.Update
-import echo.music.iad1tya.domain.data.entities.AlbumEntity
-import echo.music.iad1tya.domain.data.entities.ArtistEntity
-import echo.music.iad1tya.domain.data.entities.AutoEqCurveEntity
-import echo.music.iad1tya.domain.data.entities.AutoEqEntryEntity
-import echo.music.iad1tya.domain.data.entities.AutoEqIndexMetaEntity
-import echo.music.iad1tya.domain.data.entities.EpisodeEntity
-import echo.music.iad1tya.domain.data.entities.FollowedArtistSingleAndAlbum
-import echo.music.iad1tya.domain.data.entities.GoogleAccountEntity
-import echo.music.iad1tya.domain.data.entities.LocalPlaylistEntity
-import echo.music.iad1tya.domain.data.entities.LyricsEntity
-import echo.music.iad1tya.domain.data.entities.NewFormatEntity
-import echo.music.iad1tya.domain.data.entities.NotificationEntity
-import echo.music.iad1tya.domain.data.entities.PairSongLocalPlaylist
-import echo.music.iad1tya.domain.data.entities.PlaylistEntity
-import echo.music.iad1tya.domain.data.entities.PodcastWithEpisodes
-import echo.music.iad1tya.domain.data.entities.PodcastsEntity
-import echo.music.iad1tya.domain.data.entities.QueueEntity
-import echo.music.iad1tya.domain.data.entities.SearchHistory
-import echo.music.iad1tya.domain.data.entities.SetVideoIdEntity
-import echo.music.iad1tya.domain.data.entities.SongEntity
-import echo.music.iad1tya.domain.data.entities.SongInfoEntity
-import echo.music.iad1tya.domain.data.entities.TranslatedLyricsEntity
-import echo.music.iad1tya.domain.data.entities.YourYouTubePlaylistList
-import echo.music.iad1tya.domain.data.entities.analytics.EventArtistEntity
-import echo.music.iad1tya.domain.data.entities.analytics.PlaybackEventEntity
-import echo.music.iad1tya.domain.data.entities.analytics.query.TopPlayedAlbum
-import echo.music.iad1tya.domain.data.entities.analytics.query.TopPlayedArtist
-import echo.music.iad1tya.domain.data.entities.analytics.query.TopPlayedTracks
-import echo.music.iad1tya.domain.data.type.PlaylistType
-import echo.music.iad1tya.domain.data.type.RecentlyType
-import echo.music.iad1tya.domain.extension.now
+import echo.music.enhanced.domain.data.entities.AlbumEntity
+import echo.music.enhanced.domain.data.entities.ArtistEntity
+import echo.music.enhanced.domain.data.entities.AutoEqCurveEntity
+import echo.music.enhanced.domain.data.entities.AutoEqEntryEntity
+import echo.music.enhanced.domain.data.entities.AutoEqIndexMetaEntity
+import echo.music.enhanced.domain.data.entities.EpisodeEntity
+import echo.music.enhanced.domain.data.entities.FollowedArtistSingleAndAlbum
+import echo.music.enhanced.domain.data.entities.GoogleAccountEntity
+import echo.music.enhanced.domain.data.entities.LocalPlaylistEntity
+import echo.music.enhanced.domain.data.entities.LyricsEntity
+import echo.music.enhanced.domain.data.entities.NewFormatEntity
+import echo.music.enhanced.domain.data.entities.NotificationEntity
+import echo.music.enhanced.domain.data.entities.PairSongLocalPlaylist
+import echo.music.enhanced.domain.data.entities.PlaylistEntity
+import echo.music.enhanced.domain.data.entities.PodcastWithEpisodes
+import echo.music.enhanced.domain.data.entities.PodcastsEntity
+import echo.music.enhanced.domain.data.entities.QueueEntity
+import echo.music.enhanced.domain.data.entities.SearchHistory
+import echo.music.enhanced.domain.data.entities.SetVideoIdEntity
+import echo.music.enhanced.domain.data.entities.SongEntity
+import echo.music.enhanced.domain.data.entities.SongInfoEntity
+import echo.music.enhanced.domain.data.entities.TranslatedLyricsEntity
+import echo.music.enhanced.domain.data.entities.YourYouTubePlaylistList
+import echo.music.enhanced.domain.data.entities.analytics.EventArtistEntity
+import echo.music.enhanced.domain.data.entities.analytics.PlaybackEventEntity
+import echo.music.enhanced.domain.data.entities.analytics.query.TopPlayedAlbum
+import echo.music.enhanced.domain.data.entities.analytics.query.TopPlayedArtist
+import echo.music.enhanced.domain.data.entities.analytics.query.TopPlayedTracks
+import echo.music.enhanced.domain.data.type.PlaylistType
+import echo.music.enhanced.domain.data.type.RecentlyType
+import echo.music.enhanced.domain.extension.now
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDateTime
 
 /**
  * The album name older builds stored when they could not find a real one.
  *
- * Kept in step with the copy in [echo.music.iad1tya.data.db.datasource.LocalDataSource] and with the
+ * Kept in step with the copy in [echo.music.enhanced.data.db.datasource.LocalDataSource] and with the
  * literal baked into [DatabaseDao.refreshAlbumIfPlaceholder]'s WHERE clause.
  */
 private const val PLACEHOLDER_ALBUM_NAME = "Album"
@@ -261,7 +261,7 @@ interface DatabaseDao {
      * Stores a batch of tracks in one transaction.
      *
      * Every other path inserts one song at a time through
-     * [echo.music.iad1tya.data.db.datasource.LocalDataSource.insertSong], which is right when a track
+     * [echo.music.enhanced.data.db.datasource.LocalDataSource.insertSong], which is right when a track
      * arrives on its own but costs a commit each time. An import writes thousands in a row, so the
      * batch collapses them into a handful of commits instead.
      *

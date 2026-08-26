@@ -6,9 +6,9 @@
         android:icon="@drawable/round_home_24"
         android:shortcutShortLabel="@string/home">
         <intent
-            android:targetClass="echo.music.iad1tya.MainActivity"
-            android:targetPackage="echo.music.iad1tya"
-            android:action="echo.music.iad1tya.action.HOME" />
+            android:targetClass="echo.music.enhanced.MainActivity"
+            android:targetPackage="echo.music.enhanced"
+            android:action="echo.music.enhanced.action.HOME" />
     </shortcut>
     <shortcut
         android:shortcutId="search"
@@ -16,9 +16,9 @@
         android:icon="@drawable/round_search_24"
         android:shortcutShortLabel="@string/search">
         <intent
-            android:targetClass="echo.music.iad1tya.MainActivity"
-            android:targetPackage="echo.music.iad1tya"
-            android:action="echo.music.iad1tya.action.SEARCH" />
+            android:targetClass="echo.music.enhanced.MainActivity"
+            android:targetPackage="echo.music.enhanced"
+            android:action="echo.music.enhanced.action.SEARCH" />
     </shortcut>
     <shortcut
         android:shortcutId="library"
@@ -26,8 +26,8 @@
         android:icon="@drawable/round_library_music_24"
         android:shortcutShortLabel="@string/library">
         <intent
-            android:targetClass="echo.music.iad1tya.MainActivity"
-            android:targetPackage="echo.music.iad1tya"
-            android:action="echo.music.iad1tya.action.LIBRARY" />
+            android:targetClass="echo.music.enhanced.MainActivity"
+            android:targetPackage="echo.music.enhanced"
+            android:action="echo.music.enhanced.action.LIBRARY" />
     </shortcut>
 </shortcuts>

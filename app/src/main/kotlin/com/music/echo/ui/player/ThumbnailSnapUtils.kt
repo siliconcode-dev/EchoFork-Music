@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.player
+package echo.music.enhanced.ui.player
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.Orientation

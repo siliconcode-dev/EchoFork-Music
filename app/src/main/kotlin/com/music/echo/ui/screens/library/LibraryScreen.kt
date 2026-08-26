@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.library
+package echo.music.enhanced.ui.screens.library
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -11,11 +11,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.ChipSortTypeKey
-import echo.music.iad1tya.constants.LibraryFilter
-import echo.music.iad1tya.ui.component.ChipsRow
-import echo.music.iad1tya.utils.rememberEnumPreference
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.ChipSortTypeKey
+import echo.music.enhanced.constants.LibraryFilter
+import echo.music.enhanced.ui.component.ChipsRow
+import echo.music.enhanced.utils.rememberEnumPreference
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,12 +43,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.constants.FloatingToolbarBottomPadding
-import echo.music.iad1tya.constants.MiniPlayerBottomSpacing
-import echo.music.iad1tya.constants.MiniPlayerHeight
-import echo.music.iad1tya.constants.NavigationBarHeight
-import echo.music.iad1tya.ui.component.TextFieldDialog
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.constants.FloatingToolbarBottomPadding
+import echo.music.enhanced.constants.MiniPlayerBottomSpacing
+import echo.music.enhanced.constants.MiniPlayerHeight
+import echo.music.enhanced.constants.NavigationBarHeight
+import echo.music.enhanced.ui.component.TextFieldDialog
 
 @Composable
 fun LibraryScreen(navController: NavController) {
@@ -190,7 +190,7 @@ fun LibraryScreen(navController: NavController) {
 
     if (showYoutubeImportDialog) {
         var url by remember { mutableStateOf(TextFieldValue("")) }
-        echo.music.iad1tya.ui.component.TextFieldDialog(
+        echo.music.enhanced.ui.component.TextFieldDialog(
             icon = { Icon(painter = painterResource(R.drawable.link), contentDescription = null) },
             title = {
                 Column {
@@ -219,7 +219,7 @@ fun LibraryScreen(navController: NavController) {
     }
 
     if (showCreatePlaylistDialog) {
-        echo.music.iad1tya.ui.component.CreatePlaylistDialog(
+        echo.music.enhanced.ui.component.CreatePlaylistDialog(
             onDismiss = { showCreatePlaylistDialog = false },
             initialTextFieldValue = null,
             allowSyncing = true,
@@ -255,7 +255,7 @@ fun LibraryScreen(navController: NavController) {
     }
 
     if (showAiPlaylistDialog) {
-        echo.music.iad1tya.ui.component.CreateAiPlaylistDialog(
+        echo.music.enhanced.ui.component.CreateAiPlaylistDialog(
             onDismiss = { showAiPlaylistDialog = false },
             onPlaylistCreated = { playlistId ->
                 showAiPlaylistDialog = false

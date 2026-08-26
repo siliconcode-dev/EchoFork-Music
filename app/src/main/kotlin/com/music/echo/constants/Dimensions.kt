@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.constants
+package echo.music.enhanced.constants
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring

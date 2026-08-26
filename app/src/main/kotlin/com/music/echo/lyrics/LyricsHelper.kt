@@ -1,18 +1,18 @@
 
 
-package echo.music.iad1tya.lyrics
+package echo.music.enhanced.lyrics
 
 import android.content.Context
 import android.util.LruCache
-import echo.music.iad1tya.constants.LyricsProviderOrderKey
-import echo.music.iad1tya.constants.PreferredLyricsProvider
-import echo.music.iad1tya.constants.PreferredLyricsProviderKey
-import echo.music.iad1tya.db.entities.LyricsEntity.Companion.LYRICS_NOT_FOUND
-import echo.music.iad1tya.extensions.toEnum
-import echo.music.iad1tya.models.MediaMetadata
-import echo.music.iad1tya.utils.NetworkConnectivityObserver
-import echo.music.iad1tya.utils.dataStore
-import echo.music.iad1tya.utils.reportException
+import echo.music.enhanced.constants.LyricsProviderOrderKey
+import echo.music.enhanced.constants.PreferredLyricsProvider
+import echo.music.enhanced.constants.PreferredLyricsProviderKey
+import echo.music.enhanced.db.entities.LyricsEntity.Companion.LYRICS_NOT_FOUND
+import echo.music.enhanced.extensions.toEnum
+import echo.music.enhanced.models.MediaMetadata
+import echo.music.enhanced.utils.NetworkConnectivityObserver
+import echo.music.enhanced.utils.dataStore
+import echo.music.enhanced.utils.reportException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

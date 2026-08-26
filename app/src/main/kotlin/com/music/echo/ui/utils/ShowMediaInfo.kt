@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.utils
+package echo.music.enhanced.ui.utils
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -48,14 +48,14 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.music.innertube.YouTube
 import com.music.innertube.models.MediaInfo
-import echo.music.iad1tya.LocalDatabase
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.db.entities.FormatEntity
-import echo.music.iad1tya.db.entities.Song
-import echo.music.iad1tya.ui.component.LocalBottomSheetPageState
-import echo.music.iad1tya.ui.component.shimmer.ShimmerHost
-import echo.music.iad1tya.ui.component.shimmer.TextPlaceholder
+import echo.music.enhanced.LocalDatabase
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.db.entities.FormatEntity
+import echo.music.enhanced.db.entities.Song
+import echo.music.enhanced.ui.component.LocalBottomSheetPageState
+import echo.music.enhanced.ui.component.shimmer.ShimmerHost
+import echo.music.enhanced.ui.component.shimmer.TextPlaceholder
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

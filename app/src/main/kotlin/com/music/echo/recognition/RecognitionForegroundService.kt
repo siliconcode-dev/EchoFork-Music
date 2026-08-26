@@ -1,4 +1,4 @@
-package echo.music.iad1tya.recognition
+package echo.music.enhanced.recognition
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,8 +13,8 @@ import android.os.IBinder
 import timber.log.Timber
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import echo.music.iad1tya.MainActivity
-import echo.music.iad1tya.R
+import echo.music.enhanced.MainActivity
+import echo.music.enhanced.R
 import com.music.shazamkit.models.RecognitionResult
 import com.music.shazamkit.models.RecognitionStatus
 import kotlinx.coroutines.CoroutineScope

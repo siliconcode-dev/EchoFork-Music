@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.playback
+package echo.music.enhanced.playback
 
 import coil3.SingletonImageLoader
 import coil3.request.CachePolicy
@@ -19,22 +19,22 @@ import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadNotificationHelper
 import com.music.innertube.YouTube
-import echo.music.iad1tya.constants.AudioQuality
-import echo.music.iad1tya.constants.AudioQualityKey
-import echo.music.iad1tya.constants.IpVersionKey
+import echo.music.enhanced.constants.AudioQuality
+import echo.music.enhanced.constants.AudioQualityKey
+import echo.music.enhanced.constants.IpVersionKey
 import com.music.innertube.models.IpVersion
 import okhttp3.Dns
 import java.net.InetAddress
 import java.net.Inet4Address
 import java.net.Inet6Address
-import echo.music.iad1tya.db.MusicDatabase
-import echo.music.iad1tya.db.entities.FormatEntity
-import echo.music.iad1tya.db.entities.SongEntity
-import echo.music.iad1tya.di.DownloadCache
-import echo.music.iad1tya.di.PlayerCache
-import echo.music.iad1tya.ui.utils.resize
-import echo.music.iad1tya.utils.YTPlayerUtils
-import echo.music.iad1tya.utils.enumPreference
+import echo.music.enhanced.db.MusicDatabase
+import echo.music.enhanced.db.entities.FormatEntity
+import echo.music.enhanced.db.entities.SongEntity
+import echo.music.enhanced.di.DownloadCache
+import echo.music.enhanced.di.PlayerCache
+import echo.music.enhanced.ui.utils.resize
+import echo.music.enhanced.utils.YTPlayerUtils
+import echo.music.enhanced.utils.enumPreference
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -65,7 +65,7 @@ constructor(
     @PlayerCache val playerCache: SimpleCache,
 ) {
     private val connectivityManager = context.getSystemService<ConnectivityManager>()!!
-    private val downloadQuality by enumPreference(context, echo.music.iad1tya.constants.DownloadQualityKey, echo.music.iad1tya.constants.DownloadQuality.YOUTUBE)
+    private val downloadQuality by enumPreference(context, echo.music.enhanced.constants.DownloadQualityKey, echo.music.enhanced.constants.DownloadQuality.YOUTUBE)
     private val ipVersion by enumPreference(context, IpVersionKey, IpVersion.AUTO)
     private val songUrlCache = HashMap<String, Pair<String, Long>>()
 

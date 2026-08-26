@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.menu
+package echo.music.enhanced.ui.menu
 
 import android.content.Intent
 import android.content.res.Configuration
@@ -55,30 +55,30 @@ import androidx.media3.exoplayer.offline.DownloadService
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.music.innertube.YouTube
-import echo.music.iad1tya.LocalDatabase
-import echo.music.iad1tya.LocalDownloadUtil
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.LocalSyncUtils
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.ListItemHeight
-import echo.music.iad1tya.constants.ListThumbnailSize
-import echo.music.iad1tya.extensions.toMediaItem
-import echo.music.iad1tya.models.MediaMetadata
-import echo.music.iad1tya.models.toMediaMetadata
-import echo.music.iad1tya.playback.ExoDownloadService
-import echo.music.iad1tya.playback.queues.YouTubeQueue
-import echo.music.iad1tya.ui.component.BottomSheetState
-import echo.music.iad1tya.ui.component.ListDialog
-import echo.music.iad1tya.ui.component.Material3MenuGroup
-import echo.music.iad1tya.ui.component.Material3MenuItemData
-import echo.music.iad1tya.ui.component.MediaMetadataListItem
-import echo.music.iad1tya.ui.component.NewAction
-import echo.music.iad1tya.ui.component.NewActionGrid
-import echo.music.iad1tya.utils.listItemShape
+import echo.music.enhanced.LocalDatabase
+import echo.music.enhanced.LocalDownloadUtil
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.LocalSyncUtils
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.ListItemHeight
+import echo.music.enhanced.constants.ListThumbnailSize
+import echo.music.enhanced.extensions.toMediaItem
+import echo.music.enhanced.models.MediaMetadata
+import echo.music.enhanced.models.toMediaMetadata
+import echo.music.enhanced.playback.ExoDownloadService
+import echo.music.enhanced.playback.queues.YouTubeQueue
+import echo.music.enhanced.ui.component.BottomSheetState
+import echo.music.enhanced.ui.component.ListDialog
+import echo.music.enhanced.ui.component.Material3MenuGroup
+import echo.music.enhanced.ui.component.Material3MenuItemData
+import echo.music.enhanced.ui.component.MediaMetadataListItem
+import echo.music.enhanced.ui.component.NewAction
+import echo.music.enhanced.ui.component.NewActionGrid
+import echo.music.enhanced.utils.listItemShape
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import echo.music.iad1tya.models.QueueItemSource
+import echo.music.enhanced.models.QueueItemSource
 
 @Composable
 fun QueueMenu(
@@ -522,9 +522,9 @@ fun QueueMenu(
                             },
                             onClick = {
                                 refetchIconDegree -= 360
-                                androidx.media3.exoplayer.offline.DownloadService.sendRemoveDownload(context, echo.music.iad1tya.playback.ExoDownloadService::class.java, mediaMetadata.id, false)
-                                val intent = android.content.Intent(context, echo.music.iad1tya.playback.MusicService::class.java).apply {
-                                    action = "echo.music.iad1tya.ACTION_CLEAR_SONG_CACHE"
+                                androidx.media3.exoplayer.offline.DownloadService.sendRemoveDownload(context, echo.music.enhanced.playback.ExoDownloadService::class.java, mediaMetadata.id, false)
+                                val intent = android.content.Intent(context, echo.music.enhanced.playback.MusicService::class.java).apply {
+                                    action = "echo.music.enhanced.ACTION_CLEAR_SONG_CACHE"
                                     putExtra("songId", mediaMetadata.id)
                                 }
                                 context.startService(intent)

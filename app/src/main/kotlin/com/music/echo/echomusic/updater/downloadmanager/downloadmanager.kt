@@ -1,8 +1,8 @@
-package echo.music.iad1tya.echomusic.updater.downloadmanager
+package echo.music.enhanced.echomusic.updater.downloadmanager
 
 import android.content.Context
 import android.os.Environment
-import echo.music.iad1tya.R
+import echo.music.enhanced.R
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream

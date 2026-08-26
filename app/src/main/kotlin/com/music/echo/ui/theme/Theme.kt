@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.theme
+package echo.music.enhanced.ui.theme
 
 import android.graphics.Bitmap
 import android.os.Build

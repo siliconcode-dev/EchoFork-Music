@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,54 +32,54 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import echo.music.iad1tya.BuildConfig
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.AudioNormalizationKey
-import echo.music.iad1tya.constants.AudioOffload
-import echo.music.iad1tya.constants.AudioQuality
-import echo.music.iad1tya.constants.AudioQualityKey
-import echo.music.iad1tya.constants.AutoDownloadOnLikeKey
-import echo.music.iad1tya.constants.AutomixCrossfadeKey
-import echo.music.iad1tya.constants.AutomixDebugOverlayKey
-import echo.music.iad1tya.constants.CrossfadeDurationKey
-import echo.music.iad1tya.constants.CrossfadeEnabledKey
-import echo.music.iad1tya.constants.CrossfadeGaplessKey
-import echo.music.iad1tya.constants.AutoLoadMoreKey
-import echo.music.iad1tya.constants.AutoSkipNextOnErrorKey
-import echo.music.iad1tya.constants.DisableLoadMoreWhenRepeatAllKey
-import echo.music.iad1tya.constants.EnableGoogleCastKey
-import echo.music.iad1tya.constants.HistoryDuration
-import echo.music.iad1tya.constants.KeepScreenOn
-import echo.music.iad1tya.constants.PauseOnMute
-import echo.music.iad1tya.constants.PersistentQueueKey
-import echo.music.iad1tya.constants.PersistentShuffleAcrossQueuesKey
-import echo.music.iad1tya.constants.PreventDuplicateTracksInQueueKey
-import echo.music.iad1tya.constants.RememberShuffleAndRepeatKey
-import echo.music.iad1tya.constants.ResumeOnBluetoothConnectKey
-import echo.music.iad1tya.constants.SeekExtraSeconds
-import echo.music.iad1tya.constants.ShufflePlaylistFirstKey
-import echo.music.iad1tya.constants.SimilarContent
+import echo.music.enhanced.BuildConfig
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.AudioNormalizationKey
+import echo.music.enhanced.constants.AudioOffload
+import echo.music.enhanced.constants.AudioQuality
+import echo.music.enhanced.constants.AudioQualityKey
+import echo.music.enhanced.constants.AutoDownloadOnLikeKey
+import echo.music.enhanced.constants.AutomixCrossfadeKey
+import echo.music.enhanced.constants.AutomixDebugOverlayKey
+import echo.music.enhanced.constants.CrossfadeDurationKey
+import echo.music.enhanced.constants.CrossfadeEnabledKey
+import echo.music.enhanced.constants.CrossfadeGaplessKey
+import echo.music.enhanced.constants.AutoLoadMoreKey
+import echo.music.enhanced.constants.AutoSkipNextOnErrorKey
+import echo.music.enhanced.constants.DisableLoadMoreWhenRepeatAllKey
+import echo.music.enhanced.constants.EnableGoogleCastKey
+import echo.music.enhanced.constants.HistoryDuration
+import echo.music.enhanced.constants.KeepScreenOn
+import echo.music.enhanced.constants.PauseOnMute
+import echo.music.enhanced.constants.PersistentQueueKey
+import echo.music.enhanced.constants.PersistentShuffleAcrossQueuesKey
+import echo.music.enhanced.constants.PreventDuplicateTracksInQueueKey
+import echo.music.enhanced.constants.RememberShuffleAndRepeatKey
+import echo.music.enhanced.constants.ResumeOnBluetoothConnectKey
+import echo.music.enhanced.constants.SeekExtraSeconds
+import echo.music.enhanced.constants.ShufflePlaylistFirstKey
+import echo.music.enhanced.constants.SimilarContent
 
-import echo.music.iad1tya.constants.SkipSilenceInstantKey
-import echo.music.iad1tya.constants.SkipSilenceKey
-import echo.music.iad1tya.constants.StopMusicOnTaskClearKey
-import echo.music.iad1tya.constants.EnableExportAsMp3Key
+import echo.music.enhanced.constants.SkipSilenceInstantKey
+import echo.music.enhanced.constants.SkipSilenceKey
+import echo.music.enhanced.constants.StopMusicOnTaskClearKey
+import echo.music.enhanced.constants.EnableExportAsMp3Key
 
-import echo.music.iad1tya.constants.PreloadNextSongEnabledKey
-import echo.music.iad1tya.constants.PreloadNextSongLimitKey
-import echo.music.iad1tya.constants.PreloadLyricsEnabledKey
+import echo.music.enhanced.constants.PreloadNextSongEnabledKey
+import echo.music.enhanced.constants.PreloadNextSongLimitKey
+import echo.music.enhanced.constants.PreloadLyricsEnabledKey
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import echo.music.iad1tya.ui.component.DefaultDialog
-import echo.music.iad1tya.ui.component.EnumDialog
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.Material3SettingsGroup
-import echo.music.iad1tya.ui.component.Material3SettingsItem
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.ui.component.DefaultDialog
+import echo.music.enhanced.ui.component.EnumDialog
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.Material3SettingsGroup
+import echo.music.enhanced.ui.component.Material3SettingsItem
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.utils.rememberPreference
 import kotlin.math.roundToInt
 import android.content.Intent
 import android.net.Uri
@@ -156,7 +156,7 @@ highlightKey: String? = null) {
     )
 
     val (dataSaverEnabled, onDataSaverEnabledChange) = rememberPreference(
-        key = echo.music.iad1tya.constants.DataSaverEnabledKey,
+        key = echo.music.enhanced.constants.DataSaverEnabledKey,
         defaultValue = false
     )
 
@@ -238,8 +238,8 @@ highlightKey: String? = null) {
     var showDownloadQualityDialog by remember { mutableStateOf(false) }
 
     val (downloadQuality, onDownloadQualityChange) = rememberEnumPreference(
-        echo.music.iad1tya.constants.DownloadQualityKey,
-        defaultValue = echo.music.iad1tya.constants.DownloadQuality.YOUTUBE
+        echo.music.enhanced.constants.DownloadQualityKey,
+        defaultValue = echo.music.enhanced.constants.DownloadQuality.YOUTUBE
     )
 
     if (showAudioQualityDialog) {
@@ -273,10 +273,10 @@ highlightKey: String? = null) {
             },
             title = stringResource(R.string.download_quality_title),
             current = downloadQuality,
-            values = listOf(echo.music.iad1tya.constants.DownloadQuality.YOUTUBE),
+            values = listOf(echo.music.enhanced.constants.DownloadQuality.YOUTUBE),
             valueText = {
                 when (it) {
-                    echo.music.iad1tya.constants.DownloadQuality.YOUTUBE -> "YouTube Music (AAC/Default)"
+                    echo.music.enhanced.constants.DownloadQuality.YOUTUBE -> "YouTube Music (AAC/Default)"
                     else -> ""
                 }
             }
@@ -383,7 +383,7 @@ highlightKey: String? = null) {
                     description = {
                         Text(
                             when (downloadQuality) {
-                                echo.music.iad1tya.constants.DownloadQuality.YOUTUBE -> "YouTube Music (AAC/Default)"
+                                echo.music.enhanced.constants.DownloadQuality.YOUTUBE -> "YouTube Music (AAC/Default)"
                                 else -> "YouTube Music (AAC/Default)"
                             }
                         )

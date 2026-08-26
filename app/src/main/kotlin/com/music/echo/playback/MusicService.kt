@@ -2,7 +2,7 @@
 
 @file:Suppress("DEPRECATION")
 
-package echo.music.iad1tya.playback
+package echo.music.enhanced.playback
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -72,115 +72,115 @@ import com.google.common.util.concurrent.MoreExecutors
 import com.music.innertube.YouTube
 import com.music.innertube.models.SongItem
 import com.music.innertube.models.WatchEndpoint
-import echo.music.iad1tya.MainActivity
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.AudioNormalizationKey
-import echo.music.iad1tya.constants.AudioOffload
-import echo.music.iad1tya.constants.AudioQualityKey
-import echo.music.iad1tya.constants.AutoDownloadOnLikeKey
-import echo.music.iad1tya.constants.AutoLoadMoreKey
-import echo.music.iad1tya.constants.AutoSkipNextOnErrorKey
-import echo.music.iad1tya.constants.AutomixCrossfadeKey
-import echo.music.iad1tya.constants.CrossfadeDurationKey
-import echo.music.iad1tya.constants.CrossfadeEnabledKey
-import echo.music.iad1tya.constants.CrossfadeGaplessKey
-import echo.music.iad1tya.constants.DisableLoadMoreWhenRepeatAllKey
+import echo.music.enhanced.MainActivity
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.AudioNormalizationKey
+import echo.music.enhanced.constants.AudioOffload
+import echo.music.enhanced.constants.AudioQualityKey
+import echo.music.enhanced.constants.AutoDownloadOnLikeKey
+import echo.music.enhanced.constants.AutoLoadMoreKey
+import echo.music.enhanced.constants.AutoSkipNextOnErrorKey
+import echo.music.enhanced.constants.AutomixCrossfadeKey
+import echo.music.enhanced.constants.CrossfadeDurationKey
+import echo.music.enhanced.constants.CrossfadeEnabledKey
+import echo.music.enhanced.constants.CrossfadeGaplessKey
+import echo.music.enhanced.constants.DisableLoadMoreWhenRepeatAllKey
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
-import echo.music.iad1tya.constants.DiscordActivityNameKey
-import echo.music.iad1tya.constants.DiscordActivityTypeKey
-import echo.music.iad1tya.constants.DiscordTokenKey
-import echo.music.iad1tya.constants.EnableDiscordRPCKey
-import echo.music.iad1tya.constants.EnableLastFMScrobblingKey
-import echo.music.iad1tya.constants.HideExplicitKey
-import echo.music.iad1tya.constants.HideVideoSongsKey
-import echo.music.iad1tya.constants.HistoryDuration
-import echo.music.iad1tya.constants.LastFMSessionKey
-import echo.music.iad1tya.constants.LastFMUseNowPlaying
-import echo.music.iad1tya.constants.LastFMUseSendLikes
-import echo.music.iad1tya.constants.MediaSessionConstants.CommandToggleLike
-import echo.music.iad1tya.constants.MediaSessionConstants.CommandToggleRepeatMode
-import echo.music.iad1tya.constants.MediaSessionConstants.CommandToggleShuffle
-import echo.music.iad1tya.constants.MediaSessionConstants.CommandToggleStartRadio
-import echo.music.iad1tya.constants.PauseListenHistoryKey
-import echo.music.iad1tya.constants.PauseOnMute
-import echo.music.iad1tya.constants.PersistentQueueKey
-import echo.music.iad1tya.constants.PersistentShuffleAcrossQueuesKey
-import echo.music.iad1tya.constants.PlayerVolumeKey
+import echo.music.enhanced.constants.DiscordActivityNameKey
+import echo.music.enhanced.constants.DiscordActivityTypeKey
+import echo.music.enhanced.constants.DiscordTokenKey
+import echo.music.enhanced.constants.EnableDiscordRPCKey
+import echo.music.enhanced.constants.EnableLastFMScrobblingKey
+import echo.music.enhanced.constants.HideExplicitKey
+import echo.music.enhanced.constants.HideVideoSongsKey
+import echo.music.enhanced.constants.HistoryDuration
+import echo.music.enhanced.constants.LastFMSessionKey
+import echo.music.enhanced.constants.LastFMUseNowPlaying
+import echo.music.enhanced.constants.LastFMUseSendLikes
+import echo.music.enhanced.constants.MediaSessionConstants.CommandToggleLike
+import echo.music.enhanced.constants.MediaSessionConstants.CommandToggleRepeatMode
+import echo.music.enhanced.constants.MediaSessionConstants.CommandToggleShuffle
+import echo.music.enhanced.constants.MediaSessionConstants.CommandToggleStartRadio
+import echo.music.enhanced.constants.PauseListenHistoryKey
+import echo.music.enhanced.constants.PauseOnMute
+import echo.music.enhanced.constants.PersistentQueueKey
+import echo.music.enhanced.constants.PersistentShuffleAcrossQueuesKey
+import echo.music.enhanced.constants.PlayerVolumeKey
 
-import echo.music.iad1tya.constants.RememberShuffleAndRepeatKey
-import echo.music.iad1tya.constants.RepeatModeKey
-import echo.music.iad1tya.constants.ResumeOnBluetoothConnectKey
-import echo.music.iad1tya.constants.ScrobbleDelayPercentKey
-import echo.music.iad1tya.constants.ScrobbleDelaySecondsKey
-import echo.music.iad1tya.constants.ScrobbleMinSongDurationKey
-import echo.music.iad1tya.constants.ShowLyricsKey
-import echo.music.iad1tya.constants.ShuffleModeKey
-import echo.music.iad1tya.constants.ShufflePlaylistFirstKey
-import echo.music.iad1tya.constants.PreloadLyricsEnabledKey
-import echo.music.iad1tya.constants.PreloadNextSongEnabledKey
-import echo.music.iad1tya.constants.PreloadNextSongLimitKey
-import echo.music.iad1tya.constants.PreventDuplicateTracksInQueueKey
-import echo.music.iad1tya.constants.SimilarContent
-import echo.music.iad1tya.constants.SkipSilenceInstantKey
-import echo.music.iad1tya.constants.SkipSilenceKey
-import echo.music.iad1tya.constants.IpVersionKey
+import echo.music.enhanced.constants.RememberShuffleAndRepeatKey
+import echo.music.enhanced.constants.RepeatModeKey
+import echo.music.enhanced.constants.ResumeOnBluetoothConnectKey
+import echo.music.enhanced.constants.ScrobbleDelayPercentKey
+import echo.music.enhanced.constants.ScrobbleDelaySecondsKey
+import echo.music.enhanced.constants.ScrobbleMinSongDurationKey
+import echo.music.enhanced.constants.ShowLyricsKey
+import echo.music.enhanced.constants.ShuffleModeKey
+import echo.music.enhanced.constants.ShufflePlaylistFirstKey
+import echo.music.enhanced.constants.PreloadLyricsEnabledKey
+import echo.music.enhanced.constants.PreloadNextSongEnabledKey
+import echo.music.enhanced.constants.PreloadNextSongLimitKey
+import echo.music.enhanced.constants.PreventDuplicateTracksInQueueKey
+import echo.music.enhanced.constants.SimilarContent
+import echo.music.enhanced.constants.SkipSilenceInstantKey
+import echo.music.enhanced.constants.SkipSilenceKey
+import echo.music.enhanced.constants.IpVersionKey
 import com.music.innertube.models.IpVersion
 import okhttp3.Dns
 import java.net.InetAddress
 import java.net.Inet4Address
 import java.net.Inet6Address
-import echo.music.iad1tya.db.MusicDatabase
-import echo.music.iad1tya.db.entities.Event
-import echo.music.iad1tya.db.entities.FormatEntity
-import echo.music.iad1tya.db.entities.LyricsEntity
-import echo.music.iad1tya.db.entities.RelatedSongMap
-import echo.music.iad1tya.db.entities.Song
-import echo.music.iad1tya.di.DownloadCache
-import echo.music.iad1tya.di.PlayerCache
-import echo.music.iad1tya.eq.EqualizerService
-import echo.music.iad1tya.eq.audio.AutomixDuckAudioProcessor
-import echo.music.iad1tya.eq.audio.CustomEqualizerAudioProcessor
-import echo.music.iad1tya.eq.data.EQProfileRepository
-import echo.music.iad1tya.extensions.SilentHandler
-import echo.music.iad1tya.extensions.collect
-import echo.music.iad1tya.extensions.collectLatest
-import echo.music.iad1tya.extensions.currentMetadata
-import echo.music.iad1tya.extensions.findNextMediaItemById
-import echo.music.iad1tya.extensions.mediaItems
-import echo.music.iad1tya.extensions.metadata
-import echo.music.iad1tya.extensions.setOffloadEnabled
-import echo.music.iad1tya.extensions.toEnum
-import echo.music.iad1tya.extensions.toMediaItem
-import echo.music.iad1tya.extensions.toPersistQueue
-import echo.music.iad1tya.extensions.toQueue
-import echo.music.iad1tya.echomusic.updater.downloadmanager.EchoNotificationProvider
-import echo.music.iad1tya.lyrics.LyricsHelper
-import echo.music.iad1tya.models.PersistPlayerState
-import echo.music.iad1tya.models.PersistQueue
-import echo.music.iad1tya.models.toMediaMetadata
-import echo.music.iad1tya.db.entities.BeatInfoEntity
-import echo.music.iad1tya.playback.audio.BeatAnalyzer
-import echo.music.iad1tya.playback.audio.SilenceDetectorAudioProcessor
-import echo.music.iad1tya.playback.queues.EmptyQueue
-import echo.music.iad1tya.playback.queues.Queue
-import echo.music.iad1tya.playback.queues.YouTubeQueue
-import echo.music.iad1tya.playback.queues.filterExplicit
-import echo.music.iad1tya.playback.queues.filterVideoSongs
-import echo.music.iad1tya.utils.CoilBitmapLoader
-import echo.music.iad1tya.ui.screens.settings.DiscordPresenceManager
-import echo.music.iad1tya.utils.NetworkConnectivityObserver
-import echo.music.iad1tya.utils.ScrobbleManager
-import echo.music.iad1tya.utils.SyncUtils
-import echo.music.iad1tya.utils.YTPlayerUtils
-import echo.music.iad1tya.utils.dataStore
-import echo.music.iad1tya.utils.get
-import echo.music.iad1tya.utils.reportException
-import echo.music.iad1tya.widget.EchoMusicWidgetManager
-import echo.music.iad1tya.widget.MusicWidgetReceiver
+import echo.music.enhanced.db.MusicDatabase
+import echo.music.enhanced.db.entities.Event
+import echo.music.enhanced.db.entities.FormatEntity
+import echo.music.enhanced.db.entities.LyricsEntity
+import echo.music.enhanced.db.entities.RelatedSongMap
+import echo.music.enhanced.db.entities.Song
+import echo.music.enhanced.di.DownloadCache
+import echo.music.enhanced.di.PlayerCache
+import echo.music.enhanced.eq.EqualizerService
+import echo.music.enhanced.eq.audio.AutomixDuckAudioProcessor
+import echo.music.enhanced.eq.audio.CustomEqualizerAudioProcessor
+import echo.music.enhanced.eq.data.EQProfileRepository
+import echo.music.enhanced.extensions.SilentHandler
+import echo.music.enhanced.extensions.collect
+import echo.music.enhanced.extensions.collectLatest
+import echo.music.enhanced.extensions.currentMetadata
+import echo.music.enhanced.extensions.findNextMediaItemById
+import echo.music.enhanced.extensions.mediaItems
+import echo.music.enhanced.extensions.metadata
+import echo.music.enhanced.extensions.setOffloadEnabled
+import echo.music.enhanced.extensions.toEnum
+import echo.music.enhanced.extensions.toMediaItem
+import echo.music.enhanced.extensions.toPersistQueue
+import echo.music.enhanced.extensions.toQueue
+import echo.music.enhanced.echomusic.updater.downloadmanager.EchoNotificationProvider
+import echo.music.enhanced.lyrics.LyricsHelper
+import echo.music.enhanced.models.PersistPlayerState
+import echo.music.enhanced.models.PersistQueue
+import echo.music.enhanced.models.toMediaMetadata
+import echo.music.enhanced.db.entities.BeatInfoEntity
+import echo.music.enhanced.playback.audio.BeatAnalyzer
+import echo.music.enhanced.playback.audio.SilenceDetectorAudioProcessor
+import echo.music.enhanced.playback.queues.EmptyQueue
+import echo.music.enhanced.playback.queues.Queue
+import echo.music.enhanced.playback.queues.YouTubeQueue
+import echo.music.enhanced.playback.queues.filterExplicit
+import echo.music.enhanced.playback.queues.filterVideoSongs
+import echo.music.enhanced.utils.CoilBitmapLoader
+import echo.music.enhanced.ui.screens.settings.DiscordPresenceManager
+import echo.music.enhanced.utils.NetworkConnectivityObserver
+import echo.music.enhanced.utils.ScrobbleManager
+import echo.music.enhanced.utils.SyncUtils
+import echo.music.enhanced.utils.YTPlayerUtils
+import echo.music.enhanced.utils.dataStore
+import echo.music.enhanced.utils.get
+import echo.music.enhanced.utils.reportException
+import echo.music.enhanced.widget.EchoMusicWidgetManager
+import echo.music.enhanced.widget.MusicWidgetReceiver
 import dagger.hilt.android.AndroidEntryPoint
-import echo.music.iad1tya.utils.isLocalMediaId
+import echo.music.enhanced.utils.isLocalMediaId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -361,13 +361,13 @@ class MusicService :
     val waitingForNetworkConnection = MutableStateFlow(false)
     private val isNetworkConnected = MutableStateFlow(false)
 
-    private lateinit var audioQuality: echo.music.iad1tya.constants.AudioQuality
+    private lateinit var audioQuality: echo.music.enhanced.constants.AudioQuality
     private lateinit var ipVersion: IpVersion
 
     private var currentQueue: Queue = EmptyQueue
     var queueTitle: String? = null
 
-    val currentMediaMetadata = MutableStateFlow<echo.music.iad1tya.models.MediaMetadata?>(null)
+    val currentMediaMetadata = MutableStateFlow<echo.music.enhanced.models.MediaMetadata?>(null)
     private val currentSong =
         currentMediaMetadata
             .flatMapLatest { mediaMetadata ->
@@ -679,7 +679,7 @@ class MusicService :
 
         audioManager.registerAudioDeviceCallback(audioDeviceCallback, null)
 
-        audioQuality = dataStore.get(AudioQualityKey).toEnum(echo.music.iad1tya.constants.AudioQuality.OPUS)
+        audioQuality = dataStore.get(AudioQualityKey).toEnum(echo.music.enhanced.constants.AudioQuality.OPUS)
         ipVersion = dataStore.get(IpVersionKey).toEnum(IpVersion.AUTO)
         playerVolume = MutableStateFlow(restorePlayerVolume(dataStore.get(PlayerVolumeKey, 1f)))
 
@@ -728,8 +728,8 @@ class MusicService :
         scope.launch {
             dataStore.data
                 .map { 
-                    val listenBrainz = it[echo.music.iad1tya.constants.ListenBrainzEnabledKey] ?: false
-                    val dataSaver = it[echo.music.iad1tya.constants.DataSaverEnabledKey] ?: false
+                    val listenBrainz = it[echo.music.enhanced.constants.ListenBrainzEnabledKey] ?: false
+                    val dataSaver = it[echo.music.enhanced.constants.DataSaverEnabledKey] ?: false
                     if (dataSaver) false else listenBrainz
                 }
                 .distinctUntilChanged()
@@ -738,7 +738,7 @@ class MusicService :
 
         scope.launch {
             dataStore.data
-                .map { it[echo.music.iad1tya.constants.ListenBrainzTokenKey] ?: "" }
+                .map { it[echo.music.enhanced.constants.ListenBrainzTokenKey] ?: "" }
                 .distinctUntilChanged()
                 .collect { listenBrainzToken = it }
         }
@@ -749,10 +749,10 @@ class MusicService :
                 .map { 
                     val qualityStr = it[AudioQualityKey]
                     val quality = qualityStr?.let { value ->
-                        echo.music.iad1tya.constants.AudioQuality.entries.find { enumVal -> enumVal.name == value }
-                    } ?: echo.music.iad1tya.constants.AudioQuality.OPUS
-                    val dataSaver = it[echo.music.iad1tya.constants.DataSaverEnabledKey] ?: false
-                    if (dataSaver) echo.music.iad1tya.constants.AudioQuality.OPUS else quality
+                        echo.music.enhanced.constants.AudioQuality.entries.find { enumVal -> enumVal.name == value }
+                    } ?: echo.music.enhanced.constants.AudioQuality.OPUS
+                    val dataSaver = it[echo.music.enhanced.constants.DataSaverEnabledKey] ?: false
+                    if (dataSaver) echo.music.enhanced.constants.AudioQuality.OPUS else quality
                 }
                 .distinctUntilChanged()
                 .collect { newQuality ->
@@ -834,7 +834,7 @@ class MusicService :
             currentMediaMetadata.distinctUntilChangedBy { it?.id },
             dataStore.data.map { 
                 val showLyrics = it[ShowLyricsKey] ?: false
-                val dataSaver = it[echo.music.iad1tya.constants.DataSaverEnabledKey] ?: false
+                val dataSaver = it[echo.music.enhanced.constants.DataSaverEnabledKey] ?: false
                 if (dataSaver) false else showLyrics
             }.distinctUntilChanged(),
         ) { mediaMetadata, showLyrics ->
@@ -960,7 +960,7 @@ class MusicService :
         dataStore.data
             .map { 
                 val preload = it[PreloadNextSongEnabledKey] ?: true
-                val dataSaver = it[echo.music.iad1tya.constants.DataSaverEnabledKey] ?: false
+                val dataSaver = it[echo.music.enhanced.constants.DataSaverEnabledKey] ?: false
                 if (dataSaver) false else preload
             }
             .distinctUntilChanged()
@@ -1488,7 +1488,7 @@ class MusicService :
                 withContext(Dispatchers.IO) {
                     queue.getInitialStatus()
                         .filterExplicit(dataStore.get(HideExplicitKey, false))
-                        .filterVideoSongs(dataStore.get(HideVideoSongsKey, false) || dataStore.get(echo.music.iad1tya.constants.DataSaverEnabledKey, false))
+                        .filterVideoSongs(dataStore.get(HideVideoSongsKey, false) || dataStore.get(echo.music.enhanced.constants.DataSaverEnabledKey, false))
                 }
             if (queue.preloadItem != null && player.playbackState == STATE_IDLE) return@launch
             if (initialStatus.title != null) {
@@ -1563,7 +1563,7 @@ class MusicService :
                 val initialStatus = withContext(Dispatchers.IO) {
                     radioQueue.getInitialStatus()
                         .filterExplicit(dataStore.get(HideExplicitKey, false))
-                        .filterVideoSongs(dataStore.get(HideVideoSongsKey, false) || dataStore.get(echo.music.iad1tya.constants.DataSaverEnabledKey, false))
+                        .filterVideoSongs(dataStore.get(HideVideoSongsKey, false) || dataStore.get(echo.music.enhanced.constants.DataSaverEnabledKey, false))
                 }
 
                 if (initialStatus.title != null) {
@@ -1605,7 +1605,7 @@ class MusicService :
                                 .filter { it.id != currentMediaId }
                                 .map { it.toMediaItem() }
                                 .filterExplicit(dataStore.get(HideExplicitKey, false))
-                                .filterVideoSongs(dataStore.get(HideVideoSongsKey, false) || dataStore.get(echo.music.iad1tya.constants.DataSaverEnabledKey, false))
+                                .filterVideoSongs(dataStore.get(HideVideoSongsKey, false) || dataStore.get(echo.music.enhanced.constants.DataSaverEnabledKey, false))
 
                             if (radioItems.isNotEmpty()) {
                                 val itemCount = player.mediaItemCount
@@ -2097,7 +2097,7 @@ class MusicService :
                 val mediaItems = withContext(Dispatchers.IO) {
                     currentQueue.nextPage()
                         .filterExplicit(dataStore.get(HideExplicitKey, false))
-                        .filterVideoSongs(dataStore.get(HideVideoSongsKey, false) || dataStore.get(echo.music.iad1tya.constants.DataSaverEnabledKey, false))
+                        .filterVideoSongs(dataStore.get(HideVideoSongsKey, false) || dataStore.get(echo.music.enhanced.constants.DataSaverEnabledKey, false))
                 }
                 if (player.playbackState != STATE_IDLE && mediaItems.isNotEmpty()) {
                     player.addMediaItems(mediaItems)
@@ -2952,7 +2952,7 @@ class MusicService :
             val isFullyDownloaded = cachedLength > 0 && downloadCache.isCached(mediaId, 0, cachedLength)
 
             val activeQualityInCache = songUrlCache.keys.find { it.startsWith("${mediaId}_") }?.substringAfter("_")?.let {
-                runCatching { echo.music.iad1tya.constants.AudioQuality.valueOf(it) }.getOrNull()
+                runCatching { echo.music.enhanced.constants.AudioQuality.valueOf(it) }.getOrNull()
             }
             val lockedQuality = activeQualityInCache ?: audioQuality
 
@@ -3328,7 +3328,7 @@ class MusicService :
             MusicWidgetReceiver.ACTION_UPDATE_WIDGET -> {
                 updateWidgetUI(player.isPlaying)
             }
-            "echo.music.iad1tya.ACTION_CLEAR_SONG_CACHE" -> {
+            "echo.music.enhanced.ACTION_CLEAR_SONG_CACHE" -> {
                 val songId = intent.getStringExtra("songId")
                 if (songId != null) {
                     songUrlCache.keys.filter { it.startsWith("${songId}_") }.forEach {
@@ -3418,7 +3418,7 @@ class MusicService :
 
     
     private fun initializeCast() {
-        if (dataStore.get(echo.music.iad1tya.constants.EnableGoogleCastKey, true)) {
+        if (dataStore.get(echo.music.enhanced.constants.EnableGoogleCastKey, true)) {
             try {
                 castConnectionHandler = CastConnectionHandler(this, scope, this)
                 if (castConnectionHandler?.initialize() != true) {
@@ -4166,7 +4166,7 @@ class MusicService :
                         val dbSong = database.song(mediaId).firstOrNull()
                         val knownArtist = dbSong?.artists?.joinToString(separator = ", ") { artist -> artist.name }?.replace(" - Topic", "")
                         
-                        val playbackData = echo.music.iad1tya.utils.YTPlayerUtils.playerResponseForPlayback(
+                        val playbackData = echo.music.enhanced.utils.YTPlayerUtils.playerResponseForPlayback(
                             videoId = mediaId,
                             audioQuality = audioQuality,
                             connectivityManager = connectivityManager,
@@ -4190,16 +4190,16 @@ class MusicService :
                         val dbSong = database.song(mediaId).firstOrNull()
                         if (dbSong != null) {
                             kotlin.runCatching {
-                                val metadata = echo.music.iad1tya.models.MediaMetadata(
+                                val metadata = echo.music.enhanced.models.MediaMetadata(
                                     id = dbSong.song.id,
                                     title = dbSong.song.title,
-                                    artists = dbSong.artists.map { artist -> echo.music.iad1tya.models.MediaMetadata.Artist(artist.id, artist.name) },
+                                    artists = dbSong.artists.map { artist -> echo.music.enhanced.models.MediaMetadata.Artist(artist.id, artist.name) },
                                     duration = dbSong.song.duration,
                                     thumbnailUrl = dbSong.thumbnailUrl
                                 )
                                 val lyricsResult = lyricsHelper.getLyrics(metadata)
                                 database.query {
-                                    upsert(echo.music.iad1tya.db.entities.LyricsEntity(id = mediaId, lyrics = lyricsResult.lyrics))
+                                    upsert(echo.music.enhanced.db.entities.LyricsEntity(id = mediaId, lyrics = lyricsResult.lyrics))
                                 }
                                 Timber.tag(TAG).d("Preloaded lyrics for $mediaId")
                             }

@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.menu
+package echo.music.enhanced.ui.menu
 
 import android.content.Intent
 import android.content.res.Configuration
@@ -42,8 +42,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.Alignment
-import echo.music.iad1tya.constants.InnerTubeCookieKey
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.constants.InnerTubeCookieKey
+import echo.music.enhanced.utils.rememberPreference
 import com.music.innertube.utils.parseCookieString
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -51,25 +51,25 @@ import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadRequest
 import androidx.media3.exoplayer.offline.DownloadService
 import com.music.innertube.YouTube
-import echo.music.iad1tya.LocalDatabase
-import echo.music.iad1tya.LocalDownloadUtil
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.db.entities.Playlist
-import echo.music.iad1tya.db.entities.SpeedDialItem
-import echo.music.iad1tya.db.entities.PlaylistSong
-import echo.music.iad1tya.db.entities.Song
-import echo.music.iad1tya.extensions.toMediaItem
-import echo.music.iad1tya.playback.ExoDownloadService
-import echo.music.iad1tya.playback.queues.ListQueue
-import echo.music.iad1tya.playback.queues.YouTubeQueue
-import echo.music.iad1tya.ui.component.DefaultDialog
-import echo.music.iad1tya.ui.component.Material3MenuGroup
-import echo.music.iad1tya.ui.component.Material3MenuItemData
-import echo.music.iad1tya.ui.component.NewAction
-import echo.music.iad1tya.ui.component.NewActionGrid
-import echo.music.iad1tya.ui.component.PlaylistListItem
-import echo.music.iad1tya.ui.component.TextFieldDialog
+import echo.music.enhanced.LocalDatabase
+import echo.music.enhanced.LocalDownloadUtil
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.db.entities.Playlist
+import echo.music.enhanced.db.entities.SpeedDialItem
+import echo.music.enhanced.db.entities.PlaylistSong
+import echo.music.enhanced.db.entities.Song
+import echo.music.enhanced.extensions.toMediaItem
+import echo.music.enhanced.playback.ExoDownloadService
+import echo.music.enhanced.playback.queues.ListQueue
+import echo.music.enhanced.playback.queues.YouTubeQueue
+import echo.music.enhanced.ui.component.DefaultDialog
+import echo.music.enhanced.ui.component.Material3MenuGroup
+import echo.music.enhanced.ui.component.Material3MenuItemData
+import echo.music.enhanced.ui.component.NewAction
+import echo.music.enhanced.ui.component.NewActionGrid
+import echo.music.enhanced.ui.component.PlaylistListItem
+import echo.music.enhanced.ui.component.TextFieldDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

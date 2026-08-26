@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.player
+package echo.music.enhanced.ui.player
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.common.PlaybackException
-import echo.music.iad1tya.R
+import echo.music.enhanced.R
 
 @Composable
 fun PlaybackError(

@@ -1,7 +1,7 @@
-package echo.music.iad1tya.utils.potoken
+package echo.music.enhanced.utils.potoken
 
 import android.webkit.CookieManager
-import echo.music.iad1tya.utils.cipher.CipherDeobfuscator
+import echo.music.enhanced.utils.cipher.CipherDeobfuscator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex

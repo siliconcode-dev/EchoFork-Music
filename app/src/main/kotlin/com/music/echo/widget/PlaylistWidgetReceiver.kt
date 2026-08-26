@@ -3,14 +3,14 @@
  * Licensed under GPL-3.0 | See git history for contributors
  */
 
-package echo.music.iad1tya.widget
+package echo.music.enhanced.widget
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import echo.music.iad1tya.MainActivity
-import echo.music.iad1tya.playback.MusicService
+import echo.music.enhanced.MainActivity
+import echo.music.enhanced.playback.MusicService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -113,7 +113,7 @@ class PlaylistWidgetReceiver : AppWidgetProvider() {
 
     private fun openTargetInApp(context: Context, source: Intent) {
         val activityIntent = Intent(context, MainActivity::class.java).apply {
-            action = "echo.music.iad1tya.action.OPEN_WIDGET_TARGET"
+            action = "echo.music.enhanced.action.OPEN_WIDGET_TARGET"
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
             putExtra(
                 "extra_widget_target_type",
@@ -129,8 +129,8 @@ class PlaylistWidgetReceiver : AppWidgetProvider() {
 
     companion object {
         private const val TAG = "PlaylistWidgetReceiver"
-        const val ACTION_PLAY_TARGET = "echo.music.iad1tya.widget.playlists.PLAY_TARGET"
-        const val ACTION_UPDATE_WIDGET = "echo.music.iad1tya.widget.playlists.UPDATE_WIDGET"
+        const val ACTION_PLAY_TARGET = "echo.music.enhanced.widget.playlists.PLAY_TARGET"
+        const val ACTION_UPDATE_WIDGET = "echo.music.enhanced.widget.playlists.UPDATE_WIDGET"
 
         const val EXTRA_TARGET_TYPE = "playlist_widget_target_type"
         const val EXTRA_TARGET_ID = "playlist_widget_target_id"

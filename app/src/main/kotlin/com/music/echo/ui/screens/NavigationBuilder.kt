@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens
+package echo.music.enhanced.ui.screens
 
 import android.app.Activity
 import androidx.compose.animation.core.tween
@@ -20,49 +20,49 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
-import echo.music.iad1tya.constants.DarkModeKey
-import echo.music.iad1tya.constants.PureBlackKey
-import echo.music.iad1tya.ui.screens.artist.ArtistAlbumsScreen
-import echo.music.iad1tya.ui.screens.artist.ArtistItemsScreen
-import echo.music.iad1tya.ui.screens.artist.ArtistScreen
-import echo.music.iad1tya.ui.screens.artist.ArtistSongsScreen
-import echo.music.iad1tya.ui.screens.equalizer.EqScreen
-import echo.music.iad1tya.ui.screens.library.LibraryScreen
-import echo.music.iad1tya.ui.screens.library.LocalSongScreen
-import echo.music.iad1tya.ui.screens.playlist.AutoPlaylistScreen
-import echo.music.iad1tya.ui.screens.playlist.CachePlaylistScreen
-import echo.music.iad1tya.ui.screens.playlist.LocalPlaylistScreen
-import echo.music.iad1tya.ui.screens.playlist.OnlinePlaylistScreen
-import echo.music.iad1tya.ui.screens.playlist.TopPlaylistScreen
-import echo.music.iad1tya.ui.screens.search.OnlineSearchResult
-import echo.music.iad1tya.ui.screens.search.SearchScreen
-import echo.music.iad1tya.ui.screens.settings.AboutScreen
-import echo.music.iad1tya.ui.screens.settings.AppearanceSettings
-import echo.music.iad1tya.ui.screens.settings.GlassEffectSettings
-import echo.music.iad1tya.ui.screens.settings.BackupAndRestore
-import echo.music.iad1tya.ui.screens.settings.ContentSettings
-import echo.music.iad1tya.ui.screens.settings.UptimeScreen
-import echo.music.iad1tya.ui.screens.settings.DarkMode
-import echo.music.iad1tya.ui.screens.settings.PlayerSettings
-import echo.music.iad1tya.ui.screens.settings.PrivacySettings
-import echo.music.iad1tya.ui.screens.settings.RomanizationSettings
-import echo.music.iad1tya.ui.screens.settings.SettingsScreen
-import echo.music.iad1tya.ui.screens.settings.EchoExtractorSettings
-import echo.music.iad1tya.ui.screens.settings.AccountSettingsScreen
-import echo.music.iad1tya.ui.screens.settings.StorageSettings
-import echo.music.iad1tya.ui.screens.settings.ThemeScreen
-import echo.music.iad1tya.ui.screens.settings.AiSettings
+import echo.music.enhanced.constants.DarkModeKey
+import echo.music.enhanced.constants.PureBlackKey
+import echo.music.enhanced.ui.screens.artist.ArtistAlbumsScreen
+import echo.music.enhanced.ui.screens.artist.ArtistItemsScreen
+import echo.music.enhanced.ui.screens.artist.ArtistScreen
+import echo.music.enhanced.ui.screens.artist.ArtistSongsScreen
+import echo.music.enhanced.ui.screens.equalizer.EqScreen
+import echo.music.enhanced.ui.screens.library.LibraryScreen
+import echo.music.enhanced.ui.screens.library.LocalSongScreen
+import echo.music.enhanced.ui.screens.playlist.AutoPlaylistScreen
+import echo.music.enhanced.ui.screens.playlist.CachePlaylistScreen
+import echo.music.enhanced.ui.screens.playlist.LocalPlaylistScreen
+import echo.music.enhanced.ui.screens.playlist.OnlinePlaylistScreen
+import echo.music.enhanced.ui.screens.playlist.TopPlaylistScreen
+import echo.music.enhanced.ui.screens.search.OnlineSearchResult
+import echo.music.enhanced.ui.screens.search.SearchScreen
+import echo.music.enhanced.ui.screens.settings.AboutScreen
+import echo.music.enhanced.ui.screens.settings.AppearanceSettings
+import echo.music.enhanced.ui.screens.settings.GlassEffectSettings
+import echo.music.enhanced.ui.screens.settings.BackupAndRestore
+import echo.music.enhanced.ui.screens.settings.ContentSettings
+import echo.music.enhanced.ui.screens.settings.UptimeScreen
+import echo.music.enhanced.ui.screens.settings.DarkMode
+import echo.music.enhanced.ui.screens.settings.PlayerSettings
+import echo.music.enhanced.ui.screens.settings.PrivacySettings
+import echo.music.enhanced.ui.screens.settings.RomanizationSettings
+import echo.music.enhanced.ui.screens.settings.SettingsScreen
+import echo.music.enhanced.ui.screens.settings.EchoExtractorSettings
+import echo.music.enhanced.ui.screens.settings.AccountSettingsScreen
+import echo.music.enhanced.ui.screens.settings.StorageSettings
+import echo.music.enhanced.ui.screens.settings.ThemeScreen
+import echo.music.enhanced.ui.screens.settings.AiSettings
 
-import echo.music.iad1tya.ui.screens.recognition.RecognitionScreen
-import echo.music.iad1tya.ui.screens.recognition.RecognitionHistoryScreen
-import echo.music.iad1tya.ui.screens.settings.UpdateSettings
-import echo.music.iad1tya.echomusic.updater.UpdateScreen
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.utils.rememberPreference
-import echo.music.iad1tya.echomusic.changelog.ChangelogScreen
-import echo.music.iad1tya.echomusic.commitscreen.CommitScreen
-import echo.music.iad1tya.ui.screens.equalizer.axion.AxionEqScreen
-import echo.music.iad1tya.ui.screens.ambient.AmbientModeScreen
+import echo.music.enhanced.ui.screens.recognition.RecognitionScreen
+import echo.music.enhanced.ui.screens.recognition.RecognitionHistoryScreen
+import echo.music.enhanced.ui.screens.settings.UpdateSettings
+import echo.music.enhanced.echomusic.updater.UpdateScreen
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.utils.rememberPreference
+import echo.music.enhanced.echomusic.changelog.ChangelogScreen
+import echo.music.enhanced.echomusic.commitscreen.CommitScreen
+import echo.music.enhanced.ui.screens.equalizer.axion.AxionEqScreen
+import echo.music.enhanced.ui.screens.ambient.AmbientModeScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.navigationBuilder(
@@ -433,7 +433,7 @@ fun NavGraphBuilder.navigationBuilder(
     }
 
     composable("settings/discord") {
-        echo.music.iad1tya.ui.screens.settings.DiscordSettings(navController, scrollBehavior)
+        echo.music.enhanced.ui.screens.settings.DiscordSettings(navController, scrollBehavior)
     }
 
     composable("settings/lastfm") {

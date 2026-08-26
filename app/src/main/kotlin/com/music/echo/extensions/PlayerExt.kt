@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.extensions
+package echo.music.enhanced.extensions
 
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -10,7 +10,7 @@ import androidx.media3.common.Player.REPEAT_MODE_OFF
 import androidx.media3.common.Player.REPEAT_MODE_ONE
 import androidx.media3.common.Timeline
 import androidx.media3.common.TrackSelectionParameters
-import echo.music.iad1tya.models.MediaMetadata
+import echo.music.enhanced.models.MediaMetadata
 import java.util.ArrayDeque
 
 fun Player.togglePlayPause() {

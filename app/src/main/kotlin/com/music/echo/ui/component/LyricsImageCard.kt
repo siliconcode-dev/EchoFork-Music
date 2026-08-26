@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.component
+package echo.music.enhanced.ui.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -48,8 +48,8 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import echo.music.iad1tya.R
-import echo.music.iad1tya.models.MediaMetadata
+import echo.music.enhanced.R
+import echo.music.enhanced.models.MediaMetadata
 
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush

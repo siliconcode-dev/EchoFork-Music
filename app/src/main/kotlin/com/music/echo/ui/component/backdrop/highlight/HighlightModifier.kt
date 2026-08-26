@@ -7,7 +7,7 @@
  * scale for cheaper effect rendering. KMP expect/actual declarations were
  * merged into this single Android source set. Package renamed accordingly.
  */
-package echo.music.iad1tya.ui.component.backdrop.highlight
+package echo.music.enhanced.ui.component.backdrop.highlight
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Outline
@@ -28,12 +28,12 @@ import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.util.fastCoerceAtMost
-import echo.music.iad1tya.ui.component.backdrop.RuntimeShaderCacheImpl
-import echo.music.iad1tya.ui.component.backdrop.internal.ShapeProvider
-import echo.music.iad1tya.ui.component.backdrop.internal.blur
-import echo.music.iad1tya.ui.component.backdrop.internal.clipOutline
-import echo.music.iad1tya.ui.component.backdrop.internal.setRuntimeShader
-import echo.music.iad1tya.ui.component.backdrop.isRuntimeShaderSupported
+import echo.music.enhanced.ui.component.backdrop.RuntimeShaderCacheImpl
+import echo.music.enhanced.ui.component.backdrop.internal.ShapeProvider
+import echo.music.enhanced.ui.component.backdrop.internal.blur
+import echo.music.enhanced.ui.component.backdrop.internal.clipOutline
+import echo.music.enhanced.ui.component.backdrop.internal.setRuntimeShader
+import echo.music.enhanced.ui.component.backdrop.isRuntimeShaderSupported
 import kotlin.math.ceil
 
 internal class HighlightElement(

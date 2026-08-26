@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.utils
+package echo.music.enhanced.utils
 
 import android.content.ComponentName
 import android.content.Context
@@ -9,9 +9,9 @@ import android.content.pm.PackageManager
 object IconUtils {
     fun setIcon(context: Context, isDynamic: Boolean, isLegacy: Boolean) {
         val pm = context.packageManager
-        val dynamic = ComponentName(context, "echo.music.iad1tya.MainActivityAlias")
-        val static = ComponentName(context, "echo.music.iad1tya.MainActivityStatic")
-        val legacy = ComponentName(context, "echo.music.iad1tya.MainActivityLegacy")
+        val dynamic = ComponentName(context, "echo.music.enhanced.MainActivityAlias")
+        val static = ComponentName(context, "echo.music.enhanced.MainActivityStatic")
+        val legacy = ComponentName(context, "echo.music.enhanced.MainActivityLegacy")
 
         pm.setComponentEnabledSetting(
             dynamic,

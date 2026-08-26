@@ -1,13 +1,13 @@
 
 
-package echo.music.iad1tya.models
+package echo.music.enhanced.models
 
 import androidx.compose.runtime.Immutable
 import com.music.innertube.models.SongItem
 import com.music.innertube.models.WatchEndpoint.WatchEndpointMusicSupportedConfigs.WatchEndpointMusicConfig.Companion.MUSIC_VIDEO_TYPE_ATV
-import echo.music.iad1tya.db.entities.Song
-import echo.music.iad1tya.db.entities.SongEntity
-import echo.music.iad1tya.ui.utils.resize
+import echo.music.enhanced.db.entities.Song
+import echo.music.enhanced.db.entities.SongEntity
+import echo.music.enhanced.ui.utils.resize
 import java.io.Serializable
 import java.time.LocalDateTime
 

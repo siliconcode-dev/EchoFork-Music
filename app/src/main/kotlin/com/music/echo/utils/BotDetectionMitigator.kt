@@ -1,13 +1,13 @@
 
 
-package echo.music.iad1tya.utils
+package echo.music.enhanced.utils
 
 import androidx.datastore.preferences.core.edit
 import com.music.innertube.YouTube
-import echo.music.iad1tya.constants.VisitorDataKey
-import echo.music.iad1tya.utils.cipher.CipherDeobfuscator
-import echo.music.iad1tya.utils.PlaybackLogManager
-import echo.music.iad1tya.utils.PlaybackLogLevel
+import echo.music.enhanced.constants.VisitorDataKey
+import echo.music.enhanced.utils.cipher.CipherDeobfuscator
+import echo.music.enhanced.utils.PlaybackLogManager
+import echo.music.enhanced.utils.PlaybackLogLevel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber

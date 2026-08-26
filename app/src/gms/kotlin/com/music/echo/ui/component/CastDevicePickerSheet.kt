@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.component
+package echo.music.enhanced.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.mediarouter.media.MediaRouteSelector
 import androidx.mediarouter.media.MediaRouter
 import com.google.android.gms.cast.CastMediaControlIntent
-import echo.music.iad1tya.R
+import echo.music.enhanced.R
 import timber.log.Timber
 
 /**

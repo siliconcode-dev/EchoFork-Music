@@ -1,8 +1,8 @@
 
 
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
-import echo.music.iad1tya.R
+import echo.music.enhanced.R
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Build
@@ -46,14 +46,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
-import echo.music.iad1tya.BuildConfig
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.Material3SettingsGroup
-import echo.music.iad1tya.ui.component.Material3SettingsItem
-import echo.music.iad1tya.ui.screens.Screens
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.echomusic.updater.getUpdateAvailableState
+import echo.music.enhanced.BuildConfig
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.Material3SettingsGroup
+import echo.music.enhanced.ui.component.Material3SettingsItem
+import echo.music.enhanced.ui.screens.Screens
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.echomusic.updater.getUpdateAvailableState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,7 +65,7 @@ highlightKey: String? = null) {
     val uriHandler = LocalUriHandler.current
     val context = LocalContext.current
     val isAndroid12OrLater = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    val isUpdateAvailable = getUpdateAvailableState(context) && echo.music.iad1tya.echomusic.updater.getAutoUpdateCheckSetting(context)
+    val isUpdateAvailable = getUpdateAvailableState(context) && echo.music.enhanced.echomusic.updater.getAutoUpdateCheckSetting(context)
 
     var searchQuery by rememberSaveable { mutableStateOf("") }
     val searchLower = searchQuery.lowercase()

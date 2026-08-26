@@ -14,8 +14,7 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
-      with:
-        submodules: recursive
+      # core modules are vendored in-repo; no submodules to initialise.
 
     - name: Set up JDK 21
       uses: actions/setup-java@v4
@@ -46,5 +45,5 @@ jobs:
     - name: Upload Universal APK
       uses: actions/upload-artifact@v4
       with:
-        name: Echo-Music-Universal-APK
+        name: Enhanced-Echo-Music-Universal-APK
         path: androidApp/build/outputs/apk/release/*-universal-release.apk

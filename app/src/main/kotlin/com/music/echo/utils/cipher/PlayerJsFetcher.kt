@@ -1,4 +1,4 @@
-package echo.music.iad1tya.utils.cipher
+package echo.music.enhanced.utils.cipher
 
 import com.music.innertube.YouTube
 import kotlinx.coroutines.Dispatchers

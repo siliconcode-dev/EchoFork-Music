@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.db.entities
+package echo.music.enhanced.db.entities
 
 sealed class LocalItem {
     abstract val id: String

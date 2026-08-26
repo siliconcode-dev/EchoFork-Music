@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,14 +36,14 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.music.innertube.YouTube
 import com.music.innertube.utils.parseCookieString
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.constants.*
-import echo.music.iad1tya.ui.component.*
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.utils.rememberPreference
-import echo.music.iad1tya.viewmodels.AccountSettingsViewModel
-import echo.music.iad1tya.viewmodels.HomeViewModel
-import echo.music.iad1tya.R
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.constants.*
+import echo.music.enhanced.ui.component.*
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.utils.rememberPreference
+import echo.music.enhanced.viewmodels.AccountSettingsViewModel
+import echo.music.enhanced.viewmodels.HomeViewModel
+import echo.music.enhanced.R
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AccountSettingsScreen(

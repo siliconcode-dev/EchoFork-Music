@@ -5,7 +5,7 @@
  * Do not remove or alter this notice. - Per GPL-3.0 Section 4 & Section 5
  */
 
-package echo.music.iad1tya.spotifyimport
+package echo.music.enhanced.spotifyimport
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
@@ -21,29 +21,29 @@ import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.SpotifyAccessTokenExpiresAtKey
-import echo.music.iad1tya.constants.SpotifyAccessTokenKey
-import echo.music.iad1tya.constants.SpotifyAccountAvatarUrlKey
-import echo.music.iad1tya.constants.SpotifyAccountNameKey
-import echo.music.iad1tya.constants.SpotifySpDcKey
-import echo.music.iad1tya.constants.SpotifySpKeyKey
-import echo.music.iad1tya.db.MusicDatabase
-import echo.music.iad1tya.db.entities.PlaylistEntity
-import echo.music.iad1tya.db.entities.PlaylistSongMap
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.SpotifyAccessTokenExpiresAtKey
+import echo.music.enhanced.constants.SpotifyAccessTokenKey
+import echo.music.enhanced.constants.SpotifyAccountAvatarUrlKey
+import echo.music.enhanced.constants.SpotifyAccountNameKey
+import echo.music.enhanced.constants.SpotifySpDcKey
+import echo.music.enhanced.constants.SpotifySpKeyKey
+import echo.music.enhanced.db.MusicDatabase
+import echo.music.enhanced.db.entities.PlaylistEntity
+import echo.music.enhanced.db.entities.PlaylistSongMap
 import com.music.innertube.YouTube
 import com.music.innertube.models.SongItem
-import echo.music.iad1tya.models.MediaMetadata
-import echo.music.iad1tya.models.toMediaMetadata
-import echo.music.iad1tya.spotify.Spotify
-import echo.music.iad1tya.spotify.SpotifyAuth
-import echo.music.iad1tya.spotify.SpotifyMapper
-import echo.music.iad1tya.spotify.models.SpotifyPlaylist
-import echo.music.iad1tya.spotify.models.SpotifyPlaylistTracksRef
-import echo.music.iad1tya.spotify.models.SpotifyTrack
-import echo.music.iad1tya.utils.clearWebAuthSession
-import echo.music.iad1tya.utils.dataStore
-import echo.music.iad1tya.utils.reportException
+import echo.music.enhanced.models.MediaMetadata
+import echo.music.enhanced.models.toMediaMetadata
+import echo.music.enhanced.spotify.Spotify
+import echo.music.enhanced.spotify.SpotifyAuth
+import echo.music.enhanced.spotify.SpotifyMapper
+import echo.music.enhanced.spotify.models.SpotifyPlaylist
+import echo.music.enhanced.spotify.models.SpotifyPlaylistTracksRef
+import echo.music.enhanced.spotify.models.SpotifyTrack
+import echo.music.enhanced.utils.clearWebAuthSession
+import echo.music.enhanced.utils.dataStore
+import echo.music.enhanced.utils.reportException
 import java.time.LocalDateTime
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject

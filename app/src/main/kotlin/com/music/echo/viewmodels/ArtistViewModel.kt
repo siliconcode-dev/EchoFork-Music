@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.viewmodels
+package echo.music.enhanced.viewmodels
 
 import android.content.Context
 import androidx.compose.runtime.getValue
@@ -14,15 +14,15 @@ import com.music.innertube.models.filterExplicit
 import com.music.innertube.models.filterVideoSongs
 import com.music.innertube.models.filterYoutubeShorts
 import com.music.innertube.pages.ArtistPage
-import echo.music.iad1tya.constants.HideExplicitKey
-import echo.music.iad1tya.constants.HideVideoSongsKey
-import echo.music.iad1tya.constants.HideYoutubeShortsKey
-import echo.music.iad1tya.db.MusicDatabase
-import echo.music.iad1tya.extensions.filterExplicit
-import echo.music.iad1tya.extensions.filterExplicitAlbums
-import echo.music.iad1tya.utils.dataStore
-import echo.music.iad1tya.utils.get
-import echo.music.iad1tya.utils.reportException
+import echo.music.enhanced.constants.HideExplicitKey
+import echo.music.enhanced.constants.HideVideoSongsKey
+import echo.music.enhanced.constants.HideYoutubeShortsKey
+import echo.music.enhanced.db.MusicDatabase
+import echo.music.enhanced.extensions.filterExplicit
+import echo.music.enhanced.extensions.filterExplicitAlbums
+import echo.music.enhanced.utils.dataStore
+import echo.music.enhanced.utils.get
+import echo.music.enhanced.utils.reportException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -33,8 +33,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import echo.music.iad1tya.extensions.filterVideoSongs as filterVideoSongsLocal
-import echo.music.iad1tya.artistvideo.ArtistVideoCanvasProvider
+import echo.music.enhanced.extensions.filterVideoSongs as filterVideoSongsLocal
+import echo.music.enhanced.artistvideo.ArtistVideoCanvasProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

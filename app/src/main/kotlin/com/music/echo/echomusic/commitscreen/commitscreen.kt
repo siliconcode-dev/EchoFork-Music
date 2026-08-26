@@ -1,4 +1,4 @@
-package echo.music.iad1tya.echomusic.commitscreen
+package echo.music.enhanced.echomusic.commitscreen
 
 import android.content.Intent
 import android.net.Uri
@@ -60,8 +60,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.R
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

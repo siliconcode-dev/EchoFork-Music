@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.component
+package echo.music.enhanced.ui.component
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -41,10 +41,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import echo.music.iad1tya.constants.AppleMusicLyricsBlurKey
-import echo.music.iad1tya.lyrics.LyricsEntry
-import echo.music.iad1tya.ui.screens.settings.LyricsPosition
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.constants.AppleMusicLyricsBlurKey
+import echo.music.enhanced.lyrics.LyricsEntry
+import echo.music.enhanced.ui.screens.settings.LyricsPosition
+import echo.music.enhanced.utils.rememberPreference
 
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -101,7 +101,7 @@ fun echomusicLyricsLine(
 
     
     val wordData = remember(entry.text, entry.words, activeDuration) {
-        val isHindiText = echo.music.iad1tya.lyrics.LyricsUtils.isHindi(entry.text)
+        val isHindiText = echo.music.enhanced.lyrics.LyricsUtils.isHindi(entry.text)
         if (!isHindiText && entry.words != null && entry.words.isNotEmpty()) {
             
             entry.words.mapIndexed { index, word ->

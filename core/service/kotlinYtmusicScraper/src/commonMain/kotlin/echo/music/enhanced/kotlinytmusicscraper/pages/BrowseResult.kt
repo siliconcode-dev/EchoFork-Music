@@ -1,0 +1,13 @@
+package echo.music.enhanced.kotlinytmusicscraper.pages
+
+import echo.music.enhanced.kotlinytmusicscraper.models.YTItem
+
+data class BrowseResult(
+    val title: String?,
+    val items: List<Item>,
+) {
+    data class Item(
+        val title: String?,
+        val items: List<YTItem>,
+    )
+}

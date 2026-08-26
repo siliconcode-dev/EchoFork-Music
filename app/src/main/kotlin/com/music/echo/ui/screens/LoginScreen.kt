@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens
+package echo.music.enhanced.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -28,18 +28,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.music.innertube.YouTube
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.AccountChannelHandleKey
-import echo.music.iad1tya.constants.AccountEmailKey
-import echo.music.iad1tya.constants.AccountNameKey
-import echo.music.iad1tya.constants.DataSyncIdKey
-import echo.music.iad1tya.constants.InnerTubeCookieKey
-import echo.music.iad1tya.constants.VisitorDataKey
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.utils.rememberPreference
-import echo.music.iad1tya.utils.reportException
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.AccountChannelHandleKey
+import echo.music.enhanced.constants.AccountEmailKey
+import echo.music.enhanced.constants.AccountNameKey
+import echo.music.enhanced.constants.DataSyncIdKey
+import echo.music.enhanced.constants.InnerTubeCookieKey
+import echo.music.enhanced.constants.VisitorDataKey
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.utils.rememberPreference
+import echo.music.enhanced.utils.reportException
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -7,7 +7,7 @@
  * scale for cheaper effect rendering. KMP expect/actual declarations were
  * merged into this single Android source set. Package renamed accordingly.
  */
-package echo.music.iad1tya.ui.component.backdrop
+package echo.music.enhanced.ui.component.backdrop
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -39,15 +39,15 @@ import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
-import echo.music.iad1tya.ui.component.backdrop.backdrops.LayerBackdrop
-import echo.music.iad1tya.ui.component.backdrop.highlight.Highlight
-import echo.music.iad1tya.ui.component.backdrop.highlight.HighlightElement
-import echo.music.iad1tya.ui.component.backdrop.internal.ShapeProvider
-import echo.music.iad1tya.ui.component.backdrop.internal.recordLayer
-import echo.music.iad1tya.ui.component.backdrop.shadow.InnerShadow
-import echo.music.iad1tya.ui.component.backdrop.shadow.InnerShadowElement
-import echo.music.iad1tya.ui.component.backdrop.shadow.Shadow
-import echo.music.iad1tya.ui.component.backdrop.shadow.ShadowElement
+import echo.music.enhanced.ui.component.backdrop.backdrops.LayerBackdrop
+import echo.music.enhanced.ui.component.backdrop.highlight.Highlight
+import echo.music.enhanced.ui.component.backdrop.highlight.HighlightElement
+import echo.music.enhanced.ui.component.backdrop.internal.ShapeProvider
+import echo.music.enhanced.ui.component.backdrop.internal.recordLayer
+import echo.music.enhanced.ui.component.backdrop.shadow.InnerShadow
+import echo.music.enhanced.ui.component.backdrop.shadow.InnerShadowElement
+import echo.music.enhanced.ui.component.backdrop.shadow.Shadow
+import echo.music.enhanced.ui.component.backdrop.shadow.ShadowElement
 
 private val DefaultHighlight = { Highlight.Default }
 private val DefaultShadow = { Shadow.Default }

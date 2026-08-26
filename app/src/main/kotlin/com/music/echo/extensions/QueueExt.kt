@@ -1,16 +1,16 @@
 
 
-package echo.music.iad1tya.extensions
+package echo.music.enhanced.extensions
 
-import echo.music.iad1tya.models.MediaMetadata
-import echo.music.iad1tya.models.PersistQueue
-import echo.music.iad1tya.models.QueueData
-import echo.music.iad1tya.models.QueueType
-import echo.music.iad1tya.playback.queues.ListQueue
-import echo.music.iad1tya.playback.queues.LocalAlbumRadio
-import echo.music.iad1tya.playback.queues.Queue
-import echo.music.iad1tya.playback.queues.YouTubeAlbumRadio
-import echo.music.iad1tya.playback.queues.YouTubeQueue
+import echo.music.enhanced.models.MediaMetadata
+import echo.music.enhanced.models.PersistQueue
+import echo.music.enhanced.models.QueueData
+import echo.music.enhanced.models.QueueType
+import echo.music.enhanced.playback.queues.ListQueue
+import echo.music.enhanced.playback.queues.LocalAlbumRadio
+import echo.music.enhanced.playback.queues.Queue
+import echo.music.enhanced.playback.queues.YouTubeAlbumRadio
+import echo.music.enhanced.playback.queues.YouTubeQueue
 
 fun Queue.toPersistQueue(
     title: String?,

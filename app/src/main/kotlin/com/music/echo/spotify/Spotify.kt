@@ -5,23 +5,23 @@
  * Do not remove or alter this notice. - Per GPL-3.0 Section 4 & Section 5
  */
 
-package echo.music.iad1tya.spotify
+package echo.music.enhanced.spotify
 
-import echo.music.iad1tya.spotify.models.SpotifyAlbum
-import echo.music.iad1tya.spotify.models.SpotifyArtist
-import echo.music.iad1tya.spotify.models.SpotifyImage
-import echo.music.iad1tya.spotify.models.SpotifyPaging
-import echo.music.iad1tya.spotify.models.SpotifyPlaylist
-import echo.music.iad1tya.spotify.models.SpotifyPlaylistOwner
-import echo.music.iad1tya.spotify.models.SpotifyPlaylistTrack
-import echo.music.iad1tya.spotify.models.SpotifyPlaylistTracksRef
-import echo.music.iad1tya.spotify.models.SpotifyRecommendations
-import echo.music.iad1tya.spotify.models.SpotifySavedTrack
-import echo.music.iad1tya.spotify.models.SpotifySearchResult
-import echo.music.iad1tya.spotify.models.SpotifySimpleAlbum
-import echo.music.iad1tya.spotify.models.SpotifySimpleArtist
-import echo.music.iad1tya.spotify.models.SpotifyTrack
-import echo.music.iad1tya.spotify.models.SpotifyUser
+import echo.music.enhanced.spotify.models.SpotifyAlbum
+import echo.music.enhanced.spotify.models.SpotifyArtist
+import echo.music.enhanced.spotify.models.SpotifyImage
+import echo.music.enhanced.spotify.models.SpotifyPaging
+import echo.music.enhanced.spotify.models.SpotifyPlaylist
+import echo.music.enhanced.spotify.models.SpotifyPlaylistOwner
+import echo.music.enhanced.spotify.models.SpotifyPlaylistTrack
+import echo.music.enhanced.spotify.models.SpotifyPlaylistTracksRef
+import echo.music.enhanced.spotify.models.SpotifyRecommendations
+import echo.music.enhanced.spotify.models.SpotifySavedTrack
+import echo.music.enhanced.spotify.models.SpotifySearchResult
+import echo.music.enhanced.spotify.models.SpotifySimpleAlbum
+import echo.music.enhanced.spotify.models.SpotifySimpleArtist
+import echo.music.enhanced.spotify.models.SpotifyTrack
+import echo.music.enhanced.spotify.models.SpotifyUser
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
@@ -549,7 +549,7 @@ object Spotify {
         folderUri: String? = null,
         limit: Int = 50,
         offset: Int = 0,
-    ): Result<SpotifyPaging<echo.music.iad1tya.spotify.models.SpotifyLibraryItem>> =
+    ): Result<SpotifyPaging<echo.music.enhanced.spotify.models.SpotifyLibraryItem>> =
         runCatching {
             val vars =
                 buildJsonObject {
@@ -605,10 +605,10 @@ object Spotify {
                     when {
                         typeName == "PlaylistResponseWrapper" || typeName.contains("Playlist", ignoreCase = true) ->
                             parsePlaylistWrapper(wrapper)
-                                ?.let { echo.music.iad1tya.spotify.models.SpotifyLibraryItem.Playlist(it) }
+                                ?.let { echo.music.enhanced.spotify.models.SpotifyLibraryItem.Playlist(it) }
                         typeName == "FolderResponseWrapper" || typeName.contains("Folder", ignoreCase = true) ->
                             parseFolderWrapper(wrapper)
-                                ?.let { echo.music.iad1tya.spotify.models.SpotifyLibraryItem.Folder(it) }
+                                ?.let { echo.music.enhanced.spotify.models.SpotifyLibraryItem.Folder(it) }
                                 ?: run {
                                     // Folder typename matched but parsing returned null —
                                     // likely a shape we don't know. Dump the keys so we
@@ -662,7 +662,7 @@ object Spotify {
             ?: data.int("trackCount")
             ?: data.int("numTracks")
 
-    private fun parseFolderWrapper(wrapper: JsonObject): echo.music.iad1tya.spotify.models.SpotifyLibraryFolder? {
+    private fun parseFolderWrapper(wrapper: JsonObject): echo.music.enhanced.spotify.models.SpotifyLibraryFolder? {
         val uri = wrapper.str("_uri") ?: return null
         // Spotify has shipped this object under several shapes over time; the name
         // and child count have lived in `data` and at the root of the wrapper.
@@ -674,7 +674,7 @@ object Spotify {
             ?: wrapper.obj("data")?.int("numberOfItems")
             ?: wrapper.int("totalLength")
             ?: 0
-        return echo.music.iad1tya.spotify.models.SpotifyLibraryFolder(
+        return echo.music.enhanced.spotify.models.SpotifyLibraryFolder(
             uri = uri,
             name = name,
             totalChildren = total,
@@ -1303,7 +1303,7 @@ object Spotify {
     suspend fun home(
         sectionItemsLimit: Int = 10,
         timeZone: String = java.util.TimeZone.getDefault().id,
-    ): Result<echo.music.iad1tya.spotify.models.SpotifyHomeFeed> =
+    ): Result<echo.music.enhanced.spotify.models.SpotifyHomeFeed> =
         runCatching {
             log("D", "spotifyHome: GQL home() request — timeZone=$timeZone limit=$sectionItemsLimit")
             val vars =
@@ -1338,7 +1338,7 @@ object Spotify {
                     ?.arr("items")
                     ?: run {
                         log("W", "spotifyHome: no sectionContainer.sections.items in response")
-                        return@runCatching echo.music.iad1tya.spotify.models.SpotifyHomeFeed(
+                        return@runCatching echo.music.enhanced.spotify.models.SpotifyHomeFeed(
                             greeting = greeting,
                             sections = emptyList(),
                         )
@@ -1351,13 +1351,13 @@ object Spotify {
                 }
             log("D", "spotifyHome: parsed ${sections.size}/${sectionElements.size} sections successfully")
 
-            echo.music.iad1tya.spotify.models.SpotifyHomeFeed(
+            echo.music.enhanced.spotify.models.SpotifyHomeFeed(
                 greeting = greeting,
                 sections = sections,
             )
         }
 
-    private fun parseHomeSection(sectionObj: JsonObject): echo.music.iad1tya.spotify.models.SpotifyHomeFeedSection? {
+    private fun parseHomeSection(sectionObj: JsonObject): echo.music.enhanced.spotify.models.SpotifyHomeFeedSection? {
         val sectionData = sectionObj.obj("data") ?: return null
         val typename = sectionData.str("__typename") ?: return null
         val titleObj = sectionData.obj("title")
@@ -1376,7 +1376,7 @@ object Spotify {
 
         if (items.isEmpty()) return null
 
-        return echo.music.iad1tya.spotify.models.SpotifyHomeFeedSection(
+        return echo.music.enhanced.spotify.models.SpotifyHomeFeedSection(
             sectionUri = sectionObj.str("uri") ?: "",
             title = title,
             typename = typename,
@@ -1385,7 +1385,7 @@ object Spotify {
         )
     }
 
-    private fun parseHomeItem(itemObj: JsonObject): echo.music.iad1tya.spotify.models.SpotifyHomeFeedItem? {
+    private fun parseHomeItem(itemObj: JsonObject): echo.music.enhanced.spotify.models.SpotifyHomeFeedItem? {
         val content = itemObj.obj("content") ?: return null
         val wrapper = content.str("__typename") ?: return null
         val data = content.obj("data") ?: return null
@@ -1398,7 +1398,7 @@ object Spotify {
         }
     }
 
-    private fun parseHomePlaylist(data: JsonObject): echo.music.iad1tya.spotify.models.SpotifyHomeFeedItem.Playlist? {
+    private fun parseHomePlaylist(data: JsonObject): echo.music.enhanced.spotify.models.SpotifyHomeFeedItem.Playlist? {
         val uri = data.str("uri") ?: return null
         val imageItem = data.obj("images")?.arr("items")?.firstOrNull()?.jsonObject
         val imageUrl = imageItem?.arr("sources")?.firstOrNull()?.jsonObject?.str("url")
@@ -1408,7 +1408,7 @@ object Spotify {
                 ?.firstOrNull { it.jsonObject.str("key") == "madeFor.username" }
                 ?.jsonObject?.str("value")
 
-        return echo.music.iad1tya.spotify.models.SpotifyHomeFeedItem.Playlist(
+        return echo.music.enhanced.spotify.models.SpotifyHomeFeedItem.Playlist(
             uri = uri,
             id = uri.substringAfterLast(":"),
             name = data.str("name") ?: "",
@@ -1422,7 +1422,7 @@ object Spotify {
         )
     }
 
-    private fun parseHomeAlbum(data: JsonObject): echo.music.iad1tya.spotify.models.SpotifyHomeFeedItem.Album? {
+    private fun parseHomeAlbum(data: JsonObject): echo.music.enhanced.spotify.models.SpotifyHomeFeedItem.Album? {
         val uri = data.str("uri") ?: return null
         val artists =
             data.obj("artists")?.arr("items")?.mapNotNull {
@@ -1431,7 +1431,7 @@ object Spotify {
         val imageUrl =
             data.obj("coverArt")?.arr("sources")?.firstOrNull()?.jsonObject?.str("url")
 
-        return echo.music.iad1tya.spotify.models.SpotifyHomeFeedItem.Album(
+        return echo.music.enhanced.spotify.models.SpotifyHomeFeedItem.Album(
             uri = uri,
             id = uri.substringAfterLast(":"),
             name = data.str("name") ?: "",
@@ -1441,13 +1441,13 @@ object Spotify {
         )
     }
 
-    private fun parseHomeArtist(data: JsonObject): echo.music.iad1tya.spotify.models.SpotifyHomeFeedItem.Artist? {
+    private fun parseHomeArtist(data: JsonObject): echo.music.enhanced.spotify.models.SpotifyHomeFeedItem.Artist? {
         val uri = data.str("uri") ?: return null
         val profile = data.obj("profile")
         val imageUrl =
             data.obj("visuals")?.obj("avatarImage")
                 ?.arr("sources")?.firstOrNull()?.jsonObject?.str("url")
-        return echo.music.iad1tya.spotify.models.SpotifyHomeFeedItem.Artist(
+        return echo.music.enhanced.spotify.models.SpotifyHomeFeedItem.Artist(
             uri = uri,
             id = uri.substringAfterLast(":"),
             name = profile?.str("name") ?: "",

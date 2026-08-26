@@ -1,12 +1,12 @@
-package echo.music.iad1tya.eq
+package echo.music.enhanced.eq
 
 
 import android.annotation.SuppressLint
 import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
-import echo.music.iad1tya.eq.audio.CustomEqualizerAudioProcessor
-import echo.music.iad1tya.eq.data.ParametricEQ
-import echo.music.iad1tya.eq.data.SavedEQProfile
+import echo.music.enhanced.eq.audio.CustomEqualizerAudioProcessor
+import echo.music.enhanced.eq.data.ParametricEQ
+import echo.music.enhanced.eq.data.SavedEQProfile
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,4 +1,4 @@
-package echo.music.iad1tya.eq.data
+package echo.music.enhanced.eq.data
 
 import android.util.Log
 import java.io.File

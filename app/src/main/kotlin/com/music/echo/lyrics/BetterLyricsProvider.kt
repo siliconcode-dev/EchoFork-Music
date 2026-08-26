@@ -1,12 +1,12 @@
 
 
-package echo.music.iad1tya.lyrics
+package echo.music.enhanced.lyrics
 
 import android.content.Context
-import echo.music.iad1tya.betterlyrics.BetterLyrics
-import echo.music.iad1tya.constants.EnableBetterLyricsKey
-import echo.music.iad1tya.utils.dataStore
-import echo.music.iad1tya.utils.get
+import echo.music.enhanced.betterlyrics.BetterLyrics
+import echo.music.enhanced.constants.EnableBetterLyricsKey
+import echo.music.enhanced.utils.dataStore
+import echo.music.enhanced.utils.get
 
 object BetterLyricsProvider : LyricsProvider {
     override val name = "BetterLyrics"

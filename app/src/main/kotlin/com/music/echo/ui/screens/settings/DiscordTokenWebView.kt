@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import android.annotation.SuppressLint
 import android.webkit.JavascriptInterface

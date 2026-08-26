@@ -8,8 +8,8 @@ files_to_modify = [
     "app/src/main/kotlin/com/music/echo/playback/MusicService.kt",
     "app/src/main/kotlin/com/music/echo/ui/screens/NavigationBuilder.kt",
     "app/src/main/kotlin/com/music/echo/ui/screens/Screens.kt",
-    "composeApp/src/commonMain/kotlin/echo/music/iad1tya/di/ViewModelModule.kt",
-    "composeApp/src/commonMain/kotlin/echo/music/iad1tya/ui/navigation/graph/HomeScreenGraph.kt"
+    "composeApp/src/commonMain/kotlin/echo/music/enhanced/di/ViewModelModule.kt",
+    "composeApp/src/commonMain/kotlin/echo/music/enhanced/ui/navigation/graph/HomeScreenGraph.kt"
 ]
 
 def process_file(filepath):

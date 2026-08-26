@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 
-package echo.music.iad1tya.echomusic
+package echo.music.enhanced.echomusic
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -41,7 +41,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.runtime.key
-import echo.music.iad1tya.echomusic.shapes.RoundedStarShape
+import echo.music.enhanced.echomusic.shapes.RoundedStarShape
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -130,11 +130,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import echo.music.iad1tya.R
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.constants.AudioQuality
-import echo.music.iad1tya.constants.AudioQualityKey
-import echo.music.iad1tya.utils.rememberEnumPreference
+import echo.music.enhanced.R
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.constants.AudioQuality
+import echo.music.enhanced.constants.AudioQualityKey
+import echo.music.enhanced.utils.rememberEnumPreference
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -911,8 +911,8 @@ fun AudioQualitySelector(context: Context) {
 fun DownloadQualitySelector() {
     val context = LocalContext.current
     val (downloadQuality, onDownloadQualityChange) = rememberEnumPreference(
-        key = echo.music.iad1tya.constants.DownloadQualityKey,
-        defaultValue = echo.music.iad1tya.constants.DownloadQuality.YOUTUBE
+        key = echo.music.enhanced.constants.DownloadQualityKey,
+        defaultValue = echo.music.enhanced.constants.DownloadQuality.YOUTUBE
     )
 
     Column(
@@ -931,7 +931,7 @@ fun DownloadQualitySelector() {
             "Opus"
         )
         val selectedIndex = when (downloadQuality) {
-            echo.music.iad1tya.constants.DownloadQuality.YOUTUBE -> 0
+            echo.music.enhanced.constants.DownloadQuality.YOUTUBE -> 0
             else -> 0
         }
 
@@ -948,8 +948,8 @@ fun DownloadQualitySelector() {
                     checked = selectedIndex == index,
                     onCheckedChange = {
                         val newQuality = when (index) {
-                            0 -> echo.music.iad1tya.constants.DownloadQuality.YOUTUBE
-                            else -> echo.music.iad1tya.constants.DownloadQuality.YOUTUBE
+                            0 -> echo.music.enhanced.constants.DownloadQuality.YOUTUBE
+                            else -> echo.music.enhanced.constants.DownloadQuality.YOUTUBE
                         }
                         onDownloadQualityChange(newQuality)
                     },

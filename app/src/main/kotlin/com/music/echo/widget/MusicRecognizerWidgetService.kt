@@ -3,7 +3,7 @@
  * Licensed under GPL-3.0 | See git history for contributors
  */
 
-package echo.music.iad1tya.widget
+package echo.music.enhanced.widget
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -25,11 +25,11 @@ import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import coil3.request.crossfade
 import coil3.toBitmap
-import echo.music.iad1tya.MainActivity
-import echo.music.iad1tya.R
-import echo.music.iad1tya.db.DatabaseDao
-import echo.music.iad1tya.db.entities.RecognitionHistory
-import echo.music.iad1tya.recognition.MusicRecognitionService
+import echo.music.enhanced.MainActivity
+import echo.music.enhanced.R
+import echo.music.enhanced.db.DatabaseDao
+import echo.music.enhanced.db.entities.RecognitionHistory
+import echo.music.enhanced.recognition.MusicRecognitionService
 import com.music.shazamkit.models.RecognitionStatus
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -330,8 +330,8 @@ class MusicRecognizerWidgetService : Service() {
     // ─── Constants ────────────────────────────────────────────────────────────
 
     companion object {
-        const val ACTION_START_RECOGNITION = "echo.music.iad1tya.widget.recognizer.START"
-        const val ACTION_STOP_RECOGNITION = "echo.music.iad1tya.widget.recognizer.STOP"
+        const val ACTION_START_RECOGNITION = "echo.music.enhanced.widget.recognizer.START"
+        const val ACTION_STOP_RECOGNITION = "echo.music.enhanced.widget.recognizer.STOP"
 
         const val PREFS_NAME = "recognizer_widget_prefs"
         const val PREF_STATE = "state"

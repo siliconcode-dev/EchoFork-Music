@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.player
+package echo.music.enhanced.ui.player
 
 import android.content.res.Configuration
 import android.os.Build
@@ -101,38 +101,38 @@ import coil3.imageLoader
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import coil3.toBitmap
-import echo.music.iad1tya.LocalDatabase
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.CropAlbumArtKey
-import echo.music.iad1tya.constants.DarkModeKey
-import echo.music.iad1tya.constants.MiniPlayerBackgroundStyleKey
-import echo.music.iad1tya.constants.MiniPlayerHeight
-import echo.music.iad1tya.constants.PlayerBackgroundStyle
-import echo.music.iad1tya.constants.UseFloatingNavBarKey
-import echo.music.iad1tya.constants.PureBlackMiniPlayerKey
-import echo.music.iad1tya.constants.SwipeSensitivityKey
-import echo.music.iad1tya.constants.SwipeThumbnailKey
-import echo.music.iad1tya.constants.ThumbnailCornerRadius
-import echo.music.iad1tya.constants.UseNewMiniPlayerDesignKey
-import echo.music.iad1tya.db.entities.ArtistEntity
-import echo.music.iad1tya.models.MediaMetadata
-import echo.music.iad1tya.playback.CastConnectionHandler
-import echo.music.iad1tya.playback.PlayerConnection
-import echo.music.iad1tya.ui.screens.settings.DarkMode
-import echo.music.iad1tya.ui.component.GlassComponent
-import echo.music.iad1tya.ui.component.LocalGlassEffectConfig
-import echo.music.iad1tya.ui.component.isGlassSupported
-import echo.music.iad1tya.ui.component.liquidGlass
-import echo.music.iad1tya.ui.theme.PlayerColorExtractor
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.utils.rememberPreference
-import echo.music.iad1tya.echomusic.AudioDeviceBottomSheet
+import echo.music.enhanced.LocalDatabase
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.CropAlbumArtKey
+import echo.music.enhanced.constants.DarkModeKey
+import echo.music.enhanced.constants.MiniPlayerBackgroundStyleKey
+import echo.music.enhanced.constants.MiniPlayerHeight
+import echo.music.enhanced.constants.PlayerBackgroundStyle
+import echo.music.enhanced.constants.UseFloatingNavBarKey
+import echo.music.enhanced.constants.PureBlackMiniPlayerKey
+import echo.music.enhanced.constants.SwipeSensitivityKey
+import echo.music.enhanced.constants.SwipeThumbnailKey
+import echo.music.enhanced.constants.ThumbnailCornerRadius
+import echo.music.enhanced.constants.UseNewMiniPlayerDesignKey
+import echo.music.enhanced.db.entities.ArtistEntity
+import echo.music.enhanced.models.MediaMetadata
+import echo.music.enhanced.playback.CastConnectionHandler
+import echo.music.enhanced.playback.PlayerConnection
+import echo.music.enhanced.ui.screens.settings.DarkMode
+import echo.music.enhanced.ui.component.GlassComponent
+import echo.music.enhanced.ui.component.LocalGlassEffectConfig
+import echo.music.enhanced.ui.component.isGlassSupported
+import echo.music.enhanced.ui.component.liquidGlass
+import echo.music.enhanced.ui.theme.PlayerColorExtractor
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.utils.rememberPreference
+import echo.music.enhanced.echomusic.AudioDeviceBottomSheet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
-import echo.music.iad1tya.echomusic.isBluetoothHeadphoneConnected
+import echo.music.enhanced.echomusic.isBluetoothHeadphoneConnected
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Headphones
 import androidx.compose.material.icons.filled.Speaker
@@ -145,7 +145,7 @@ import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
-import echo.music.iad1tya.ui.component.Icon as MIcon
+import echo.music.enhanced.ui.component.Icon as MIcon
 
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path

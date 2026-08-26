@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens
+package echo.music.enhanced.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -37,29 +37,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.music.innertube.models.WatchEndpoint
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.StatPeriod
-import echo.music.iad1tya.extensions.toMediaItem
-import echo.music.iad1tya.models.toMediaMetadata
-import echo.music.iad1tya.playback.queues.ListQueue
-import echo.music.iad1tya.playback.queues.YouTubeQueue
-import echo.music.iad1tya.ui.component.ChoiceChipsRow
-import echo.music.iad1tya.ui.component.HideOnScrollFAB
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.LocalAlbumsGrid
-import echo.music.iad1tya.ui.component.LocalArtistsGrid
-import echo.music.iad1tya.ui.component.LocalMenuState
-import echo.music.iad1tya.ui.component.LocalSongsGrid
-import echo.music.iad1tya.ui.component.NavigationTitle
-import echo.music.iad1tya.ui.menu.AlbumMenu
-import echo.music.iad1tya.ui.menu.ArtistMenu
-import echo.music.iad1tya.ui.menu.SongMenu
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.utils.joinByBullet
-import echo.music.iad1tya.utils.makeTimeString
-import echo.music.iad1tya.viewmodels.StatsViewModel
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.StatPeriod
+import echo.music.enhanced.extensions.toMediaItem
+import echo.music.enhanced.models.toMediaMetadata
+import echo.music.enhanced.playback.queues.ListQueue
+import echo.music.enhanced.playback.queues.YouTubeQueue
+import echo.music.enhanced.ui.component.ChoiceChipsRow
+import echo.music.enhanced.ui.component.HideOnScrollFAB
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.LocalAlbumsGrid
+import echo.music.enhanced.ui.component.LocalArtistsGrid
+import echo.music.enhanced.ui.component.LocalMenuState
+import echo.music.enhanced.ui.component.LocalSongsGrid
+import echo.music.enhanced.ui.component.NavigationTitle
+import echo.music.enhanced.ui.menu.AlbumMenu
+import echo.music.enhanced.ui.menu.ArtistMenu
+import echo.music.enhanced.ui.menu.SongMenu
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.utils.joinByBullet
+import echo.music.enhanced.utils.makeTimeString
+import echo.music.enhanced.viewmodels.StatsViewModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

@@ -1,14 +1,14 @@
 
 
-package echo.music.iad1tya
-import echo.music.iad1tya.R
-import echo.music.iad1tya.BuildConfig
-import echo.music.iad1tya.ui.screens.settings.RingtoneViewModel
-import echo.music.iad1tya.ui.component.RingtoneTrimmerDialog
-import echo.music.iad1tya.ui.component.RingtoneProgressDialog
-import echo.music.iad1tya.ui.component.AppFloatingNavBar
-import echo.music.iad1tya.ui.component.floatingtabbar.rememberFloatingTabBarScrollConnection
-import echo.music.iad1tya.constants.UseFloatingNavBarKey
+package echo.music.enhanced
+import echo.music.enhanced.R
+import echo.music.enhanced.BuildConfig
+import echo.music.enhanced.ui.screens.settings.RingtoneViewModel
+import echo.music.enhanced.ui.component.RingtoneTrimmerDialog
+import echo.music.enhanced.ui.component.RingtoneProgressDialog
+import echo.music.enhanced.ui.component.AppFloatingNavBar
+import echo.music.enhanced.ui.component.floatingtabbar.rememberFloatingTabBarScrollConnection
+import echo.music.enhanced.constants.UseFloatingNavBarKey
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.CompositionLocalProvider
@@ -151,71 +151,71 @@ import coil3.toBitmap
 import com.music.innertube.YouTube
 import com.music.innertube.models.SongItem
 import com.music.innertube.models.WatchEndpoint
-import echo.music.iad1tya.constants.AppBarHeight
-import echo.music.iad1tya.constants.AiRecommendationsKey
-import echo.music.iad1tya.constants.AppLanguageKey
-import echo.music.iad1tya.constants.DarkModeKey
-import echo.music.iad1tya.constants.DefaultOpenTabKey
-import echo.music.iad1tya.constants.DisableScreenshotKey
-import echo.music.iad1tya.constants.DynamicThemeKey
-import echo.music.iad1tya.constants.EnableHighRefreshRateKey
-import echo.music.iad1tya.constants.FloatingToolbarBottomPadding
-import echo.music.iad1tya.constants.FloatingToolbarHorizontalPadding
-import echo.music.iad1tya.constants.MiniPlayerBottomSpacing
-import echo.music.iad1tya.constants.MiniPlayerHeight
-import echo.music.iad1tya.constants.NavigationBarAnimationSpec
-import echo.music.iad1tya.constants.NavigationBarHeight
-import echo.music.iad1tya.echomusic.updater.checkForUpdate
-import echo.music.iad1tya.echomusic.updater.getAutoUpdateCheckSetting
-import echo.music.iad1tya.echomusic.updater.isNewerVersion
-import echo.music.iad1tya.echomusic.updater.saveUpdateAvailableState
-import echo.music.iad1tya.echomusic.updater.getUpdateNotificationsSetting
-import echo.music.iad1tya.echomusic.UpdateNotificationHelper
+import echo.music.enhanced.constants.AppBarHeight
+import echo.music.enhanced.constants.AiRecommendationsKey
+import echo.music.enhanced.constants.AppLanguageKey
+import echo.music.enhanced.constants.DarkModeKey
+import echo.music.enhanced.constants.DefaultOpenTabKey
+import echo.music.enhanced.constants.DisableScreenshotKey
+import echo.music.enhanced.constants.DynamicThemeKey
+import echo.music.enhanced.constants.EnableHighRefreshRateKey
+import echo.music.enhanced.constants.FloatingToolbarBottomPadding
+import echo.music.enhanced.constants.FloatingToolbarHorizontalPadding
+import echo.music.enhanced.constants.MiniPlayerBottomSpacing
+import echo.music.enhanced.constants.MiniPlayerHeight
+import echo.music.enhanced.constants.NavigationBarAnimationSpec
+import echo.music.enhanced.constants.NavigationBarHeight
+import echo.music.enhanced.echomusic.updater.checkForUpdate
+import echo.music.enhanced.echomusic.updater.getAutoUpdateCheckSetting
+import echo.music.enhanced.echomusic.updater.isNewerVersion
+import echo.music.enhanced.echomusic.updater.saveUpdateAvailableState
+import echo.music.enhanced.echomusic.updater.getUpdateNotificationsSetting
+import echo.music.enhanced.echomusic.UpdateNotificationHelper
 import android.util.Log
 import androidx.compose.ui.platform.LocalContext
-import echo.music.iad1tya.constants.PauseListenHistoryKey
-import echo.music.iad1tya.constants.PauseSearchHistoryKey
-import echo.music.iad1tya.constants.PureBlackKey
-import echo.music.iad1tya.constants.SYSTEM_DEFAULT
-import echo.music.iad1tya.constants.SelectedThemeColorKey
-import echo.music.iad1tya.constants.StopMusicOnTaskClearKey
-import echo.music.iad1tya.constants.UseNewMiniPlayerDesignKey
-import echo.music.iad1tya.constants.*
-import echo.music.iad1tya.ui.component.shimmer.getShimmerTheme
-import echo.music.iad1tya.db.MusicDatabase
-import echo.music.iad1tya.db.entities.SearchHistory
-import echo.music.iad1tya.extensions.toEnum
-import echo.music.iad1tya.models.toMediaMetadata
-import echo.music.iad1tya.playback.DownloadUtil
-import echo.music.iad1tya.playback.MusicService
-import echo.music.iad1tya.playback.MusicService.MusicBinder
-import echo.music.iad1tya.playback.PlayerConnection
-import echo.music.iad1tya.playback.queues.YouTubeQueue
-import echo.music.iad1tya.ui.component.*
-import echo.music.iad1tya.ui.component.backdrop.backdrops.rememberLayerBackdrop
-import echo.music.iad1tya.ui.component.backdrop.backdrops.layerBackdrop
-import echo.music.iad1tya.ui.menu.YouTubeSongMenu
-import echo.music.iad1tya.ui.player.BottomSheetPlayer
-import echo.music.iad1tya.ui.screens.Screens
-import echo.music.iad1tya.ui.screens.SettingDialoge
-import echo.music.iad1tya.ui.screens.WelcomeDialog
-import echo.music.iad1tya.ui.screens.navigationBuilder
-import echo.music.iad1tya.ui.screens.settings.DarkMode
-import echo.music.iad1tya.ui.screens.settings.NavigationTab
-import echo.music.iad1tya.ui.theme.ColorSaver
-import echo.music.iad1tya.ui.theme.DefaultThemeColor
-import echo.music.iad1tya.ui.theme.echomusicTheme
-import echo.music.iad1tya.ui.theme.extractThemeColor
-import echo.music.iad1tya.ui.utils.appBarScrollBehavior
-import echo.music.iad1tya.ui.utils.resetHeightOffset
-import echo.music.iad1tya.utils.SyncUtils
-import echo.music.iad1tya.utils.dataStore
-import echo.music.iad1tya.utils.get
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.utils.rememberPreference
-import echo.music.iad1tya.utils.reportException
-import echo.music.iad1tya.utils.setAppLocale
-import echo.music.iad1tya.viewmodels.HomeViewModel
+import echo.music.enhanced.constants.PauseListenHistoryKey
+import echo.music.enhanced.constants.PauseSearchHistoryKey
+import echo.music.enhanced.constants.PureBlackKey
+import echo.music.enhanced.constants.SYSTEM_DEFAULT
+import echo.music.enhanced.constants.SelectedThemeColorKey
+import echo.music.enhanced.constants.StopMusicOnTaskClearKey
+import echo.music.enhanced.constants.UseNewMiniPlayerDesignKey
+import echo.music.enhanced.constants.*
+import echo.music.enhanced.ui.component.shimmer.getShimmerTheme
+import echo.music.enhanced.db.MusicDatabase
+import echo.music.enhanced.db.entities.SearchHistory
+import echo.music.enhanced.extensions.toEnum
+import echo.music.enhanced.models.toMediaMetadata
+import echo.music.enhanced.playback.DownloadUtil
+import echo.music.enhanced.playback.MusicService
+import echo.music.enhanced.playback.MusicService.MusicBinder
+import echo.music.enhanced.playback.PlayerConnection
+import echo.music.enhanced.playback.queues.YouTubeQueue
+import echo.music.enhanced.ui.component.*
+import echo.music.enhanced.ui.component.backdrop.backdrops.rememberLayerBackdrop
+import echo.music.enhanced.ui.component.backdrop.backdrops.layerBackdrop
+import echo.music.enhanced.ui.menu.YouTubeSongMenu
+import echo.music.enhanced.ui.player.BottomSheetPlayer
+import echo.music.enhanced.ui.screens.Screens
+import echo.music.enhanced.ui.screens.SettingDialoge
+import echo.music.enhanced.ui.screens.WelcomeDialog
+import echo.music.enhanced.ui.screens.navigationBuilder
+import echo.music.enhanced.ui.screens.settings.DarkMode
+import echo.music.enhanced.ui.screens.settings.NavigationTab
+import echo.music.enhanced.ui.theme.ColorSaver
+import echo.music.enhanced.ui.theme.DefaultThemeColor
+import echo.music.enhanced.ui.theme.echomusicTheme
+import echo.music.enhanced.ui.theme.extractThemeColor
+import echo.music.enhanced.ui.utils.appBarScrollBehavior
+import echo.music.enhanced.ui.utils.resetHeightOffset
+import echo.music.enhanced.utils.SyncUtils
+import echo.music.enhanced.utils.dataStore
+import echo.music.enhanced.utils.get
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.utils.rememberPreference
+import echo.music.enhanced.utils.reportException
+import echo.music.enhanced.utils.setAppLocale
+import echo.music.enhanced.viewmodels.HomeViewModel
 import com.valentinilk.shimmer.LocalShimmerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -235,9 +235,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     companion object {
-        const val ACTION_SEARCH = "echo.music.iad1tya.action.SEARCH"
-        const val ACTION_LIBRARY = "echo.music.iad1tya.action.LIBRARY"
-        const val ACTION_RECOGNITION = "echo.music.iad1tya.action.RECOGNITION"
+        const val ACTION_SEARCH = "echo.music.enhanced.action.SEARCH"
+        const val ACTION_LIBRARY = "echo.music.enhanced.action.LIBRARY"
+        const val ACTION_RECOGNITION = "echo.music.enhanced.action.RECOGNITION"
         const val EXTRA_AUTO_START_RECOGNITION = "auto_start_recognition"
     }
 
@@ -388,7 +388,7 @@ class MainActivity : ComponentActivity() {
                 .collectLatest { enabled ->
                     val workManager = androidx.work.WorkManager.getInstance(this@MainActivity)
                     if (enabled) {
-                        val request = androidx.work.PeriodicWorkRequestBuilder<echo.music.iad1tya.ai.AiRecommendationWorker>(1, java.util.concurrent.TimeUnit.DAYS)
+                        val request = androidx.work.PeriodicWorkRequestBuilder<echo.music.enhanced.ai.AiRecommendationWorker>(1, java.util.concurrent.TimeUnit.DAYS)
                             .setConstraints(androidx.work.Constraints.Builder().setRequiredNetworkType(androidx.work.NetworkType.CONNECTED).build())
                             .build()
                         workManager.enqueueUniquePeriodicWork(
@@ -539,7 +539,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        val (enableHaptics) = rememberPreference(echo.music.iad1tya.constants.EnableHapticsKey, defaultValue = false)
+        val (enableHaptics) = rememberPreference(echo.music.enhanced.constants.EnableHapticsKey, defaultValue = false)
         val view = LocalView.current
         var lastScrollHapticTime by remember { mutableStateOf(0L) }
 
@@ -825,7 +825,7 @@ class MainActivity : ComponentActivity() {
                 val snackbarHostState = remember { SnackbarHostState() }
                 var showSettingDialoge by remember { mutableStateOf(false) }
 
-                val (lastOpenedVersionCode, setLastOpenedVersionCode) = rememberPreference(echo.music.iad1tya.constants.LastOpenedVersionCodeKey, -1)
+                val (lastOpenedVersionCode, setLastOpenedVersionCode) = rememberPreference(echo.music.enhanced.constants.LastOpenedVersionCodeKey, -1)
                 var showWelcomeDialog by remember { mutableStateOf(false) }
 
                 LaunchedEffect(lastOpenedVersionCode) {

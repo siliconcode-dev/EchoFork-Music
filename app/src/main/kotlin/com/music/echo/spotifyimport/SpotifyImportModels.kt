@@ -5,7 +5,7 @@
  * Do not remove or alter this notice. - Per GPL-3.0 Section 4 & Section 5
  */
 
-package echo.music.iad1tya.spotifyimport
+package echo.music.enhanced.spotifyimport
 
 import androidx.compose.runtime.Immutable
 

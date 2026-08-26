@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens
+package echo.music.enhanced.ui.screens
 
 import android.content.Intent
 import android.os.Bundle
@@ -39,9 +39,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
-import echo.music.iad1tya.R
-import echo.music.iad1tya.ui.theme.echomusicTheme
-import echo.music.iad1tya.utils.CrashHandler
+import echo.music.enhanced.R
+import echo.music.enhanced.ui.theme.echomusicTheme
+import echo.music.enhanced.utils.CrashHandler
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date

@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.component
+package echo.music.enhanced.ui.component
 
 import android.graphics.BlurMaskFilter
 import androidx.compose.animation.core.animateFloatAsState
@@ -47,12 +47,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.constants.AppleMusicLyricsBlurKey
-import echo.music.iad1tya.constants.LyricsRomanizeAsMainKey
-import echo.music.iad1tya.lyrics.LyricsEntry
-import echo.music.iad1tya.ui.screens.settings.LyricsPosition
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.constants.AppleMusicLyricsBlurKey
+import echo.music.enhanced.constants.LyricsRomanizeAsMainKey
+import echo.music.enhanced.lyrics.LyricsEntry
+import echo.music.enhanced.ui.screens.settings.LyricsPosition
+import echo.music.enhanced.utils.rememberPreference
 import kotlinx.coroutines.isActive
 import kotlin.math.PI
 import kotlin.math.cos

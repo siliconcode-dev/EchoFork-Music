@@ -1,4 +1,4 @@
-package echo.music.iad1tya.recognition
+package echo.music.enhanced.recognition
 
 import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi

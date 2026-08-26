@@ -8,7 +8,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "echo.music.iad1tya.autoeq"
+        namespace = "echo.music.enhanced.autoeq"
         compileSdk = 37
         minSdk = 26
     }

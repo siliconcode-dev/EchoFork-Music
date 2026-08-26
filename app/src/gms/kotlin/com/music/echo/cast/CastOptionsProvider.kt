@@ -1,4 +1,4 @@
-package echo.music.iad1tya.cast
+package echo.music.enhanced.cast
 
 import android.content.Context
 import com.google.android.gms.cast.CastMediaControlIntent

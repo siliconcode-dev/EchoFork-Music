@@ -19,5 +19,5 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--dontwarn echo.music.iad1tya.data.di.loader.LoaderKt
--dontwarn echo.music.iad1tya.media3.ui.MediaPlayerViewKt
+-dontwarn echo.music.enhanced.data.di.loader.LoaderKt
+-dontwarn echo.music.enhanced.media3.ui.MediaPlayerViewKt

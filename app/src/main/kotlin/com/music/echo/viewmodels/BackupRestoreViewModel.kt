@@ -1,26 +1,26 @@
 
 
-package echo.music.iad1tya.viewmodels
+package echo.music.enhanced.viewmodels
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
-import echo.music.iad1tya.MainActivity
-import echo.music.iad1tya.R
-import echo.music.iad1tya.db.InternalDatabase
-import echo.music.iad1tya.db.MusicDatabase
-import echo.music.iad1tya.db.entities.ArtistEntity
-import echo.music.iad1tya.db.entities.Song
-import echo.music.iad1tya.db.entities.SongEntity
-import echo.music.iad1tya.extensions.div
-import echo.music.iad1tya.extensions.tryOrNull
-import echo.music.iad1tya.extensions.zipInputStream
-import echo.music.iad1tya.extensions.zipOutputStream
-import echo.music.iad1tya.playback.MusicService
-import echo.music.iad1tya.playback.MusicService.Companion.PERSISTENT_QUEUE_FILE
-import echo.music.iad1tya.utils.reportException
+import echo.music.enhanced.MainActivity
+import echo.music.enhanced.R
+import echo.music.enhanced.db.InternalDatabase
+import echo.music.enhanced.db.MusicDatabase
+import echo.music.enhanced.db.entities.ArtistEntity
+import echo.music.enhanced.db.entities.Song
+import echo.music.enhanced.db.entities.SongEntity
+import echo.music.enhanced.extensions.div
+import echo.music.enhanced.extensions.tryOrNull
+import echo.music.enhanced.extensions.zipInputStream
+import echo.music.enhanced.extensions.zipOutputStream
+import echo.music.enhanced.playback.MusicService
+import echo.music.enhanced.playback.MusicService.Companion.PERSISTENT_QUEUE_FILE
+import echo.music.enhanced.utils.reportException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking

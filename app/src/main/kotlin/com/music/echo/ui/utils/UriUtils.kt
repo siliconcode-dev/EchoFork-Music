@@ -1,11 +1,11 @@
 
 
-package echo.music.iad1tya.ui.utils
+package echo.music.enhanced.ui.utils
 
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.ui.platform.UriHandler
-import echo.music.iad1tya.R
+import echo.music.enhanced.R
 
 
 fun UriHandler.safeOpenUri(context: Context, uri: String) {

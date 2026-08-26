@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.utils
+package echo.music.enhanced.utils
 
 import android.net.ConnectivityManager
 import android.util.Log
@@ -9,7 +9,7 @@ import com.music.innertube.NewPipeExtractor
 import com.music.innertube.YouTube
 import com.music.innertube.models.YouTubeClient
 import com.music.innertube.models.YouTubeClient.Companion.ANDROID_CREATOR
-import echo.music.iad1tya.utils.BotDetectionMitigator
+import echo.music.enhanced.utils.BotDetectionMitigator
 import com.music.innertube.models.YouTubeClient.Companion.ANDROID_VR_1_43_32
 import com.music.innertube.models.YouTubeClient.Companion.ANDROID_VR_1_61_48
 import com.music.innertube.models.YouTubeClient.Companion.ANDROID_VR_NO_AUTH
@@ -22,16 +22,16 @@ import com.music.innertube.models.YouTubeClient.Companion.WEB
 import com.music.innertube.models.YouTubeClient.Companion.WEB_CREATOR
 import com.music.innertube.models.YouTubeClient.Companion.WEB_REMIX
 import com.music.innertube.models.response.PlayerResponse
-import echo.music.iad1tya.constants.AudioQuality
-import echo.music.iad1tya.utils.cipher.CipherDeobfuscator
-import echo.music.iad1tya.utils.YTPlayerUtils.MAIN_CLIENT
-import echo.music.iad1tya.utils.YTPlayerUtils.STREAM_FALLBACK_CLIENTS
-import echo.music.iad1tya.utils.YTPlayerUtils.validateStatus
-import echo.music.iad1tya.utils.potoken.PoTokenGenerator
-import echo.music.iad1tya.utils.potoken.PoTokenResult
-import echo.music.iad1tya.utils.sabr.EjsNTransformSolver
-import echo.music.iad1tya.utils.PlaybackLogLevel
-import echo.music.iad1tya.utils.PlaybackLogManager
+import echo.music.enhanced.constants.AudioQuality
+import echo.music.enhanced.utils.cipher.CipherDeobfuscator
+import echo.music.enhanced.utils.YTPlayerUtils.MAIN_CLIENT
+import echo.music.enhanced.utils.YTPlayerUtils.STREAM_FALLBACK_CLIENTS
+import echo.music.enhanced.utils.YTPlayerUtils.validateStatus
+import echo.music.enhanced.utils.potoken.PoTokenGenerator
+import echo.music.enhanced.utils.potoken.PoTokenResult
+import echo.music.enhanced.utils.sabr.EjsNTransformSolver
+import echo.music.enhanced.utils.PlaybackLogLevel
+import echo.music.enhanced.utils.PlaybackLogManager
 import com.music.innertube.models.IpVersion
 import okhttp3.Dns
 import okhttp3.OkHttpClient

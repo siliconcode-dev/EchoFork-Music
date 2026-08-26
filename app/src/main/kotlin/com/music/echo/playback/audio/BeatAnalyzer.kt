@@ -1,4 +1,4 @@
-package echo.music.iad1tya.playback.audio
+package echo.music.enhanced.playback.audio
 
 import android.content.Context
 import android.media.MediaCodec

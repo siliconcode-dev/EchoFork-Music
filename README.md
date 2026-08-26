@@ -1,18 +1,25 @@
 <div align="center">
-  <img src="assets/Echo-new.png" alt="Echo Music Logo" width="120"/>
+  <img src="assets/Echo-new.png" alt="Enhanced Echo Music Logo" width="120"/>
 
-  <h1>Echo Music</h1>
+  <h1>Enhanced Echo Music</h1>
 
   <p><b>A modern Android music app with streaming, synced lyrics, offline playback, and an intuitive user experience.</b></p>
-  <p>
-    <a href="https://buymeacoffee.com/iad1tya">Buy me a Coffee</a> •
-    <a href="https://support.iad1tya.cyou">Support</a> •
-    <a href="https://instagram.com/iad1tya">Instagram</a> •
-    <a href="https://x.com/xad1tya">X</a>
-  </p>
 </div>
 
+## About this project
+
+Enhanced Echo Music is a fork of [Echo Music](https://github.com/iad1tya/Echo-Music) by Aditya
+([@iad1tya](https://github.com/iad1tya)), which is itself built on top of
+[SimpMusic](https://github.com/maxrave-dev/SimpMusic) by
+[maxrave-dev](https://github.com/maxrave-dev). Both are GPL-3.0 projects, and this fork continues
+under the same license. See [Acknowledgements](#acknowledgements).
+
+This fork exists to build on that foundation — deeper Material 3 Expressive adoption, refined
+motion and player UI, and continued modernization of the codebase.
+
 ## Screenshots
+
+> Screenshots below are inherited from upstream Echo Music and predate this fork's UI work.
 
 <div align="center">
   <img src="Screenshots/HomeScreen.png" alt="Home Screen" width="18%" style="border-radius: 10px; margin: 5px;" />
@@ -38,99 +45,114 @@
 
 ## Architecture
 
-Echo Music is built utilizing a modern Android and Kotlin Multiplatform (KMP) architecture to ensure scalability, maintainability, and high performance.
+Enhanced Echo Music uses a modern Android and Kotlin Multiplatform (KMP) architecture.
 
-* **Kotlin Multiplatform (KMP):** The core business logic, domain models, and data access layers are encapsulated within a dedicated `core` Git submodule. This enables logic sharing across platforms and isolates critical services.
-* **UI Layer:** The application interface is built entirely with Jetpack Compose, offering a reactive and declarative UI paradigm.
-* **Media Playback:** Playback is handled by AndroidX Media3 (ExoPlayer), providing robust handling of audio streams, local caching, and gapless transitions.
-* **Dependency Injection:** Koin is utilized for dependency injection, decoupling module lifecycles and simplifying testing.
-* **Local Storage:** Room Database manages structured local data (playlists, favorites, cache metadata) while DataStore manages user preferences.
-* **Modularization:** The project is strictly modularized by feature and layer (e.g., `:core:data`, `:core:domain`, `:core:media3`, `:core:service:spotify`, `:core:service:lyricsService`). This structure reduces build times and enforces clear boundary separations.
+* **Kotlin Multiplatform (KMP):** Core business logic, domain models, and data access layers live
+  under `core/`. Upstream tracked this as a Git submodule; this fork vendors it directly so the
+  shared logic can be modified alongside the app.
+* **UI Layer:** Built entirely with Jetpack Compose (Material 3 Expressive).
+* **Media Playback:** AndroidX Media3 (ExoPlayer), handling audio streams, local caching, and
+  gapless transitions.
+* **Dependency Injection:** Koin, decoupling module lifecycles and simplifying testing.
+* **Local Storage:** Room for structured local data (playlists, favorites, cache metadata);
+  DataStore for user preferences.
+* **Modularization:** Split by feature and layer (`:data`, `:domain`, `:media3`, `:spotify`,
+  `:lyricsService`, and others — see `settings.gradle.kts`).
 
-## Infrastructure and Analytics
+## Building
 
-* **Firebase Integration:** Echo Music utilizes Firebase Crashlytics for real-time crash reporting and Firebase Analytics to monitor application performance and usage metrics. This telemetry data is critical for maintaining app stability and guiding future improvements.
-* **Monetization:** To sustain the infrastructure, development, and maintenance costs associated with this project, minimal advertisements are integrated within the [Website](https://echomusic.fun).
+Requirements: **JDK 21** and **Android SDK 37**.
 
-## Transfer Playlists from Old Echo Music to New Echo Music
-This guide walks you through moving your playlists from the old Echo Music app to the new one, using a backup-and-convert process.
+```bash
+git clone https://github.com/siliconcode-dev/EchoFork-Music.git
+cd EchoFork-Music
+./gradlew assembleDebug
+```
 
-## Steps
+The APK is written to `androidApp/build/outputs/apk/debug/`.
 
-**1. Back up your playlists (old app)**
-- Open the old Echo Music app
-- Go to **Settings**
-- Select **Backup and Restore**
-- Tap **Backup** → **Local Backup**
-- This creates a `.backup` file saved on your device
+Optional — Last.fm scrobbling requires API credentials. Without them the feature disables itself
+at runtime. Add to `local.properties` (which is gitignored):
 
-**2. Visit the migration site**
-- Open **https://echomusic.fun/migrate** in your browser
+```properties
+LASTFM_API_KEY=your_key
+LASTFM_SECRET=your_secret
+```
 
-**3. Upload and convert the file**
-- Upload the `.backup` file from Step 1
-- The site processes it and generates a new `.json` file
-- Download this file to your device
+### Firebase (disabled by default)
 
-**4. Open the new Echo Music app**
-- Install it (if not already) and launch it
+Crashlytics and Analytics are **switched off** in this fork. The inherited
+`androidApp/google-services.json.disabled` belongs to the upstream project's Firebase account —
+building against it would send this app's crash and analytics data to the upstream maintainer.
 
-**5. Import your playlists**
-- Go to **Settings**
-- Select **Backup and Restore**
-- Tap **Import Playlists**
+To enable telemetry, register the `echo.music.enhanced` application ID in your own Firebase
+project, add that project's `google-services.json` to `androidApp/`, and uncomment the two
+plugin lines in `androidApp/build.gradle.kts`. Crash reporting degrades to logcat until you do.
 
-**6. Select the converted file**
-- Choose the `.json` file from Step 3
-- Your playlists will now appear in the new app
+## Transfer playlists from Echo Music
+
+Playlists can be moved from the upstream Echo Music app using its backup-and-convert flow:
+
+1. **Back up** — in Echo Music, go to **Settings → Backup and Restore → Backup → Local Backup**.
+   This writes a `.backup` file to your device.
+2. **Convert** — open **https://echomusic.fun/migrate** and upload that `.backup` file. The site
+   returns a `.json` file.
+3. **Import** — in Enhanced Echo Music, go to **Settings → Backup and Restore → Import Playlists**
+   and pick the converted `.json`.
+
+> The migration site is operated by the upstream Echo Music project, not by this fork.
 
 ## Acknowledgements
 
-Echo Music, developed by Aditya ([@iad1tya](https://github.com/iad1tya)), is built on top of the [SimpMusic](https://github.com/maxrave-dev/SimpMusic) project. Huge thanks to the [SimpMusic developer](https://github.com/maxrave-dev) for their excellent open-source work, which forms the reliable foundation this project builds upon.
+This project stands on work by others:
 
-## Installation
+* **[Echo Music](https://github.com/iad1tya/Echo-Music)** by Aditya
+  ([@iad1tya](https://github.com/iad1tya)) — the direct upstream of this fork.
+* **[SimpMusic](https://github.com/maxrave-dev/SimpMusic)** by
+  [maxrave-dev](https://github.com/maxrave-dev) — the foundation Echo Music itself builds on.
 
-Download the latest pre-compiled APK from the [Releases Page](https://github.com/iad1tya/Echo-Music/releases/latest).
-
-## Support
-
-If you find Echo Music valuable, please consider supporting the development infrastructure:
+If you find this software valuable, please consider supporting the **upstream** developers, who
+did the bulk of this work:
 
 <div align="center">
   <a href="https://buymeacoffee.com/iad1tya"><img src="assets/bmac.png" width="140" style="margin: 10px; border-radius: 8px;"/></a>
-  <a href="https://intradeus.github.io/http-protocol-redirector/?r=upi://pay?pa=iad1tya@upi&pn=Aditya%20Yadav"><img src="assets/upi.svg" width="100" style="margin: 10px; border-radius: 8px;"/></a>
   <a href="https://www.patreon.com/cw/iad1tya"><img src="assets/patreon3.png" width="100" style="margin: 10px; border-radius: 8px;"/></a>
 </div>
-
-<details>
-<summary><b>Cryptocurrency Options</b></summary>
-<br>
-
-| Network | Address |
-| :--- | :--- |
-| **Bitcoin** | `bc1qcvyr7eekha8uytmffcvgzf4h7xy7shqzke35fy` |
-| **Ethereum** | `0x51bc91022E2dCef9974D5db2A0e22d57B360e700` |
-| **Solana** | `9wjca3EQnEiqzqgy7N5iqS1JGXJiknMQv6zHgL96t94S` |
-
-</details>
 
 ## Legal Disclaimer & Terms of Use
 
 **1. Free & Open-Source**
-Echo Music is a 100% free, open-source (FOSS) application built for educational purposes and personal use. It is not sold or monetized in any way — no ads, no premium features, no subscriptions, and no hidden fees.
+Enhanced Echo Music is a 100% free, open-source (FOSS) application built for educational purposes
+and personal use. This fork contains no advertisements, no premium tier, no subscriptions, and no
+monetization of any kind.
 
 **2. How It Works**
-Echo Music functions as a specialized client that parses the publicly available content and APIs of YouTube and YouTube Music, displaying them in a custom interface. This ad-free experience is comparable to using a standard browser with an ad-blocking extension (like uBlock Origin) — it doesn't modify or bypass any content protections beyond that.
+The app functions as a specialized client that parses publicly available content and APIs of
+YouTube and YouTube Music, displaying them in a custom interface. It does not modify or bypass
+content protections.
 
 **3. Support Creators**
-We respect the work of artists and content creators. Users are encouraged to subscribe to [YouTube Premium](https://www.youtube.com/premium) to directly support the creators they listen to. Echo Music is intended as a developer proof-of-concept, not as a way to reduce creator revenue.
+We respect the work of artists and content creators. Users are encouraged to subscribe to
+[YouTube Premium](https://www.youtube.com/premium) to directly support the creators they listen
+to. This app is a developer proof-of-concept, not a way to reduce creator revenue.
 
 **4. No Hosted Content**
-Echo Music does not host, upload, or store any audio, video, or copyrighted media on its own servers. All content remains hosted on Google/YouTube's servers and is the property of its respective owners. The app simply streams publicly accessible links.
+This app does not host, upload, or store any audio, video, or copyrighted media. All content
+remains hosted on Google/YouTube's servers and is the property of its respective owners.
 
-**5. User Responsibility & Contact**
-This software is provided "AS IS," without warranty of any kind. Users are solely responsible for ensuring their use of the app complies with local copyright laws and the platform's Terms of Service. Since no media is hosted by us, we cannot process DMCA takedowns for audio/video content — but for legal concerns regarding the open-source code itself, contact: [hello@echomusic.fun](mailto:hello@echomusic.fun)
+**5. Third-Party Services**
+The app talks to a number of third-party services, some via official APIs (Last.fm, LRCLIB,
+SponsorBlock) and some via unofficial or reverse-engineered endpoints (YouTube Music, Spotify,
+Apple Music lyrics). Availability of those endpoints is outside this project's control and may
+break without notice. Using them may conflict with those platforms' Terms of Service — that
+choice, and the accounts you sign in with, are yours.
+
+**6. User Responsibility**
+This software is provided "AS IS," without warranty of any kind. Users are solely responsible for
+ensuring their use complies with local copyright laws and platform Terms of Service. No media is
+hosted by this project, so it cannot process DMCA takedowns for audio/video content.
 
 ## License
 
-Echo Music is licensed under the GPL-3.0 License. See the LICENSE file for details.
+Enhanced Echo Music is licensed under the GPL-3.0 License, inherited from Echo Music and
+SimpMusic. See the [LICENSE](LICENSE) file for details.

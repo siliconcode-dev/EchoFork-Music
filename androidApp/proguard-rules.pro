@@ -58,10 +58,10 @@
 
 -dontwarn org.slf4j.impl.StaticLoggerBinder
 -dontwarn kotlinx.serialization.internal.ClassValueReferences
--keep class echo.music.iad1tya.data.model.** { *; }
--keep class echo.music.iad1tya.extension.AllExtKt { *; }
--keep class echo.music.iad1tya.extension.AllExtKt$* { *; }
--keep class echo.music.iad1tya.kotlinytmusicscraper.extension.MapExtKt$* { *; }
+-keep class echo.music.enhanced.data.model.** { *; }
+-keep class echo.music.enhanced.extension.AllExtKt { *; }
+-keep class echo.music.enhanced.extension.AllExtKt$* { *; }
+-keep class echo.music.enhanced.kotlinytmusicscraper.extension.MapExtKt$* { *; }
 
 ## Removes all Logs as they cause perfomance issues in prod
 #-assumenosideeffects class android.util.Log {
@@ -148,7 +148,7 @@
 -keep class com.liskovsoft.** { *; }
 -keep interface com.liskovsoft.** { *; }
 -keep class com.eclipsesource.v8.** { *; }
--keep class echo.music.iad1tya.kotlinytmusicscraper.** { *; }
+-keep class echo.music.enhanced.kotlinytmusicscraper.** { *; }
 
 -dontwarn javax.script.AbstractScriptEngine
 -dontwarn javax.script.Bindings
@@ -200,15 +200,15 @@
 -dontwarn java.beans.Introspector
 -dontwarn java.beans.PropertyDescriptor
 
--dontwarn echo.music.iad1tya.data.di.loader.LoaderKt
--dontwarn echo.music.iad1tya.media3.ui.MediaPlayerViewKt
+-dontwarn echo.music.enhanced.data.di.loader.LoaderKt
+-dontwarn echo.music.enhanced.media3.ui.MediaPlayerViewKt
 
--keep class echo.music.iad1tya.data.di.loader.LoaderKt { *; }
--keep class echo.music.iad1tya.data.mapping.MappingKt { *; }
--keep class echo.music.iad1tya.data.extension.** { *; }
--keep class echo.music.iad1tya.data.di.** { *; }
+-keep class echo.music.enhanced.data.di.loader.LoaderKt { *; }
+-keep class echo.music.enhanced.data.mapping.MappingKt { *; }
+-keep class echo.music.enhanced.data.extension.** { *; }
+-keep class echo.music.enhanced.data.di.** { *; }
 
--keep class echo.music.iad1tya.kotlinytmusicscraper.** { *; }
+-keep class echo.music.enhanced.kotlinytmusicscraper.** { *; }
 
 -keep class org.echomusic.lyrics.parser.** { *; }
 -keep class org.echomusic.lyrics.models.** { *; }

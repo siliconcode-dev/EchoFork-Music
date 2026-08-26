@@ -1,4 +1,4 @@
-package echo.music.iad1tya.ui.screens
+package echo.music.enhanced.ui.screens
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import echo.music.iad1tya.BuildConfig
-import echo.music.iad1tya.R
+import echo.music.enhanced.BuildConfig
+import echo.music.enhanced.R
 
 @Composable
 fun WelcomeDialog(

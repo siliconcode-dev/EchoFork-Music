@@ -1,10 +1,10 @@
-package echo.music.iad1tya.ui.screens.equalizer
+package echo.music.enhanced.ui.screens.equalizer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import echo.music.iad1tya.eq.EqualizerService
-import echo.music.iad1tya.eq.data.EQProfileRepository
-import echo.music.iad1tya.eq.data.ParametricEQParser
+import echo.music.enhanced.eq.EqualizerService
+import echo.music.enhanced.eq.data.EQProfileRepository
+import echo.music.enhanced.eq.data.ParametricEQParser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

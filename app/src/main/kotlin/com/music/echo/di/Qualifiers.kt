@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.di
+package echo.music.enhanced.di
 
 import javax.inject.Qualifier
 

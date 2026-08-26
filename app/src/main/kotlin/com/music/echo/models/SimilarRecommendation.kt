@@ -1,9 +1,9 @@
 
 
-package echo.music.iad1tya.models
+package echo.music.enhanced.models
 
 import com.music.innertube.models.YTItem
-import echo.music.iad1tya.db.entities.LocalItem
+import echo.music.enhanced.db.entities.LocalItem
 
 data class SimilarRecommendation(
     val title: LocalItem,

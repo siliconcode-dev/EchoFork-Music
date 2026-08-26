@@ -1,4 +1,4 @@
-package echo.music.iad1tya.models
+package echo.music.enhanced.models
 
 import kotlinx.serialization.Serializable
 

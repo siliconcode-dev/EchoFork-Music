@@ -7,7 +7,7 @@
  * scale for cheaper effect rendering. KMP expect/actual declarations were
  * merged into this single Android source set. Package renamed accordingly.
  */
-package echo.music.iad1tya.ui.component.backdrop.shadow
+package echo.music.enhanced.ui.component.backdrop.shadow
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
@@ -26,8 +26,8 @@ import androidx.compose.ui.node.requireGraphicsContext
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
-import echo.music.iad1tya.ui.component.backdrop.internal.ShapeProvider
-import echo.music.iad1tya.ui.component.backdrop.internal.blur
+import echo.music.enhanced.ui.component.backdrop.internal.ShapeProvider
+import echo.music.enhanced.ui.component.backdrop.internal.blur
 import kotlin.math.ceil
 
 internal class ShadowElement(

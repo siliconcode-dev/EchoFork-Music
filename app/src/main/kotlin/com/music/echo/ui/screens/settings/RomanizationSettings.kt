@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import androidx.compose.foundation.layout.Column
 
@@ -29,28 +29,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.LyricsRomanizeAsMainKey
-import echo.music.iad1tya.constants.LyricsRomanizeBelarusianKey
-import echo.music.iad1tya.constants.LyricsRomanizeBulgarianKey
-import echo.music.iad1tya.constants.LyricsRomanizeChineseKey
-import echo.music.iad1tya.constants.LyricsRomanizeHindiKey
-import echo.music.iad1tya.constants.LyricsRomanizePunjabiKey
-import echo.music.iad1tya.constants.LyricsRomanizeCyrillicByLineKey
-import echo.music.iad1tya.constants.LyricsRomanizeJapaneseKey
-import echo.music.iad1tya.constants.LyricsRomanizeKoreanKey
-import echo.music.iad1tya.constants.LyricsRomanizeKyrgyzKey
-import echo.music.iad1tya.constants.LyricsRomanizeMacedonianKey
-import echo.music.iad1tya.constants.LyricsRomanizeRussianKey
-import echo.music.iad1tya.constants.LyricsRomanizeSerbianKey
-import echo.music.iad1tya.constants.LyricsRomanizeUkrainianKey
-import echo.music.iad1tya.ui.component.ActionPromptDialog
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.Material3SettingsGroup
-import echo.music.iad1tya.ui.component.Material3SettingsItem
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.LyricsRomanizeAsMainKey
+import echo.music.enhanced.constants.LyricsRomanizeBelarusianKey
+import echo.music.enhanced.constants.LyricsRomanizeBulgarianKey
+import echo.music.enhanced.constants.LyricsRomanizeChineseKey
+import echo.music.enhanced.constants.LyricsRomanizeHindiKey
+import echo.music.enhanced.constants.LyricsRomanizePunjabiKey
+import echo.music.enhanced.constants.LyricsRomanizeCyrillicByLineKey
+import echo.music.enhanced.constants.LyricsRomanizeJapaneseKey
+import echo.music.enhanced.constants.LyricsRomanizeKoreanKey
+import echo.music.enhanced.constants.LyricsRomanizeKyrgyzKey
+import echo.music.enhanced.constants.LyricsRomanizeMacedonianKey
+import echo.music.enhanced.constants.LyricsRomanizeRussianKey
+import echo.music.enhanced.constants.LyricsRomanizeSerbianKey
+import echo.music.enhanced.constants.LyricsRomanizeUkrainianKey
+import echo.music.enhanced.ui.component.ActionPromptDialog
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.Material3SettingsGroup
+import echo.music.enhanced.ui.component.Material3SettingsItem
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.utils.rememberPreference
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

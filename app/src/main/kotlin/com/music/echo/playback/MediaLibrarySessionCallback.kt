@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.playback
+package echo.music.enhanced.playback
 
 import android.content.ContentResolver
 import android.content.Context
@@ -31,20 +31,20 @@ import com.music.innertube.models.PlaylistItem
 import com.music.innertube.models.SongItem
 import com.music.innertube.models.filterExplicit
 import com.music.innertube.models.filterVideoSongs
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.HideExplicitKey
-import echo.music.iad1tya.constants.HideVideoSongsKey
-import echo.music.iad1tya.constants.MediaSessionConstants
-import echo.music.iad1tya.constants.SongSortType
-import echo.music.iad1tya.db.MusicDatabase
-import echo.music.iad1tya.db.entities.PlaylistEntity
-import echo.music.iad1tya.db.entities.Song
-import echo.music.iad1tya.extensions.toMediaItem
-import echo.music.iad1tya.extensions.toggleRepeatMode
-import echo.music.iad1tya.models.toMediaMetadata
-import echo.music.iad1tya.utils.dataStore
-import echo.music.iad1tya.utils.get
-import echo.music.iad1tya.utils.reportException
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.HideExplicitKey
+import echo.music.enhanced.constants.HideVideoSongsKey
+import echo.music.enhanced.constants.MediaSessionConstants
+import echo.music.enhanced.constants.SongSortType
+import echo.music.enhanced.db.MusicDatabase
+import echo.music.enhanced.db.entities.PlaylistEntity
+import echo.music.enhanced.db.entities.Song
+import echo.music.enhanced.extensions.toMediaItem
+import echo.music.enhanced.extensions.toggleRepeatMode
+import echo.music.enhanced.models.toMediaMetadata
+import echo.music.enhanced.utils.dataStore
+import echo.music.enhanced.utils.get
+import echo.music.enhanced.utils.reportException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -252,7 +252,7 @@ constructor(
                                     val songs = YouTube.playlist(playlistId).getOrNull()?.songs
                                         ?.take(100)
                                         ?.filterExplicit(context.dataStore.get(HideExplicitKey, false))
-                                        ?.filterVideoSongs(context.dataStore.get(HideVideoSongsKey, false) || context.dataStore.get(echo.music.iad1tya.constants.DataSaverEnabledKey, false))
+                                        ?.filterVideoSongs(context.dataStore.get(HideVideoSongsKey, false) || context.dataStore.get(echo.music.enhanced.constants.DataSaverEnabledKey, false))
                                         ?: emptyList()
 
                                     listOf(shuffleMediaItem(parentId)) + songs.map { it.toMediaItem(parentId) }
@@ -344,7 +344,7 @@ constructor(
                         ?.items
                         ?.filterIsInstance<SongItem>()
                         ?.filterExplicit(context.dataStore.get(HideExplicitKey, false))
-                        ?.filterVideoSongs(context.dataStore.get(HideVideoSongsKey, false) || context.dataStore.get(echo.music.iad1tya.constants.DataSaverEnabledKey, false))
+                        ?.filterVideoSongs(context.dataStore.get(HideVideoSongsKey, false) || context.dataStore.get(echo.music.enhanced.constants.DataSaverEnabledKey, false))
                         ?.filter { onlineSong ->
                             !allLocalSongs.any { localSong ->
                                 localSong.id == onlineSong.id ||
@@ -539,7 +539,7 @@ constructor(
                             ?.items
                             ?.filterIsInstance<SongItem>()
                             ?.filterExplicit(context.dataStore.get(HideExplicitKey, false))
-                            ?.filterVideoSongs(context.dataStore.get(HideVideoSongsKey, false) || context.dataStore.get(echo.music.iad1tya.constants.DataSaverEnabledKey, false))
+                            ?.filterVideoSongs(context.dataStore.get(HideVideoSongsKey, false) || context.dataStore.get(echo.music.enhanced.constants.DataSaverEnabledKey, false))
                             ?.filter { onlineSong ->
                                 !allLocalSongs.any { localSong ->
                                     localSong.id == onlineSong.id ||
@@ -798,7 +798,7 @@ constructor(
         singleItemStyle = MediaConstants.EXTRAS_VALUE_CONTENT_STYLE_CATEGORY_LIST_ITEM,
     )
 
-    private fun echo.music.iad1tya.db.entities.Playlist.toBrowsableMediaItem() = browsableMediaItem(
+    private fun echo.music.enhanced.db.entities.Playlist.toBrowsableMediaItem() = browsableMediaItem(
         "${MusicService.PLAYLIST}/$id",
         playlist.name,
         context.resources.getQuantityString(

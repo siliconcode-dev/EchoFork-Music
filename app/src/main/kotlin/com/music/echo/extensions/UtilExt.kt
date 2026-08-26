@@ -1,6 +1,6 @@
 
 
-package echo.music.iad1tya.extensions
+package echo.music.enhanced.extensions
 
 fun <T> tryOrNull(block: () -> T): T? =
     try {

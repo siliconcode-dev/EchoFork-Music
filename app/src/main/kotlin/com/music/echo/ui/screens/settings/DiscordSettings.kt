@@ -2,7 +2,7 @@
 
 @file:OptIn(ExperimentalMaterial3ExpressiveApi::class)
 
-package echo.music.iad1tya.ui.screens.settings
+package echo.music.enhanced.ui.screens.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -40,26 +40,26 @@ import coil3.request.allowHardware
 import coil3.toBitmap
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
-import echo.music.iad1tya.LocalPlayerAwareWindowInsets
-import echo.music.iad1tya.LocalPlayerConnection
-import echo.music.iad1tya.R
-import echo.music.iad1tya.constants.*
-import echo.music.iad1tya.db.entities.Song
+import echo.music.enhanced.LocalPlayerAwareWindowInsets
+import echo.music.enhanced.LocalPlayerConnection
+import echo.music.enhanced.R
+import echo.music.enhanced.constants.*
+import echo.music.enhanced.db.entities.Song
 import com.music.echo.discord.DiscordAuthCoordinator
 import com.music.echo.discord.DiscordOAuthRepository
-import echo.music.iad1tya.ui.component.EditTextPreference
-import echo.music.iad1tya.ui.component.EnumListPreference
-import echo.music.iad1tya.ui.component.IconButton
-import echo.music.iad1tya.ui.component.ListPreference
-import echo.music.iad1tya.ui.component.PreferenceEntry
+import echo.music.enhanced.ui.component.EditTextPreference
+import echo.music.enhanced.ui.component.EnumListPreference
+import echo.music.enhanced.ui.component.IconButton
+import echo.music.enhanced.ui.component.ListPreference
+import echo.music.enhanced.ui.component.PreferenceEntry
 
-import echo.music.iad1tya.ui.component.SwitchPreference
-import echo.music.iad1tya.ui.theme.PlayerColorExtractor
-import echo.music.iad1tya.ui.theme.extractThemeColor
-import echo.music.iad1tya.ui.utils.backToMain
-import echo.music.iad1tya.utils.makeTimeString
-import echo.music.iad1tya.utils.rememberEnumPreference
-import echo.music.iad1tya.utils.rememberPreference
+import echo.music.enhanced.ui.component.SwitchPreference
+import echo.music.enhanced.ui.theme.PlayerColorExtractor
+import echo.music.enhanced.ui.theme.extractThemeColor
+import echo.music.enhanced.ui.utils.backToMain
+import echo.music.enhanced.utils.makeTimeString
+import echo.music.enhanced.utils.rememberEnumPreference
+import echo.music.enhanced.utils.rememberPreference
 import timber.log.Timber
 
 enum class ActivitySource { ARTIST, ALBUM, SONG, APP }
