@@ -115,7 +115,6 @@ import echo.music.enhanced.ui.component.MoodMomentAndGenreHomeItem
 import echo.music.enhanced.ui.component.OfflineErrorState
 import echo.music.enhanced.ui.component.NowPlayingBottomSheet
 import echo.music.enhanced.ui.component.QuickPicksItem
-import echo.music.enhanced.ui.component.ReviewDialog
 import echo.music.enhanced.ui.component.RippleIconButton
 import echo.music.enhanced.ui.component.ShareSavedLyricsDialog
 import echo.music.enhanced.ui.icon.History
@@ -252,7 +251,6 @@ fun HomeScreen(
 
     val openAppTime by sharedViewModel.openAppTime.collectAsStateWithLifecycle()
     val shareLyricsPermissions by sharedViewModel.shareSavedLyrics.collectAsStateWithLifecycle()
-    val lastShownSupportVersion = "never_show_again"
 
     val backgroundColor = MaterialTheme.colorScheme.background
     val isLightTheme = backgroundColor.luminance() > 0.5f
@@ -377,33 +375,6 @@ fun HomeScreen(
 
 
 
-
-    val currentVersion = echo.music.enhanced.utils.VersionManager.getVersionName()
-    var showSupportDialog by rememberSaveable { mutableStateOf(false) }
-
-    LaunchedEffect(lastShownSupportVersion) {
-        if (lastShownSupportVersion == null) return@LaunchedEffect
-        
-        if (lastShownSupportVersion == "never_show_again") {
-            showSupportDialog = false
-            return@LaunchedEffect
-        }
-        
-        if (false && lastShownSupportVersion != currentVersion) {
-            showSupportDialog = true
-        } else if (false) {
-            showSupportDialog = true
-        }
-    }
-
-    if (showSupportDialog) {
-        echo.music.enhanced.ui.component.SupportProjectDialog(
-            onDismiss = {
-                showSupportDialog = false
-                
-            }
-        )
-    }
 
     Box {
         PullToRefreshBox(

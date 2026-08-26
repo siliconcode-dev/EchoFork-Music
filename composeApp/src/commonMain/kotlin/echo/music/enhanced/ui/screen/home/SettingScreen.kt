@@ -182,11 +182,12 @@ import echomusic.composeapp.generated.resources.auto_download_liked_songs_descri
 import echomusic.composeapp.generated.resources.anonymous
 import echomusic.composeapp.generated.resources.app_name
 import echomusic.composeapp.generated.resources.audio
-import echomusic.composeapp.generated.resources.author
 import echomusic.composeapp.generated.resources.auto_backup
 import echomusic.composeapp.generated.resources.auto_backup_description
 import echomusic.composeapp.generated.resources.auto_check_for_update
 import echomusic.composeapp.generated.resources.auto_check_for_update_description
+import echomusic.composeapp.generated.resources.based_on
+import echomusic.composeapp.generated.resources.based_on_description
 import echomusic.composeapp.generated.resources.backup
 import echomusic.composeapp.generated.resources.backup_downloaded
 import echomusic.composeapp.generated.resources.backup_downloaded_description
@@ -195,7 +196,6 @@ import echomusic.composeapp.generated.resources.balance_media_loudness
 import echomusic.composeapp.generated.resources.better_lyrics
 import echomusic.composeapp.generated.resources.blog_notification_description
 import echomusic.composeapp.generated.resources.blog_notification_title
-import echomusic.composeapp.generated.resources.buy_me_a_coffee
 import echomusic.composeapp.generated.resources.cancel
 import echomusic.composeapp.generated.resources.canvas_info
 import echomusic.composeapp.generated.resources.categories_sponsor_block
@@ -230,10 +230,7 @@ import echomusic.composeapp.generated.resources.daily
 import echomusic.composeapp.generated.resources.database
 import echomusic.composeapp.generated.resources.default_models
 import echomusic.composeapp.generated.resources.description_and_licenses
-import echomusic.composeapp.generated.resources.developer_blog
-import echomusic.composeapp.generated.resources.developer_blog_tagline
 import echomusic.composeapp.generated.resources.discord_integration
-import echomusic.composeapp.generated.resources.donation
 import echomusic.composeapp.generated.resources.download_quality
 import echomusic.composeapp.generated.resources.downloaded_cache
 import echomusic.composeapp.generated.resources.enable_canvas
@@ -258,8 +255,6 @@ import echomusic.composeapp.generated.resources.import_result
 import echomusic.composeapp.generated.resources.import_result_skipped
 import echomusic.composeapp.generated.resources.import_spotify_playlist
 import echomusic.composeapp.generated.resources.import_spotify_playlist_url
-import echomusic.composeapp.generated.resources.support_upi_crypto
-import echomusic.composeapp.generated.resources.support_url
 import echomusic.composeapp.generated.resources.enable_scrobbling
 import echomusic.composeapp.generated.resources.intro_login_to_discord
 import echomusic.composeapp.generated.resources.intro_login_to_lastfm
@@ -300,7 +295,6 @@ import echomusic.composeapp.generated.resources.lrclib
 import echomusic.composeapp.generated.resources.lyrics
 import echomusic.composeapp.generated.resources.main_lyrics_provider
 import echomusic.composeapp.generated.resources.manage_your_youtube_accounts
-import echomusic.composeapp.generated.resources.iad1tya_dev
 import echomusic.composeapp.generated.resources.monthly
 import echomusic.composeapp.generated.resources.never
 import echomusic.composeapp.generated.resources.no_account
@@ -2206,25 +2200,10 @@ fun SettingScreen(
                     },
                 )
                 SettingItem(
-                    title = stringResource(Res.string.author),
-                    subtitle = stringResource(Res.string.iad1tya_dev),
+                    title = stringResource(Res.string.based_on),
+                    subtitle = stringResource(Res.string.based_on_description),
                     onClick = {
-                        uriHandler.openUri("https://iad1tya.cyou")
-                    },
-                )
-
-                SettingItem(
-                    title = stringResource(Res.string.buy_me_a_coffee),
-                    subtitle = stringResource(Res.string.donation),
-                    onClick = {
-                        uriHandler.openUri("https://buymeacoffee.com/iad1tya")
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.support_upi_crypto),
-                    subtitle = stringResource(Res.string.support_url),
-                    onClick = {
-                        uriHandler.openUri("https://support.iad1tya.cyou/")
+                        uriHandler.openUri("https://github.com/iad1tya/Echo-Music")
                     },
                 )
 

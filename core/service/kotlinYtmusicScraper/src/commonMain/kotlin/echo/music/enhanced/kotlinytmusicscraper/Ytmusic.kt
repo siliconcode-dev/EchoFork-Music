@@ -599,13 +599,16 @@ class Ytmusic {
             parameter("service", "YouTube")
         }
 
+    // Update checks target this fork. Pointing them at the upstream repository
+    // would offer users the upstream APK, i.e. migrate them off this app.
+    // Until a release is published these simply find nothing, which is correct.
     suspend fun checkForGithubReleaseUpdate() =
-        httpClient.get("https://api.github.com/repos/EchoMusicApp/Echo-Music/releases/latest") {
+        httpClient.get("https://api.github.com/repos/siliconcode-dev/EchoFork-Music/releases/latest") {
             contentType(ContentType.Application.Json)
         }
 
     suspend fun checkForFdroidUpdate() =
-        httpClient.get("https://f-droid.org/api/v1/packages/echo.music.enhanced.simpmusic") {
+        httpClient.get("https://f-droid.org/api/v1/packages/echo.music.enhanced") {
             contentType(ContentType.Application.Json)
         }
 
