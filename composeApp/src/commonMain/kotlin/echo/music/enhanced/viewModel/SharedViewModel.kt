@@ -1741,6 +1741,10 @@ class SharedViewModel(
 
     fun getEnableLiquidGlass() = dataStoreManager.enableLiquidGlass
 
+    fun getTrueMotionEnabled() = dataStoreManager.trueMotionEnabled
+
+    fun getTrueMotionTargetHz() = dataStoreManager.trueMotionTargetHz
+
     
 
     

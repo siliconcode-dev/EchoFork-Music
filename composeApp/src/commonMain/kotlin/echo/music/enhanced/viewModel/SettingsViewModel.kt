@@ -153,6 +153,10 @@ class SettingsViewModel(
     val spatialAudioEnabled: StateFlow<Boolean> = _spatialAudioEnabled
     private val _immersiveAudioPassthroughEnabled = MutableStateFlow<Boolean>(true)
     val immersiveAudioPassthroughEnabled: StateFlow<Boolean> = _immersiveAudioPassthroughEnabled
+    private val _trueMotionEnabled = MutableStateFlow<Boolean>(false)
+    val trueMotionEnabled: StateFlow<Boolean> = _trueMotionEnabled
+    private val _trueMotionTargetHz = MutableStateFlow<Int>(0)
+    val trueMotionTargetHz: StateFlow<Int> = _trueMotionTargetHz
     private val _crossfadeDuration = MutableStateFlow<Int>(5000)
     val crossfadeDuration: StateFlow<Int> = _crossfadeDuration
     private val _crossfadeDjMode = MutableStateFlow<Boolean>(true)
@@ -385,6 +389,8 @@ class SettingsViewModel(
         getCrossfadeEnabled()
         getSpatialAudioEnabled()
         getImmersiveAudioPassthroughEnabled()
+        getTrueMotionEnabled()
+        getTrueMotionTargetHz()
         getCrossfadeDuration()
         getCrossfadeDjMode()
         getCrossfadeSkipAlbum()
@@ -575,6 +581,36 @@ class SettingsViewModel(
         viewModelScope.launch {
             dataStoreManager.setImmersiveAudioPassthroughEnabled(enabled)
             getImmersiveAudioPassthroughEnabled()
+        }
+    }
+
+    private fun getTrueMotionEnabled() {
+        viewModelScope.launch {
+            dataStoreManager.trueMotionEnabled.collect { enabled ->
+                _trueMotionEnabled.value = enabled == DataStoreManager.TRUE
+            }
+        }
+    }
+
+    fun setTrueMotionEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            dataStoreManager.setTrueMotionEnabled(enabled)
+            getTrueMotionEnabled()
+        }
+    }
+
+    private fun getTrueMotionTargetHz() {
+        viewModelScope.launch {
+            dataStoreManager.trueMotionTargetHz.collect { hz ->
+                _trueMotionTargetHz.value = hz
+            }
+        }
+    }
+
+    fun setTrueMotionTargetHz(hz: Int) {
+        viewModelScope.launch {
+            dataStoreManager.setTrueMotionTargetHz(hz)
+            getTrueMotionTargetHz()
         }
     }
 

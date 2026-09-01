@@ -1308,16 +1308,30 @@ internal class DataStoreManagerImpl(
         }
     }
 
-    // Default OFF: real battery cost, opt-in — see the "True Smooth" default-state decision.
-    override val trueSmoothEnabled: Flow<String> =
+    // Default OFF: real battery cost, opt-in — see the "True Motion" default-state decision.
+    override val trueMotionEnabled: Flow<String> =
         settingsDataStore.data.map { preferences ->
-            preferences[TRUE_SMOOTH_ENABLED] ?: FALSE
+            preferences[TRUE_MOTION_ENABLED] ?: FALSE
         }
 
-    override suspend fun setTrueSmoothEnabled(enabled: Boolean) {
+    override suspend fun setTrueMotionEnabled(enabled: Boolean) {
         withContext(Dispatchers.IO) {
             settingsDataStore.edit { settings ->
-                settings[TRUE_SMOOTH_ENABLED] = if (enabled) TRUE else FALSE
+                settings[TRUE_MOTION_ENABLED] = if (enabled) TRUE else FALSE
+            }
+        }
+    }
+
+    // 0 = "match device max", the agreed smart default within the picker.
+    override val trueMotionTargetHz: Flow<Int> =
+        settingsDataStore.data.map { preferences ->
+            preferences[TRUE_MOTION_TARGET_HZ] ?: 0
+        }
+
+    override suspend fun setTrueMotionTargetHz(hz: Int) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[TRUE_MOTION_TARGET_HZ] = hz
             }
         }
     }
@@ -1687,7 +1701,8 @@ internal class DataStoreManagerImpl(
         val CROSSFADE_ENABLED = stringPreferencesKey("crossfade_enabled")
         val SPATIAL_AUDIO_ENABLED = stringPreferencesKey("spatial_audio_enabled")
         val IMMERSIVE_AUDIO_PASSTHROUGH_ENABLED = stringPreferencesKey("immersive_audio_passthrough_enabled")
-        val TRUE_SMOOTH_ENABLED = stringPreferencesKey("true_smooth_enabled")
+        val TRUE_MOTION_ENABLED = stringPreferencesKey("true_motion_enabled")
+        val TRUE_MOTION_TARGET_HZ = intPreferencesKey("true_motion_target_hz")
         val CROSSFADE_DURATION = intPreferencesKey("crossfade_duration")
         val CROSSFADE_DJ_MODE = stringPreferencesKey("crossfade_dj_mode")
         val CROSSFADE_SKIP_ALBUM = stringPreferencesKey("crossfade_skip_album")

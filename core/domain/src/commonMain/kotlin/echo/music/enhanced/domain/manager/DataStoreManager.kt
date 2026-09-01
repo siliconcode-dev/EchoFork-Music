@@ -367,9 +367,14 @@ interface DataStoreManager {
 
     suspend fun setImmersiveAudioPassthroughEnabled(enabled: Boolean)
 
-    val trueSmoothEnabled: Flow<String>
+    val trueMotionEnabled: Flow<String>
 
-    suspend fun setTrueSmoothEnabled(enabled: Boolean)
+    suspend fun setTrueMotionEnabled(enabled: Boolean)
+
+    /** `0` means "match the display's highest supported rate"; otherwise a specific Hz target. */
+    val trueMotionTargetHz: Flow<Int>
+
+    suspend fun setTrueMotionTargetHz(hz: Int)
 
     val crossfadeDuration: Flow<Int>
 

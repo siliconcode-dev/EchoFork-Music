@@ -112,6 +112,8 @@ import echo.music.enhanced.Platform
 import echo.music.enhanced.expect.ui.fileSaverResult
 import echo.music.enhanced.expect.audio.isOemDolbyEngineDetected
 import echo.music.enhanced.expect.audio.isSpatialAudioSupported
+import echo.music.enhanced.expect.display.getSupportedRefreshRatesHz
+import echo.music.enhanced.expect.display.isHighRefreshRateSupported
 import echo.music.enhanced.expect.ui.isWallpaperDynamicColorSupported
 import echo.music.enhanced.extension.bytesToMB
 import echo.music.enhanced.extension.displayString
@@ -531,6 +533,8 @@ fun SettingScreen(
     val crossfadeEnabled by viewModel.crossfadeEnabled.collectAsStateWithLifecycle()
     val spatialAudioEnabled by viewModel.spatialAudioEnabled.collectAsStateWithLifecycle()
     val immersiveAudioPassthroughEnabled by viewModel.immersiveAudioPassthroughEnabled.collectAsStateWithLifecycle()
+    val trueMotionEnabled by viewModel.trueMotionEnabled.collectAsStateWithLifecycle()
+    val trueMotionTargetHz by viewModel.trueMotionTargetHz.collectAsStateWithLifecycle()
     val crossfadeDuration by viewModel.crossfadeDuration.collectAsStateWithLifecycle()
     val crossfadeDjMode by viewModel.crossfadeDjMode.collectAsStateWithLifecycle()
     val crossfadeSkipAlbum by viewModel.crossfadeSkipAlbum.collectAsStateWithLifecycle()
@@ -1187,6 +1191,69 @@ fun SettingScreen(
                             )
                         },
                     )
+                }
+            }
+        }
+        if (getPlatform() == Platform.Android) {
+            item(key = "display") {
+                ExpandableSection(title = stringResource(Res.string.display), icon = echoIcons.Fullscreen,
+                    currentSection = currentSection,
+                    onSectionClick = { currentSection = it }
+                ) {
+                    val highRefreshRateSupported = isHighRefreshRateSupported()
+                    val supportedRates = getSupportedRefreshRatesHz()
+                    val autoLabel = runBlocking { getString(Res.string.true_motion_auto) }
+                    SettingItem(
+                        title = stringResource(Res.string.true_motion) + stringResource(Res.string.beta_suffix),
+                        subtitle =
+                            if (highRefreshRateSupported) {
+                                stringResource(Res.string.true_motion_description)
+                            } else {
+                                stringResource(Res.string.true_motion_unsupported)
+                            },
+                        isEnable = highRefreshRateSupported,
+                        switch = (trueMotionEnabled to { viewModel.setTrueMotionEnabled(it) }),
+                        onDisable = { viewModel.setTrueMotionEnabled(false) },
+                    )
+                    AnimatedVisibility(visible = trueMotionEnabled && highRefreshRateSupported) {
+                        SettingItem(
+                            title = stringResource(Res.string.true_motion_target_rate),
+                            subtitle =
+                                if (trueMotionTargetHz == 0) {
+                                    autoLabel
+                                } else {
+                                    stringResource(Res.string.refresh_rate_format, trueMotionTargetHz)
+                                },
+                            smallSubtitle = true,
+                            onClick = {
+                                viewModel.setAlertData(
+                                    SettingAlertState(
+                                        title = runBlocking { getString(Res.string.true_motion_target_rate) },
+                                        selectOne =
+                                            SettingAlertState.SelectData(
+                                                listSelect =
+                                                    listOf((trueMotionTargetHz == 0) to autoLabel) +
+                                                        supportedRates.map { hz ->
+                                                            (trueMotionTargetHz == hz) to "$hz Hz"
+                                                        },
+                                            ),
+                                        confirm =
+                                            runBlocking { getString(Res.string.change) } to { state ->
+                                                val selected = state.selectOne?.getSelected()
+                                                val hz =
+                                                    if (selected == autoLabel) {
+                                                        0
+                                                    } else {
+                                                        selected?.removeSuffix(" Hz")?.toIntOrNull() ?: 0
+                                                    }
+                                                viewModel.setTrueMotionTargetHz(hz)
+                                            },
+                                        dismiss = runBlocking { getString(Res.string.cancel) },
+                                    ),
+                                )
+                            },
+                        )
+                    }
                 }
             }
         }

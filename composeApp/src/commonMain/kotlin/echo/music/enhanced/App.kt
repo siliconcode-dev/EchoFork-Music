@@ -64,6 +64,7 @@ import echo.music.enhanced.domain.manager.DataStoreManager.Values.TRUE
 import echo.music.enhanced.logger.Logger
 import echo.music.enhanced.expect.Orientation
 import echo.music.enhanced.expect.currentOrientation
+import echo.music.enhanced.expect.display.ApplyTrueMotionRefreshRate
 import echo.music.enhanced.expect.openUrl
 import echo.music.enhanced.expect.ui.layerBackdrop
 import echo.music.enhanced.expect.ui.rememberBackdrop
@@ -136,6 +137,9 @@ fun App(viewModel: SharedViewModel = koinInject()) {
 
 
     val isLiquidGlassEnabled by viewModel.getEnableLiquidGlass().collectAsStateWithLifecycle(DataStoreManager.FALSE)
+    val trueMotionEnabled by viewModel.getTrueMotionEnabled().collectAsStateWithLifecycle(DataStoreManager.FALSE)
+    val trueMotionTargetHz by viewModel.getTrueMotionTargetHz().collectAsStateWithLifecycle(0)
+    ApplyTrueMotionRefreshRate(if (trueMotionEnabled == TRUE) trueMotionTargetHz else -1)
     // Analytics only makes sense with local tracking on, so its tab follows that setting.
     val isLocalTrackingEnabled by viewModel.getLocalTrackingEnabled().collectAsStateWithLifecycle(DataStoreManager.FALSE)
     val showAnalyticsTab = isLocalTrackingEnabled == TRUE
