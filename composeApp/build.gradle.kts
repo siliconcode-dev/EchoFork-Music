@@ -56,17 +56,6 @@ kotlin {
         }
     }
 
-//    listOf(
-//        iosArm64(),
-//        iosSimulatorArm64()
-//    ).forEach { iosTarget ->
-//        iosTarget.binaries.framework {
-//            baseName = "ComposeApp"
-//            isStatic = true
-//        }
-//    }
-
-
     sourceSets {
         dependencies {
             val composeBom = project.dependencies.platform(libs.compose.bom)

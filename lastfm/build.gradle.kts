@@ -13,19 +13,7 @@ kotlin {
         compileSdk = 37
         minSdk = 26
     }
-    val xcfName = "lastfmKit"
-
-    iosArm64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
-
-    iosSimulatorArm64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
+    jvm { }
 
     sourceSets {
         commonMain {
