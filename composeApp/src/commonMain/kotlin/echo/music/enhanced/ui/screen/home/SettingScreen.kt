@@ -198,6 +198,7 @@ import echomusic.composeapp.generated.resources.backup_downloaded
 import echomusic.composeapp.generated.resources.backup_downloaded_description
 import echomusic.composeapp.generated.resources.backup_frequency
 import echomusic.composeapp.generated.resources.balance_media_loudness
+import echomusic.composeapp.generated.resources.beta_suffix
 import echomusic.composeapp.generated.resources.better_lyrics
 import echomusic.composeapp.generated.resources.blog_notification_description
 import echomusic.composeapp.generated.resources.blog_notification_title
@@ -236,6 +237,7 @@ import echomusic.composeapp.generated.resources.database
 import echomusic.composeapp.generated.resources.default_models
 import echomusic.composeapp.generated.resources.description_and_licenses
 import echomusic.composeapp.generated.resources.discord_integration
+import echomusic.composeapp.generated.resources.display
 import echomusic.composeapp.generated.resources.download_quality
 import echomusic.composeapp.generated.resources.downloaded_cache
 import echomusic.composeapp.generated.resources.enable_canvas
@@ -250,6 +252,9 @@ import echomusic.composeapp.generated.resources.guest
 import echomusic.composeapp.generated.resources.help_build_lyrics_database
 import echomusic.composeapp.generated.resources.help_build_lyrics_database_description
 import echomusic.composeapp.generated.resources.http
+import echomusic.composeapp.generated.resources.immersive_audio_passthrough
+import echomusic.composeapp.generated.resources.immersive_audio_passthrough_description
+import echomusic.composeapp.generated.resources.immersive_audio_passthrough_unsupported
 import echomusic.composeapp.generated.resources.import_data
 import echomusic.composeapp.generated.resources.import_data_intro
 import echomusic.composeapp.generated.resources.import_failed
@@ -331,6 +336,7 @@ import echomusic.composeapp.generated.resources.proxy_username_message
 import echomusic.composeapp.generated.resources.quality
 import echomusic.composeapp.generated.resources.radio_audio_only
 import echomusic.composeapp.generated.resources.radio_audio_only_description
+import echomusic.composeapp.generated.resources.refresh_rate_format
 import echomusic.composeapp.generated.resources.restore_your_data
 import echomusic.composeapp.generated.resources.restore_your_saved_data
 import echomusic.composeapp.generated.resources.rich_presence_info
@@ -349,6 +355,9 @@ import echomusic.composeapp.generated.resources.skip_no_music_part
 import echomusic.composeapp.generated.resources.skip_silent
 import echomusic.composeapp.generated.resources.skip_sponsor_part_of_video
 import echomusic.composeapp.generated.resources.socks
+import echomusic.composeapp.generated.resources.spatial_audio
+import echomusic.composeapp.generated.resources.spatial_audio_description
+import echomusic.composeapp.generated.resources.spatial_audio_unsupported
 import echomusic.composeapp.generated.resources.sponsorBlock
 import echomusic.composeapp.generated.resources.sponsor_block_intro
 import echomusic.composeapp.generated.resources.spotify
@@ -369,6 +378,11 @@ import echomusic.composeapp.generated.resources.thumbnail_cache
 import echomusic.composeapp.generated.resources.translation_language
 import echomusic.composeapp.generated.resources.translation_language_message
 import echomusic.composeapp.generated.resources.translucent_bottom_navigation_bar
+import echomusic.composeapp.generated.resources.true_motion
+import echomusic.composeapp.generated.resources.true_motion_auto
+import echomusic.composeapp.generated.resources.true_motion_description
+import echomusic.composeapp.generated.resources.true_motion_target_rate
+import echomusic.composeapp.generated.resources.true_motion_unsupported
 import echomusic.composeapp.generated.resources.unknown
 import echomusic.composeapp.generated.resources.update_channel
 import echomusic.composeapp.generated.resources.upload_your_listening_history_to_youtube_music_server_it_will_make_yt_music_recommendation_system_better_working_only_if_logged_in
