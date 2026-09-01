@@ -1,5 +1,6 @@
 - First release of Enhanced Echo Music: a fork of Echo Music with its own violet identity
-- Immersive Audio Passthrough and Spatial Audio support (Beta)
-- True Smooth: adaptive high refresh rate support (Beta)
+- Spatial Audio and Immersive Audio Passthrough support (Beta)
+- True Motion: adaptive high refresh rate support (Beta)
 - Refreshed Material 3 Expressive UI with wavy progress indicators on the player
+- New "What's New" dialog highlighting new features after an update
 - Crash reporting and analytics run on this fork's own Firebase project, off by default for anyone building from source
