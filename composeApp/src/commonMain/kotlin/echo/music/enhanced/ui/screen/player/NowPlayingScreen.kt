@@ -76,7 +76,6 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.WavyProgressIndicatorDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -1629,7 +1628,7 @@ fun NowPlayingScreenContent(
                                     }
                                     if (getPlatform() == Platform.Android) {
                                         // Real Slider
-                                        Box(
+                                        Column(
                                             Modifier
                                                 .padding(
                                                     top = 15.dp,
@@ -1638,11 +1637,13 @@ fun NowPlayingScreenContent(
                                                     shouldShowToolbar = !it && isExpanded && mainScrollState.value > 0
                                                 },
                                         ) {
+                                            // Drawn above (not underneath) the slider — the slider's opaque
+                                            // track would otherwise fully cover this wave.
                                             Box(
                                                 modifier =
                                                     Modifier
                                                         .fillMaxWidth()
-                                                        .height(24.dp),
+                                                        .height(8.dp),
                                                 contentAlignment = Alignment.Center,
                                             ) {
                                                 Crossfade(timelineState.loading) {
@@ -1677,12 +1678,8 @@ fun NowPlayingScreenContent(
                                                                     Color.Gray.copy(
                                                                         alpha = 0.6f,
                                                                     ),
-                                                                amplitude = { p ->
-                                                                    if (controllerState.isPlaying) {
-                                                                        WavyProgressIndicatorDefaults.indicatorAmplitude(p)
-                                                                    } else {
-                                                                        0f
-                                                                    }
+                                                                amplitude = {
+                                                                    if (controllerState.isPlaying) 1f else 0f
                                                                 },
                                                             )
                                                         }
@@ -1713,11 +1710,7 @@ fun NowPlayingScreenContent(
                                                     },
                                                     modifier =
                                                         Modifier
-                                                            .fillMaxWidth()
-                                                            .padding(top = 3.dp)
-                                                            .align(
-                                                                Alignment.TopCenter,
-                                                            ),
+                                                            .fillMaxWidth(),
                                                     track = { sliderState ->
                                                         SliderDefaults.Track(
                                                             modifier =
@@ -2622,12 +2615,8 @@ fun NowPlayingScreenContent(
                                     ),
                             color = BrandViolet,
                             trackColor = Color.Gray.copy(alpha = 0.4f),
-                            amplitude = { p ->
-                                if (controllerState.isPlaying) {
-                                    WavyProgressIndicatorDefaults.indicatorAmplitude(p)
-                                } else {
-                                    0f
-                                }
+                            amplitude = {
+                                if (controllerState.isPlaying) 1f else 0f
                             },
                         )
                     }

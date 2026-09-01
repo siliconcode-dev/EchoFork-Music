@@ -41,7 +41,6 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.WavyProgressIndicatorDefaults
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -531,17 +530,19 @@ fun FullscreenPlayer(
                                     .padding(horizontal = 40.dp),
                             verticalArrangement = Arrangement.Bottom,
                         ) {
-                            Box(
+                            Column(
                                 Modifier
                                     .padding(
                                         vertical = 5.dp,
                                     ),
                             ) {
+                                // Drawn above (not underneath) the slider — the slider's opaque
+                                // track would otherwise fully cover this wave.
                                 Box(
                                     modifier =
                                         Modifier
                                             .fillMaxWidth()
-                                            .height(24.dp),
+                                            .height(8.dp),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     Crossfade(timelineState.loading) {
@@ -573,12 +574,8 @@ fun FullscreenPlayer(
                                                             ),
                                                     color = BrandViolet,
                                                     trackColor = Color.DarkGray,
-                                                    amplitude = { p ->
-                                                        if (controllerState.isPlaying) {
-                                                            WavyProgressIndicatorDefaults.indicatorAmplitude(p)
-                                                        } else {
-                                                            0f
-                                                        }
+                                                    amplitude = {
+                                                        if (controllerState.isPlaying) 1f else 0f
                                                     },
                                                 )
                                             }
@@ -603,11 +600,7 @@ fun FullscreenPlayer(
                                         },
                                         modifier =
                                             Modifier
-                                                .fillMaxWidth()
-                                                .padding(top = 3.dp)
-                                                .align(
-                                                    Alignment.TopCenter,
-                                                ),
+                                                .fillMaxWidth(),
                                         track = { sliderState ->
                                             SliderDefaults.Track(
                                                 modifier =

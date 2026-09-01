@@ -67,7 +67,6 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
-import androidx.compose.material3.WavyProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -576,12 +575,8 @@ fun MiniPlayer(
                                 ),
                         color = textColor,
                         trackColor = Color.Transparent,
-                        amplitude = { p ->
-                            if (isPlaying) {
-                                WavyProgressIndicatorDefaults.indicatorAmplitude(p)
-                            } else {
-                                0f
-                            }
+                        amplitude = {
+                            if (isPlaying) 1f else 0f
                         },
                     )
                 }
