@@ -4,7 +4,34 @@
   <h1>Enhanced Echo Music</h1>
 
   <p><b>A modern Android music app with streaming, synced lyrics, offline playback, and an intuitive user experience.</b></p>
+
+  <p>
+    <a href="https://github.com/siliconcode-dev/EchoFork-Music/actions/workflows/android-build.yml"><img src="https://github.com/siliconcode-dev/EchoFork-Music/actions/workflows/android-build.yml/badge.svg" alt="Android CI"/></a>
+    <a href="https://github.com/siliconcode-dev/EchoFork-Music/actions/workflows/codeql.yml"><img src="https://github.com/siliconcode-dev/EchoFork-Music/actions/workflows/codeql.yml/badge.svg" alt="CodeQL"/></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue.svg" alt="License: GPL-3.0"/></a>
+    <img src="https://img.shields.io/badge/Kotlin-2.4.10-7F52FF?logo=kotlin&logoColor=white" alt="Kotlin 2.4.10"/>
+    <img src="https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white" alt="Platform: Android"/>
+    <img src="https://img.shields.io/badge/minSdk-26-brightgreen" alt="Min SDK 26"/>
+  </p>
 </div>
+
+## Table of Contents
+
+- [About this project](#about-this-project)
+- [What's different in this fork](#whats-different-in-this-fork)
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Getting Started](#getting-started)
+  - [Requirements](#requirements)
+  - [Build from source](#build-from-source)
+  - [Optional: Last.fm scrobbling](#optional-lastfm-scrobbling)
+  - [Firebase (disabled by default)](#firebase-disabled-by-default)
+- [Transfer playlists from Echo Music](#transfer-playlists-from-echo-music)
+- [Architecture](#architecture)
+- [Contributing](#contributing)
+- [Acknowledgements](#acknowledgements)
+- [Legal Disclaimer & Terms of Use](#legal-disclaimer--terms-of-use)
+- [License](#license)
 
 ## About this project
 
@@ -14,8 +41,46 @@ Enhanced Echo Music is a fork of [Echo Music](https://github.com/iad1tya/Echo-Mu
 [maxrave-dev](https://github.com/maxrave-dev). Both are GPL-3.0 projects, and this fork continues
 under the same license. See [Acknowledgements](#acknowledgements).
 
-This fork exists to build on that foundation — deeper Material 3 Expressive adoption, refined
-motion and player UI, and continued modernization of the codebase.
+This fork exists to build on that foundation — its own visual identity, deeper Material 3
+Expressive adoption, refined motion and player UI, and continued modernization of the codebase.
+
+## What's different in this fork
+
+This is a young fork, so the differences today are mostly foundational — more will land over
+time. So far:
+
+* **Own identity.** Application ID `echo.music.enhanced` (installs side-by-side with upstream
+  Echo Music, no conflict), a violet (`#6C3CE9`) icon and app mark instead of upstream's red, and
+  in-app strings updated to "Enhanced Echo Music".
+* **Privacy by default.** Firebase Crashlytics and Analytics are **disabled out of the box** —
+  see [Firebase](#firebase-disabled-by-default) — so nothing is sent to upstream's Firebase
+  project just by using this build.
+* **No inherited promo.** Update checks, Discord Rich Presence, and in-app "About" credits point
+  at this fork's own repository, not upstream's release feed or Discord application.
+* **No ads, no monetization** — see [Legal Disclaimer](#legal-disclaimer--terms-of-use).
+
+Longer-term, the goal is deeper Material 3 Expressive adoption and refined player/motion work —
+tracked as it happens, not promised up front.
+
+## Features
+
+**Playback**
+* High-quality audio streaming (up to 256kbps for supported accounts).
+* Crossfade and gapless playback.
+* Video playback support (1080p with subtitles).
+* Sleep timer.
+* Android Auto integration for in-car listening.
+
+**Discovery**
+* Browse charts, podcasts, moods, and genres.
+* Comprehensive search across the music catalog.
+* AI-based song suggestions.
+* Playback data analytics and automated custom playlists.
+
+**Personalization & extras**
+* Synced lyrics, with Spotify Canvas visualizations support.
+* Light, Dark, and dynamic (Material You) themes.
+* Last.fm scrobbling (optional, bring your own API key).
 
 ## Screenshots
 
@@ -29,39 +94,17 @@ motion and player UI, and continued modernization of the codebase.
   <img src="Screenshots/LibraryPage.png" alt="Library Page" width="18%" style="border-radius: 10px; margin: 5px;" />
 </div>
 
-## Features
+## Getting Started
 
-* High-quality audio streaming (up to 256kbps for supported accounts).
-* Browse charts, podcasts, moods, and genres.
-* Comprehensive search functionality across the music catalog.
-* Playback data analytics and automated custom playlists.
-* Video playback support (1080p with subtitles).
-* Artificial Intelligence based song suggestions.
-* Crossfade and gapless playback capabilities.
-* Customizable application themes (Light, Dark, and dynamic colors).
-* Sleep timer functionality.
-* Android Auto integration for in-car listening.
-* Support for Spotify Canvas visualizations.
+No pre-built APKs are published yet — build from source for now. Once releases exist they'll be
+under this repository's [Releases](https://github.com/siliconcode-dev/EchoFork-Music/releases).
 
-## Architecture
+### Requirements
 
-Enhanced Echo Music uses a modern Android and Kotlin Multiplatform (KMP) architecture.
+* **JDK 21**
+* **Android SDK 37** (min SDK 26)
 
-* **Kotlin Multiplatform (KMP):** Core business logic, domain models, and data access layers live
-  under `core/`. Upstream tracked this as a Git submodule; this fork vendors it directly so the
-  shared logic can be modified alongside the app.
-* **UI Layer:** Built entirely with Jetpack Compose (Material 3 Expressive).
-* **Media Playback:** AndroidX Media3 (ExoPlayer), handling audio streams, local caching, and
-  gapless transitions.
-* **Dependency Injection:** Koin, decoupling module lifecycles and simplifying testing.
-* **Local Storage:** Room for structured local data (playlists, favorites, cache metadata);
-  DataStore for user preferences.
-* **Modularization:** Split by feature and layer (`:data`, `:domain`, `:media3`, `:spotify`,
-  `:lyricsService`, and others — see `settings.gradle.kts`).
-
-## Building
-
-Requirements: **JDK 21** and **Android SDK 37**.
+### Build from source
 
 ```bash
 git clone https://github.com/siliconcode-dev/EchoFork-Music.git
@@ -71,8 +114,10 @@ cd EchoFork-Music
 
 The APK is written to `androidApp/build/outputs/apk/debug/`.
 
-Optional — Last.fm scrobbling requires API credentials. Without them the feature disables itself
-at runtime. Add to `local.properties` (which is gitignored):
+### Optional: Last.fm scrobbling
+
+Requires API credentials, or the feature disables itself at runtime. Add to `local.properties`
+(gitignored):
 
 ```properties
 LASTFM_API_KEY=your_key
@@ -101,6 +146,29 @@ Playlists can be moved from the upstream Echo Music app using its backup-and-con
    and pick the converted `.json`.
 
 > The migration site is operated by the upstream Echo Music project, not by this fork.
+
+## Architecture
+
+Enhanced Echo Music uses a modern Android and Kotlin Multiplatform (KMP) architecture.
+
+* **Kotlin Multiplatform (KMP):** Core business logic, domain models, and data access layers live
+  under `core/`. Upstream tracked this as a Git submodule; this fork vendors it directly so the
+  shared logic can be modified alongside the app.
+* **UI Layer:** Built entirely with Jetpack Compose (Material 3 Expressive).
+* **Media Playback:** AndroidX Media3 (ExoPlayer), handling audio streams, local caching, and
+  gapless transitions.
+* **Dependency Injection:** Koin, decoupling module lifecycles and simplifying testing.
+* **Local Storage:** Room for structured local data (playlists, favorites, cache metadata);
+  DataStore for user preferences.
+* **Modularization:** Split by feature and layer (`:data`, `:domain`, `:media3`, `:spotify`,
+  `:lyricsService`, and others — see `settings.gradle.kts`).
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow —
+briefly: fork, branch, make sure `./gradlew assembleDebug` and `./gradlew lint` pass, then open a
+pull request against `main`. Bug reports and feature requests use the templates under
+[Issues](https://github.com/siliconcode-dev/EchoFork-Music/issues).
 
 ## Acknowledgements
 
