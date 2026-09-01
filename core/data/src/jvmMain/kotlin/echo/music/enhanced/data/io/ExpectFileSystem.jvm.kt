@@ -8,4 +8,4 @@ actual fun fileSystem(): FileSystem {
     return FileSystem.SYSTEM
 }
 
-actual fun fileDir(): String = File(getHomeFolderPath(listOf(".simpmusic"))).absolutePath
+actual fun fileDir(): String = File(getHomeFolderPath(listOf(".enhanced-echo-music"))).absolutePath

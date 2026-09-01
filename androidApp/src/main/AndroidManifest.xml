@@ -141,19 +141,9 @@
                 <data android:scheme="vnd.youtube.launch" />
             </intent-filter>
 
-            <!-- echoMusic deep link filter (https) -->
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="https" />
-                <data android:host="echomusic.fun" />
-                <data android:pathPrefix="/app/" />
-            </intent-filter>
-
-            <!-- echoMusic deep link filter (custom scheme) -->
+            <!-- echoMusic deep link filter (custom scheme). No https App Link here:
+                 echomusic.fun is upstream Echo Music's domain, not this fork's, so
+                 this app has no business claiming it as a verified App Link target. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

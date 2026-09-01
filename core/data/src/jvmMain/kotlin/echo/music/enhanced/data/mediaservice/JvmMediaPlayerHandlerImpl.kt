@@ -143,8 +143,8 @@ class JvmMediaPlayerHandlerImpl(
             Platform.MacOs
         } else {
             Platform.Linux(
-                "SimpMusic",
-                "echo.music.enhanced.simpmusic",
+                "Enhanced Echo Music",
+                "echo.music.enhanced",
             )
         }
     }

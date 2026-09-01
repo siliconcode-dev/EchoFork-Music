@@ -245,4 +245,4 @@ internal class DownloadUtils(
     }
 }
 
-fun getDownloadPath(): String = System.getProperty("user.home") + File.separator + ".simpmusic" + File.separator + "downloads"
+fun getDownloadPath(): String = System.getProperty("user.home") + File.separator + ".enhanced-echo-music" + File.separator + "downloads"

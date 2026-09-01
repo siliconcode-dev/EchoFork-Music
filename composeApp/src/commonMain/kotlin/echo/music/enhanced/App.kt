@@ -192,23 +192,14 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
                 // of it. The token is handed straight to the shared view model, and the screen
                 // closes itself when it sees a session key appear.
                 token?.let { viewModel.completeLastfmLogin(it) }
-            } else if (data.host == "echomusic.fun" || data.scheme == "echomusic") {
-                // https://echomusic.fun/app/watch?v=VIDEO_ID
-                // https://echomusic.fun/app/playlist?list=PLAYLIST_ID
-                // https://echomusic.fun/app/channel/CHANNEL_ID
+            } else if (data.scheme == "echomusic") {
                 // echomusic://watch?v=VIDEO_ID  (host="watch", no path)
                 // echomusic://playlist?list=PLAYLIST_ID
                 // echomusic://channel/CHANNEL_ID
                 val segments = data.pathSegments
-                // For echomusic.fun: segments = ["app", "watch"] → appPath = segments[1]
-                // For echomusic://: host IS the appPath (e.g. host="watch"), segments = []
-                val appPath =
-                    if (data.scheme == "echomusic") {
-                        data.host
-                    } else {
-                        segments.getOrNull(1)
-                    }
-                Logger.d("MainActivity", "echomusic.fun deep link, appPath: $appPath")
+                // host IS the appPath (e.g. host="watch")
+                val appPath = data.host
+                Logger.d("MainActivity", "echomusic:// deep link, appPath: $appPath")
                 viewModel.setIntent(null)
                 when (appPath) {
                     "watch" -> {
@@ -231,13 +222,7 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
 
                     "channel", "c" -> {
                         // echomusic://channel/UCxxx → segments = ["UCxxx"]
-                        // echomusic.fun/app/channel/UCxxx → segments = ["app", "channel", "UCxxx"]
-                        val artistId =
-                            if (data.scheme == "echomusic") {
-                                segments.firstOrNull()
-                            } else {
-                                segments.getOrNull(2)
-                            }
+                        val artistId = segments.firstOrNull()
                         artistId?.let {
                             if (it.startsWith("UC")) {
                                 navController.navigate(ArtistDestination(channelId = it))
@@ -651,7 +636,7 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
                                 onClick = {
                                     shouldShowUpdateDialog = false
                                     viewModel.showedUpdateDialog = false
-                                    openUrl("https://echomusic.fun/")
+                                    openUrl("https://github.com/siliconcode-dev/EchoFork-Music/releases/latest")
                                 },
                             ) {
                                 Text(
