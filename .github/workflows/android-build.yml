@@ -3,8 +3,12 @@ name: Android CI
 on:
   push:
     branches: [ "main" ]
+    tags: [ "v*" ]
   pull_request:
     branches: [ "main" ]
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -47,3 +51,15 @@ jobs:
       with:
         name: Enhanced-Echo-Music-Universal-APK
         path: androidApp/build/outputs/apk/release/*-universal-release.apk
+
+    - name: Extract release notes from CHANGELOG.md
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        awk '/^## \[/{if (n++) exit} n' CHANGELOG.md > release_notes.md
+
+    - name: Publish GitHub Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v2
+      with:
+        body_path: release_notes.md
+        files: androidApp/build/outputs/apk/release/*-release.apk
