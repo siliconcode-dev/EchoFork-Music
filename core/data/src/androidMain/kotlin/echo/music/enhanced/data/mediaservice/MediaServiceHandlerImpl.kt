@@ -330,11 +330,6 @@ internal class MediaServiceHandlerImpl(
                 .distinctUntilChanged()
                 .collect { enabled -> player.setSpatialAudioEnabled(enabled == TRUE) }
         }
-        backgroundScope.launch {
-            dataStoreManager.immersiveAudioPassthroughEnabled
-                .distinctUntilChanged()
-                .collect { enabled -> player.setImmersiveAudioPassthroughEnabled(enabled == TRUE) }
-        }
         normalizeVolume =
             runBlocking { dataStoreManager.normalizeVolume.first() == TRUE }
         _nowPlaying.value = player.currentMediaItem

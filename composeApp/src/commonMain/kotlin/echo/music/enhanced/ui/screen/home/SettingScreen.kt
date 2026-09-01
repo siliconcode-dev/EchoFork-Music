@@ -112,6 +112,7 @@ import echo.music.enhanced.Platform
 import echo.music.enhanced.expect.ui.fileSaverResult
 import echo.music.enhanced.expect.audio.isOemDolbyEngineDetected
 import echo.music.enhanced.expect.audio.isSpatialAudioSupported
+import echo.music.enhanced.expect.audio.rememberOpenSoundSettingsAction
 import echo.music.enhanced.expect.display.getSupportedRefreshRatesHz
 import echo.music.enhanced.expect.display.isHighRefreshRateSupported
 import echo.music.enhanced.expect.ui.isWallpaperDynamicColorSupported
@@ -532,7 +533,6 @@ fun SettingScreen(
 
     val crossfadeEnabled by viewModel.crossfadeEnabled.collectAsStateWithLifecycle()
     val spatialAudioEnabled by viewModel.spatialAudioEnabled.collectAsStateWithLifecycle()
-    val immersiveAudioPassthroughEnabled by viewModel.immersiveAudioPassthroughEnabled.collectAsStateWithLifecycle()
     val trueMotionEnabled by viewModel.trueMotionEnabled.collectAsStateWithLifecycle()
     val trueMotionTargetHz by viewModel.trueMotionTargetHz.collectAsStateWithLifecycle()
     val crossfadeDuration by viewModel.crossfadeDuration.collectAsStateWithLifecycle()
@@ -1171,6 +1171,7 @@ fun SettingScreen(
                         },
                     )
                     val dolbyEngineDetected = isOemDolbyEngineDetected()
+                    val openSoundSettings = rememberOpenSoundSettingsAction()
                     SettingItem(
                         title = stringResource(Res.string.immersive_audio_passthrough) + stringResource(Res.string.beta_suffix),
                         subtitle =
@@ -1180,8 +1181,7 @@ fun SettingScreen(
                                 stringResource(Res.string.immersive_audio_passthrough_unsupported)
                             },
                         isEnable = dolbyEngineDetected,
-                        switch = (immersiveAudioPassthroughEnabled to { viewModel.setImmersiveAudioPassthroughEnabled(it) }),
-                        onDisable = { viewModel.setImmersiveAudioPassthroughEnabled(false) },
+                        onClick = if (dolbyEngineDetected) openSoundSettings else null,
                         otherView = {
                             Icon(
                                 imageVector = echoIcons.SurroundSound,

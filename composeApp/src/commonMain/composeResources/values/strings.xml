@@ -160,7 +160,7 @@
     <string name="display">Display</string>
     <string name="beta_suffix" translatable="false"> (Beta)</string>
     <string name="immersive_audio_passthrough">Immersive Audio Passthrough</string>
-    <string name="immersive_audio_passthrough_description">Uses this device\'s Dolby engine, when detected, for the current output</string>
+    <string name="immersive_audio_passthrough_description">Detected — Android doesn\'t let apps control it directly. Tap to manage it in Sound settings.</string>
     <string name="immersive_audio_passthrough_unsupported">No Dolby audio engine detected on this device</string>
     <string name="spatial_audio">Spatial Audio</string>
     <string name="spatial_audio_description">Virtualized surround sound via this device\'s spatializer</string>
@@ -179,7 +179,7 @@
     <string name="whats_new_spatial_audio_title">Spatial Audio</string>
     <string name="whats_new_spatial_audio_description">Virtualized surround sound on supported devices, right from the Audio settings.</string>
     <string name="whats_new_immersive_audio_title">Immersive Audio Passthrough</string>
-    <string name="whats_new_immersive_audio_description">Taps into your device\'s own Dolby engine, when it has one.</string>
+    <string name="whats_new_immersive_audio_description">Detects your device\'s own Dolby engine, when it has one, and gets you straight to its settings.</string>
     <string name="whats_new_true_motion_title">True Motion</string>
     <string name="whats_new_true_motion_description">Adaptive high refresh rate, matched to your display, with manual control when you want it.</string>
     <string name="version_format" translatable="false">v%1$s</string>

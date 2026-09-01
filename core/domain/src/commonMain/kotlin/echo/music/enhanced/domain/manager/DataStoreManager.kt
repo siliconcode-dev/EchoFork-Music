@@ -363,10 +363,6 @@ interface DataStoreManager {
 
     suspend fun setSpatialAudioEnabled(enabled: Boolean)
 
-    val immersiveAudioPassthroughEnabled: Flow<String>
-
-    suspend fun setImmersiveAudioPassthroughEnabled(enabled: Boolean)
-
     val trueMotionEnabled: Flow<String>
 
     suspend fun setTrueMotionEnabled(enabled: Boolean)

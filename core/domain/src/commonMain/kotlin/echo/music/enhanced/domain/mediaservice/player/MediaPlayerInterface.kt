@@ -146,12 +146,6 @@ interface MediaPlayerInterface {
      */
     fun setSpatialAudioEnabled(enabled: Boolean) = Unit
 
-    /**
-     * Allow (or restrict) encoded-audio passthrough to the active output, when it's capable of
-     * decoding it directly. Default no-op so a backend without passthrough support ignores it.
-     */
-    fun setImmersiveAudioPassthroughEnabled(enabled: Boolean) = Unit
-
     // Listener management
     fun addListener(listener: MediaPlayerListener)
 

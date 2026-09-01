@@ -151,8 +151,6 @@ class SettingsViewModel(
     val crossfadeEnabled: StateFlow<Boolean> = _crossfadeEnabled
     private val _spatialAudioEnabled = MutableStateFlow<Boolean>(true)
     val spatialAudioEnabled: StateFlow<Boolean> = _spatialAudioEnabled
-    private val _immersiveAudioPassthroughEnabled = MutableStateFlow<Boolean>(true)
-    val immersiveAudioPassthroughEnabled: StateFlow<Boolean> = _immersiveAudioPassthroughEnabled
     private val _trueMotionEnabled = MutableStateFlow<Boolean>(false)
     val trueMotionEnabled: StateFlow<Boolean> = _trueMotionEnabled
     private val _trueMotionTargetHz = MutableStateFlow<Int>(0)
@@ -388,7 +386,6 @@ class SettingsViewModel(
         getKillServiceOnExit()
         getCrossfadeEnabled()
         getSpatialAudioEnabled()
-        getImmersiveAudioPassthroughEnabled()
         getTrueMotionEnabled()
         getTrueMotionTargetHz()
         getCrossfadeDuration()
@@ -566,21 +563,6 @@ class SettingsViewModel(
         viewModelScope.launch {
             dataStoreManager.setSpatialAudioEnabled(enabled)
             getSpatialAudioEnabled()
-        }
-    }
-
-    private fun getImmersiveAudioPassthroughEnabled() {
-        viewModelScope.launch {
-            dataStoreManager.immersiveAudioPassthroughEnabled.collect { enabled ->
-                _immersiveAudioPassthroughEnabled.value = enabled == DataStoreManager.TRUE
-            }
-        }
-    }
-
-    fun setImmersiveAudioPassthroughEnabled(enabled: Boolean) {
-        viewModelScope.launch {
-            dataStoreManager.setImmersiveAudioPassthroughEnabled(enabled)
-            getImmersiveAudioPassthroughEnabled()
         }
     }
 

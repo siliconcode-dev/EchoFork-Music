@@ -19,3 +19,11 @@ expect fun isSpatialAudioSupported(): Boolean
  */
 @Composable
 expect fun isOemDolbyEngineDetected(): Boolean
+
+/**
+ * Returns an action that opens the platform's system Sound settings screen, where an OEM
+ * Dolby engine (if any) is actually managed — this app has no public API to control it
+ * directly, since it's a system-wide effect once the user enables it there.
+ */
+@Composable
+expect fun rememberOpenSoundSettingsAction(): () -> Unit

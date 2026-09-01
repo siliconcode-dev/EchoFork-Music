@@ -1295,19 +1295,6 @@ internal class DataStoreManagerImpl(
         }
     }
 
-    override val immersiveAudioPassthroughEnabled: Flow<String> =
-        settingsDataStore.data.map { preferences ->
-            preferences[IMMERSIVE_AUDIO_PASSTHROUGH_ENABLED] ?: TRUE
-        }
-
-    override suspend fun setImmersiveAudioPassthroughEnabled(enabled: Boolean) {
-        withContext(Dispatchers.IO) {
-            settingsDataStore.edit { settings ->
-                settings[IMMERSIVE_AUDIO_PASSTHROUGH_ENABLED] = if (enabled) TRUE else FALSE
-            }
-        }
-    }
-
     // Default OFF: real battery cost, opt-in — see the "True Motion" default-state decision.
     override val trueMotionEnabled: Flow<String> =
         settingsDataStore.data.map { preferences ->
@@ -1713,7 +1700,6 @@ internal class DataStoreManagerImpl(
         val KEEP_SERVICE_ALIVE = stringPreferencesKey("keep_service_alive")
         val CROSSFADE_ENABLED = stringPreferencesKey("crossfade_enabled")
         val SPATIAL_AUDIO_ENABLED = stringPreferencesKey("spatial_audio_enabled")
-        val IMMERSIVE_AUDIO_PASSTHROUGH_ENABLED = stringPreferencesKey("immersive_audio_passthrough_enabled")
         val TRUE_MOTION_ENABLED = stringPreferencesKey("true_motion_enabled")
         val TRUE_MOTION_TARGET_HZ = intPreferencesKey("true_motion_target_hz")
         val LAST_SEEN_WHATS_NEW_VERSION = stringPreferencesKey("last_seen_whats_new_version")

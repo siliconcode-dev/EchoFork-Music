@@ -1,8 +1,10 @@
 package echo.music.enhanced.expect.audio
 
+import android.content.Intent
 import android.media.AudioManager
 import android.media.audiofx.AudioEffect
 import android.os.Build
+import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
@@ -23,4 +25,16 @@ actual fun isOemDolbyEngineDetected(): Boolean {
             null
         }
     return descriptors.orEmpty().any { it.name?.contains("dolby", ignoreCase = true) == true }
+}
+
+@Composable
+actual fun rememberOpenSoundSettingsAction(): () -> Unit {
+    val context = LocalContext.current
+    return {
+        try {
+            context.startActivity(Intent(Settings.ACTION_SOUND_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        } catch (_: Exception) {
+            // No Sound settings screen on this device/ROM — nothing sensible to fall back to.
+        }
+    }
 }
