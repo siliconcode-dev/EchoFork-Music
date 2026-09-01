@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.PathParser
+import androidx.compose.ui.graphics.vector.group
 import androidx.compose.ui.unit.dp
 
 // Material Symbols "surround_sound", outlined, 24px — original viewBox "0 -960 960 960"
