@@ -1,3 +1,5 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class)
+
 package echo.music.enhanced.ui.screen
 
 import androidx.compose.animation.Animatable
@@ -57,7 +59,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
@@ -65,6 +67,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.WavyProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -82,7 +85,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
@@ -562,20 +564,25 @@ fun MiniPlayer(
                                 horizontal = 10.dp,
                             ).align(Alignment.BottomCenter),
                 ) {
-                    LinearProgressIndicator(
+                    LinearWavyProgressIndicator(
                         progress = { animatedProgress },
                         modifier =
                             Modifier
                                 .fillMaxWidth()
-                                .height(1.dp)
+                                .height(4.dp)
                                 .background(
                                     color = Color.Transparent,
                                     shape = RoundedCornerShape(4.dp),
                                 ),
                         color = textColor,
                         trackColor = Color.Transparent,
-                        strokeCap = StrokeCap.Round,
-                        drawStopIndicator = {},
+                        amplitude = { p ->
+                            if (isPlaying) {
+                                WavyProgressIndicatorDefaults.indicatorAmplitude(p)
+                            } else {
+                                0f
+                            }
+                        },
                     )
                 }
             }

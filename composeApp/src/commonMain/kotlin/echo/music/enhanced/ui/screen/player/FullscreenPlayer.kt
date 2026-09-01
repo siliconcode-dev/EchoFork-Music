@@ -1,3 +1,5 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class)
+
 package echo.music.enhanced.ui.screen.player
 
 import androidx.compose.animation.Crossfade
@@ -32,13 +34,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.WavyProgressIndicatorDefaults
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -54,7 +57,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
@@ -94,6 +96,8 @@ import org.koin.compose.koinInject
 import echomusic.composeapp.generated.resources.Res
 import echomusic.composeapp.generated.resources.five_seconds
 import kotlin.math.roundToLong
+
+private val BrandViolet = Color(0xFF6C3CE9)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -543,24 +547,22 @@ fun FullscreenPlayer(
                                     Crossfade(timelineState.loading) {
                                         if (it) {
                                             CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
-                                                LinearProgressIndicator(
+                                                LinearWavyProgressIndicator(
                                                     modifier =
                                                         Modifier
                                                             .fillMaxWidth()
                                                             .height(4.dp)
                                                             .padding(
                                                                 horizontal = 3.dp,
-                                                            ).clip(
-                                                                RoundedCornerShape(8.dp),
                                                             ),
-                                                    color = Color.Gray,
+                                                    color = BrandViolet,
                                                     trackColor = Color.DarkGray,
-                                                    strokeCap = StrokeCap.Round,
+                                                    amplitude = if (controllerState.isPlaying) 1f else 0f,
                                                 )
                                             }
                                         } else {
                                             CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
-                                                LinearProgressIndicator(
+                                                LinearWavyProgressIndicator(
                                                     progress = { timelineState.bufferedPercent.toFloat() / 100 },
                                                     modifier =
                                                         Modifier
@@ -568,13 +570,16 @@ fun FullscreenPlayer(
                                                             .height(4.dp)
                                                             .padding(
                                                                 horizontal = 3.dp,
-                                                            ).clip(
-                                                                RoundedCornerShape(8.dp),
                                                             ),
-                                                    color = Color.Gray,
+                                                    color = BrandViolet,
                                                     trackColor = Color.DarkGray,
-                                                    strokeCap = StrokeCap.Round,
-                                                    drawStopIndicator = {},
+                                                    amplitude = { p ->
+                                                        if (controllerState.isPlaying) {
+                                                            WavyProgressIndicatorDefaults.indicatorAmplitude(p)
+                                                        } else {
+                                                            0f
+                                                        }
+                                                    },
                                                 )
                                             }
                                         }
