@@ -12,8 +12,13 @@
     <img src="https://img.shields.io/badge/Kotlin-2.4.10-7F52FF?logo=kotlin&logoColor=white" alt="Kotlin 2.4.10"/>
     <img src="https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white" alt="Platform: Android"/>
     <img src="https://img.shields.io/badge/minSdk-26-brightgreen" alt="Min SDK 26"/>
+    <img src="https://img.shields.io/badge/version-0.1.1%20--%20Early%20Access-6C3CE9" alt="Version 0.1.1 - Early Access"/>
   </p>
 </div>
+
+> **v0.1 — Early Access.** This fork's version number was reset to `0.1.1` to reflect
+> its actual history (see [CHANGELOG.md](CHANGELOG.md)), rather than inheriting
+> upstream's `1.2.1` — this is a fresh start, not a downgrade.
 
 ## Table of Contents
 
@@ -25,7 +30,7 @@
   - [Requirements](#requirements)
   - [Build from source](#build-from-source)
   - [Optional: Last.fm scrobbling](#optional-lastfm-scrobbling)
-  - [Firebase (disabled by default)](#firebase-disabled-by-default)
+  - [Firebase](#firebase)
 - [Transfer playlists from Echo Music](#transfer-playlists-from-echo-music)
 - [Architecture](#architecture)
 - [Contributing](#contributing)
@@ -52,9 +57,9 @@ time. So far:
 * **Own identity.** Application ID `echo.music.enhanced` (installs side-by-side with upstream
   Echo Music, no conflict), a violet (`#6C3CE9`) icon and app mark instead of upstream's red, and
   in-app strings updated to "Enhanced Echo Music".
-* **Privacy by default.** Firebase Crashlytics and Analytics are **disabled out of the box** —
-  see [Firebase](#firebase-disabled-by-default) — so nothing is sent to upstream's Firebase
-  project just by using this build.
+* **Own telemetry.** Firebase Crashlytics and Analytics run against this fork's own Firebase
+  project — see [Firebase](#firebase) — so nothing is sent to upstream's Firebase project by
+  using this build.
 * **No inherited promo.** Update checks, Discord Rich Presence, and in-app "About" credits point
   at this fork's own repository, not upstream's release feed or Discord application.
 * **No ads, no monetization** — see [Legal Disclaimer](#legal-disclaimer--terms-of-use).
@@ -124,15 +129,17 @@ LASTFM_API_KEY=your_key
 LASTFM_SECRET=your_secret
 ```
 
-### Firebase (disabled by default)
+### Firebase
 
-Crashlytics and Analytics are **switched off** in this fork. The inherited
-`androidApp/google-services.json.disabled` belongs to the upstream project's Firebase account —
-building against it would send this app's crash and analytics data to the upstream maintainer.
+Crashlytics and Analytics run against this fork's own Firebase project (`enhanced-echo-music`),
+not upstream's — so crash/analytics data goes to this project, not to the upstream maintainer.
+`androidApp/google-services.json` is checked in for that project.
 
-To enable telemetry, register the `echo.music.enhanced` application ID in your own Firebase
-project, add that project's `google-services.json` to `androidApp/`, and uncomment the two
-plugin lines in `androidApp/build.gradle.kts`. Crash reporting degrades to logcat until you do.
+If you fork this repo further, generate your own config instead of building against this project's:
+register `echo.music.enhanced` in your own Firebase project, replace
+`androidApp/google-services.json` with that project's file, or comment out the two plugin lines in
+`androidApp/build.gradle.kts` to disable telemetry entirely — crash reporting degrades to logcat
+when the plugins are off.
 
 ## Transfer playlists from Echo Music
 

@@ -1,5 +1,5 @@
-<br><b>New</b>
-* Create local playlists yourself
-* Download playlist
-* Add "Clear cache and download" feature
-* Added Fastlane structure
+- First release of Enhanced Echo Music: a fork of Echo Music with its own violet identity
+- Immersive Audio Passthrough and Spatial Audio support (Beta)
+- True Smooth: adaptive high refresh rate support (Beta)
+- Refreshed Material 3 Expressive UI with wavy progress indicators on the player
+- Crash reporting and analytics run on this fork's own Firebase project, off by default for anyone building from source
