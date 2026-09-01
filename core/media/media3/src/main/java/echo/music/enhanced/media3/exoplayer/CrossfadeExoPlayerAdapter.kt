@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.media.audiofx.AudioEffect
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -160,6 +161,33 @@ internal class CrossfadeExoPlayerAdapter(
      */
     @Volatile
     private var internalEqualizerCurve: EqualizerCurve = EqualizerCurve.FLAT
+
+    /** Opts this app's playback into (or out of) system spatialization. See [MediaPlayerInterface.setSpatialAudioEnabled]. */
+    @Volatile
+    private var internalSpatialAudioEnabled = true
+
+    /** Attaches (or releases) the detected OEM Dolby engine. See [MediaPlayerInterface.setImmersiveAudioPassthroughEnabled]. */
+    @Volatile
+    private var internalImmersivePassthroughEnabled = true
+
+    /**
+     * No official cross-OEM API exists for this — best-effort scan of the device's
+     * registered audio effects for anything Dolby-branded. Computed once and cached: the
+     * effect registry doesn't change at runtime.
+     */
+    private val oemDolbyEffectUuid: java.util.UUID? by lazy {
+        try {
+            AudioEffect
+                .queryEffects()
+                .firstOrNull { it.name?.contains("dolby", ignoreCase = true) == true }
+                ?.uuid
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    /** The Dolby effect instance currently attached to a player's audio session, if any. */
+    private var activeDolbyEffect: AudioEffect? = null
 
     @Volatile
     private var internalRepeatMode = PlayerConstants.REPEAT_MODE_OFF
@@ -536,10 +564,21 @@ internal class CrossfadeExoPlayerAdapter(
                         ).build()
             }
 
+        // Rebuilt fresh per player rather than reusing the injected [audioAttributes] instance:
+        // this class creates a new ExoPlayer per track (crossfade design), so re-reading the
+        // spatial-audio preference here means a change takes effect from the next track, without
+        // needing to rebuild an already-playing player's fixed attributes.
+        val effectiveAudioAttributes =
+            audioAttributes
+                .buildUpon()
+                .setSpatializationBehavior(
+                    if (internalSpatialAudioEnabled) C.SPATIALIZATION_BEHAVIOR_AUTO else C.SPATIALIZATION_BEHAVIOR_NEVER,
+                ).build()
+
         val player =
             ExoPlayer
                 .Builder(context)
-                .setAudioAttributes(audioAttributes, false)
+                .setAudioAttributes(effectiveAudioAttributes, false)
                 .setLoadControl(
                     DefaultLoadControl
                         .Builder()
@@ -557,7 +596,29 @@ internal class CrossfadeExoPlayerAdapter(
                 .setRenderersFactory(perPlayerRenderers)
                 .build()
 
+        applyOemDolbyEffect(player.audioSessionId)
+
         return PlayerWithFilter(player, crossfadeFilter)
+    }
+
+    /**
+     * Attaches the detected OEM Dolby engine to [audioSessionId] and enables it, or releases
+     * whatever was previously attached — best-effort, no-op when nothing was detected on this
+     * device (see [oemDolbyEffectUuid]).
+     */
+    private fun applyOemDolbyEffect(audioSessionId: Int) {
+        activeDolbyEffect?.release()
+        activeDolbyEffect = null
+        val uuid = oemDolbyEffectUuid ?: return
+        if (!internalImmersivePassthroughEnabled) return
+        activeDolbyEffect =
+            try {
+                AudioEffect(AudioEffect.EFFECT_TYPE_NULL, uuid, 0, audioSessionId).apply {
+                    enabled = true
+                }
+            } catch (_: Exception) {
+                null
+            }
     }
 
     // ========== Playback Control ==========
@@ -1289,6 +1350,20 @@ internal class CrossfadeExoPlayerAdapter(
         internalEqualizerCurve = EqualizerCurve(bandsDb, preampDb)
     }
 
+    // Sampled by createExoPlayerInstance() when building each track's AudioAttributes, so this
+    // takes effect from the next track — see the comment there for why.
+    override fun setSpatialAudioEnabled(enabled: Boolean) {
+        internalSpatialAudioEnabled = enabled
+    }
+
+    // Unlike spatial audio, re-applied to the current session immediately: attaching/releasing
+    // an AudioEffect doesn't require rebuilding the player, so there's no reason to wait for the
+    // next track.
+    override fun setImmersiveAudioPassthroughEnabled(enabled: Boolean) {
+        internalImmersivePassthroughEnabled = enabled
+        currentPlayer?.let { applyOemDolbyEffect(it.audioSessionId) }
+    }
+
     override var skipSilenceEnabled: Boolean
         get() = internalSkipSilence
         set(value) {
@@ -1329,6 +1404,9 @@ internal class CrossfadeExoPlayerAdapter(
         cleanupCurrentPlayerInternal()
         clearAllPrecacheInternal()
         listeners.clear()
+
+        activeDolbyEffect?.release()
+        activeDolbyEffect = null
     }
 
     // ========== Internal: State Transition ==========

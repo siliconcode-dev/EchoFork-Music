@@ -157,6 +157,18 @@
     <string name="balance_media_loudness">Balance media loudness</string>
     <string name="normalize_volume">Normalize Volume</string>
     <string name="audio">Audio</string>
+    <string name="display">Display</string>
+    <string name="beta_suffix" translatable="false"> (Beta)</string>
+    <string name="immersive_audio_passthrough">Immersive Audio Passthrough</string>
+    <string name="immersive_audio_passthrough_description">Uses this device\'s Dolby engine, when detected, for the current output</string>
+    <string name="immersive_audio_passthrough_unsupported">No Dolby audio engine detected on this device</string>
+    <string name="spatial_audio">Spatial Audio</string>
+    <string name="spatial_audio_description">Virtualized surround sound via this device\'s spatializer</string>
+    <string name="spatial_audio_unsupported">Requires Android 13 or newer, and a spatializer-capable output</string>
+    <string name="true_smooth">True Smooth</string>
+    <string name="true_smooth_description">Matches this display\'s highest supported refresh rate while the app is open</string>
+    <string name="true_smooth_unsupported">Requires Android 11 or newer, and a display above 60Hz</string>
+    <string name="refresh_rate_format" translatable="false">%1$d Hz</string>
     <string name="version_format" translatable="false">v%1$s</string>
     <string name="streaming_data_provider_piped">Streaming data provider (Piped)</string>
     <string name="itag">Itag</string>

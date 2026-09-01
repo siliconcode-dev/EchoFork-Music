@@ -110,6 +110,8 @@ import echo.music.enhanced.domain.utils.LocalResource
 import echo.music.enhanced.logger.Logger
 import echo.music.enhanced.Platform
 import echo.music.enhanced.expect.ui.fileSaverResult
+import echo.music.enhanced.expect.audio.isOemDolbyEngineDetected
+import echo.music.enhanced.expect.audio.isSpatialAudioSupported
 import echo.music.enhanced.expect.ui.isWallpaperDynamicColorSupported
 import echo.music.enhanced.extension.bytesToMB
 import echo.music.enhanced.extension.displayString
@@ -527,6 +529,8 @@ fun SettingScreen(
     val equalizerEnabled by viewModel.equalizerEnabled.collectAsStateWithLifecycle()
 
     val crossfadeEnabled by viewModel.crossfadeEnabled.collectAsStateWithLifecycle()
+    val spatialAudioEnabled by viewModel.spatialAudioEnabled.collectAsStateWithLifecycle()
+    val immersiveAudioPassthroughEnabled by viewModel.immersiveAudioPassthroughEnabled.collectAsStateWithLifecycle()
     val crossfadeDuration by viewModel.crossfadeDuration.collectAsStateWithLifecycle()
     val crossfadeDjMode by viewModel.crossfadeDjMode.collectAsStateWithLifecycle()
     val crossfadeSkipAlbum by viewModel.crossfadeSkipAlbum.collectAsStateWithLifecycle()
@@ -1140,6 +1144,48 @@ fun SettingScreen(
                         subtitle = stringResource(Res.string.equalizer_description),
                         smallSubtitle = true,
                         onClick = { navController.navigate(echo.music.enhanced.ui.navigation.destination.home.EqualizerDestination) },
+                    )
+                    val spatialAudioSupported = isSpatialAudioSupported()
+                    SettingItem(
+                        title = stringResource(Res.string.spatial_audio) + stringResource(Res.string.beta_suffix),
+                        subtitle =
+                            if (spatialAudioSupported) {
+                                stringResource(Res.string.spatial_audio_description)
+                            } else {
+                                stringResource(Res.string.spatial_audio_unsupported)
+                            },
+                        isEnable = spatialAudioSupported,
+                        switch = (spatialAudioEnabled to { viewModel.setSpatialAudioEnabled(it) }),
+                        onDisable = { viewModel.setSpatialAudioEnabled(false) },
+                        otherView = {
+                            Icon(
+                                imageVector = echoIcons.SpatialAudio,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp),
+                            )
+                        },
+                    )
+                    val dolbyEngineDetected = isOemDolbyEngineDetected()
+                    SettingItem(
+                        title = stringResource(Res.string.immersive_audio_passthrough) + stringResource(Res.string.beta_suffix),
+                        subtitle =
+                            if (dolbyEngineDetected) {
+                                stringResource(Res.string.immersive_audio_passthrough_description)
+                            } else {
+                                stringResource(Res.string.immersive_audio_passthrough_unsupported)
+                            },
+                        isEnable = dolbyEngineDetected,
+                        switch = (immersiveAudioPassthroughEnabled to { viewModel.setImmersiveAudioPassthroughEnabled(it) }),
+                        onDisable = { viewModel.setImmersiveAudioPassthroughEnabled(false) },
+                        otherView = {
+                            Icon(
+                                imageVector = echoIcons.SurroundSound,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp),
+                            )
+                        },
                     )
                 }
             }

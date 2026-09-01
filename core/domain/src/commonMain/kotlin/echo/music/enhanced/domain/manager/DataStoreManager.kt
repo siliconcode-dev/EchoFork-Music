@@ -359,6 +359,18 @@ interface DataStoreManager {
 
     suspend fun setCrossfadeEnabled(enabled: Boolean)
 
+    val spatialAudioEnabled: Flow<String>
+
+    suspend fun setSpatialAudioEnabled(enabled: Boolean)
+
+    val immersiveAudioPassthroughEnabled: Flow<String>
+
+    suspend fun setImmersiveAudioPassthroughEnabled(enabled: Boolean)
+
+    val trueSmoothEnabled: Flow<String>
+
+    suspend fun setTrueSmoothEnabled(enabled: Boolean)
+
     val crossfadeDuration: Flow<Int>
 
     suspend fun setCrossfadeDuration(duration: Int)

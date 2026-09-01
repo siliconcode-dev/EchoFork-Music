@@ -149,6 +149,10 @@ class SettingsViewModel(
     val customOpenAIHeaders: StateFlow<String> = _customOpenAIHeaders
     private val _crossfadeEnabled = MutableStateFlow<Boolean>(false)
     val crossfadeEnabled: StateFlow<Boolean> = _crossfadeEnabled
+    private val _spatialAudioEnabled = MutableStateFlow<Boolean>(true)
+    val spatialAudioEnabled: StateFlow<Boolean> = _spatialAudioEnabled
+    private val _immersiveAudioPassthroughEnabled = MutableStateFlow<Boolean>(true)
+    val immersiveAudioPassthroughEnabled: StateFlow<Boolean> = _immersiveAudioPassthroughEnabled
     private val _crossfadeDuration = MutableStateFlow<Int>(5000)
     val crossfadeDuration: StateFlow<Int> = _crossfadeDuration
     private val _crossfadeDjMode = MutableStateFlow<Boolean>(true)
@@ -379,6 +383,8 @@ class SettingsViewModel(
         getCustomOpenAIHeaders()
         getKillServiceOnExit()
         getCrossfadeEnabled()
+        getSpatialAudioEnabled()
+        getImmersiveAudioPassthroughEnabled()
         getCrossfadeDuration()
         getCrossfadeDjMode()
         getCrossfadeSkipAlbum()
@@ -539,6 +545,36 @@ class SettingsViewModel(
         viewModelScope.launch {
             dataStoreManager.setCrossfadeEnabled(enabled)
             getCrossfadeEnabled()
+        }
+    }
+
+    private fun getSpatialAudioEnabled() {
+        viewModelScope.launch {
+            dataStoreManager.spatialAudioEnabled.collect { enabled ->
+                _spatialAudioEnabled.value = enabled == DataStoreManager.TRUE
+            }
+        }
+    }
+
+    fun setSpatialAudioEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            dataStoreManager.setSpatialAudioEnabled(enabled)
+            getSpatialAudioEnabled()
+        }
+    }
+
+    private fun getImmersiveAudioPassthroughEnabled() {
+        viewModelScope.launch {
+            dataStoreManager.immersiveAudioPassthroughEnabled.collect { enabled ->
+                _immersiveAudioPassthroughEnabled.value = enabled == DataStoreManager.TRUE
+            }
+        }
+    }
+
+    fun setImmersiveAudioPassthroughEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            dataStoreManager.setImmersiveAudioPassthroughEnabled(enabled)
+            getImmersiveAudioPassthroughEnabled()
         }
     }
 

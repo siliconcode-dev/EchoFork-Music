@@ -1280,6 +1280,48 @@ internal class DataStoreManagerImpl(
         }
     }
 
+    // Default ON: real, OS-backed, no downside when the device supports it — see
+    // the "Immersive Audio Passthrough" / "Spatial Audio" default-state decision.
+    override val spatialAudioEnabled: Flow<String> =
+        settingsDataStore.data.map { preferences ->
+            preferences[SPATIAL_AUDIO_ENABLED] ?: TRUE
+        }
+
+    override suspend fun setSpatialAudioEnabled(enabled: Boolean) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[SPATIAL_AUDIO_ENABLED] = if (enabled) TRUE else FALSE
+            }
+        }
+    }
+
+    override val immersiveAudioPassthroughEnabled: Flow<String> =
+        settingsDataStore.data.map { preferences ->
+            preferences[IMMERSIVE_AUDIO_PASSTHROUGH_ENABLED] ?: TRUE
+        }
+
+    override suspend fun setImmersiveAudioPassthroughEnabled(enabled: Boolean) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[IMMERSIVE_AUDIO_PASSTHROUGH_ENABLED] = if (enabled) TRUE else FALSE
+            }
+        }
+    }
+
+    // Default OFF: real battery cost, opt-in — see the "True Smooth" default-state decision.
+    override val trueSmoothEnabled: Flow<String> =
+        settingsDataStore.data.map { preferences ->
+            preferences[TRUE_SMOOTH_ENABLED] ?: FALSE
+        }
+
+    override suspend fun setTrueSmoothEnabled(enabled: Boolean) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[TRUE_SMOOTH_ENABLED] = if (enabled) TRUE else FALSE
+            }
+        }
+    }
+
     override val crossfadeDuration: Flow<Int> =
         settingsDataStore.data.map { preferences ->
             preferences[CROSSFADE_DURATION] ?: 5000
@@ -1643,6 +1685,9 @@ internal class DataStoreManagerImpl(
         val KILL_SERVICE_ON_EXIT = stringPreferencesKey("kill_service_on_exit")
         val KEEP_SERVICE_ALIVE = stringPreferencesKey("keep_service_alive")
         val CROSSFADE_ENABLED = stringPreferencesKey("crossfade_enabled")
+        val SPATIAL_AUDIO_ENABLED = stringPreferencesKey("spatial_audio_enabled")
+        val IMMERSIVE_AUDIO_PASSTHROUGH_ENABLED = stringPreferencesKey("immersive_audio_passthrough_enabled")
+        val TRUE_SMOOTH_ENABLED = stringPreferencesKey("true_smooth_enabled")
         val CROSSFADE_DURATION = intPreferencesKey("crossfade_duration")
         val CROSSFADE_DJ_MODE = stringPreferencesKey("crossfade_dj_mode")
         val CROSSFADE_SKIP_ALBUM = stringPreferencesKey("crossfade_skip_album")

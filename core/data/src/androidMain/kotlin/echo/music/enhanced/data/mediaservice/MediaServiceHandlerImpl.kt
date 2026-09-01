@@ -323,6 +323,18 @@ internal class MediaServiceHandlerImpl(
                     )
                 }
         }
+        // Same reasoning as the equalizer above: collected, not read once, so a change reaches
+        // the audio pipeline while a track may already be playing.
+        backgroundScope.launch {
+            dataStoreManager.spatialAudioEnabled
+                .distinctUntilChanged()
+                .collect { enabled -> player.setSpatialAudioEnabled(enabled == TRUE) }
+        }
+        backgroundScope.launch {
+            dataStoreManager.immersiveAudioPassthroughEnabled
+                .distinctUntilChanged()
+                .collect { enabled -> player.setImmersiveAudioPassthroughEnabled(enabled == TRUE) }
+        }
         normalizeVolume =
             runBlocking { dataStoreManager.normalizeVolume.first() == TRUE }
         _nowPlaying.value = player.currentMediaItem
