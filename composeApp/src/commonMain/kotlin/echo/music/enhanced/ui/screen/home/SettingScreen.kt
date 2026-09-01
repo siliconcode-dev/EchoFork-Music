@@ -1149,47 +1149,9 @@ fun SettingScreen(
                         smallSubtitle = true,
                         onClick = { navController.navigate(echo.music.enhanced.ui.navigation.destination.home.EqualizerDestination) },
                     )
-                    val spatialAudioSupported = isSpatialAudioSupported()
-                    SettingItem(
-                        title = stringResource(Res.string.spatial_audio) + stringResource(Res.string.beta_suffix),
-                        subtitle =
-                            if (spatialAudioSupported) {
-                                stringResource(Res.string.spatial_audio_description)
-                            } else {
-                                stringResource(Res.string.spatial_audio_unsupported)
-                            },
-                        isEnable = spatialAudioSupported,
-                        switch = (spatialAudioEnabled to { viewModel.setSpatialAudioEnabled(it) }),
-                        onDisable = { viewModel.setSpatialAudioEnabled(false) },
-                        otherView = {
-                            Icon(
-                                imageVector = echoIcons.SpatialAudio,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(20.dp),
-                            )
-                        },
-                    )
-                    val dolbyEngineDetected = isOemDolbyEngineDetected()
-                    val openSoundSettings = rememberOpenSoundSettingsAction()
-                    SettingItem(
-                        title = stringResource(Res.string.immersive_audio_passthrough) + stringResource(Res.string.beta_suffix),
-                        subtitle =
-                            if (dolbyEngineDetected) {
-                                stringResource(Res.string.immersive_audio_passthrough_description)
-                            } else {
-                                stringResource(Res.string.immersive_audio_passthrough_unsupported)
-                            },
-                        isEnable = dolbyEngineDetected,
-                        onClick = if (dolbyEngineDetected) openSoundSettings else null,
-                        otherView = {
-                            Icon(
-                                imageVector = echoIcons.SurroundSound,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(20.dp),
-                            )
-                        },
+                    AudioBetaFeatureItems(
+                        viewModel = viewModel,
+                        spatialAudioEnabled = spatialAudioEnabled,
                     )
                 }
             }
@@ -1200,60 +1162,11 @@ fun SettingScreen(
                     currentSection = currentSection,
                     onSectionClick = { currentSection = it }
                 ) {
-                    val highRefreshRateSupported = isHighRefreshRateSupported()
-                    val supportedRates = getSupportedRefreshRatesHz()
-                    val autoLabel = runBlocking { getString(Res.string.true_motion_auto) }
-                    SettingItem(
-                        title = stringResource(Res.string.true_motion) + stringResource(Res.string.beta_suffix),
-                        subtitle =
-                            if (highRefreshRateSupported) {
-                                stringResource(Res.string.true_motion_description)
-                            } else {
-                                stringResource(Res.string.true_motion_unsupported)
-                            },
-                        isEnable = highRefreshRateSupported,
-                        switch = (trueMotionEnabled to { viewModel.setTrueMotionEnabled(it) }),
-                        onDisable = { viewModel.setTrueMotionEnabled(false) },
+                    DisplaySettingsItems(
+                        viewModel = viewModel,
+                        trueMotionEnabled = trueMotionEnabled,
+                        trueMotionTargetHz = trueMotionTargetHz,
                     )
-                    AnimatedVisibility(visible = trueMotionEnabled && highRefreshRateSupported) {
-                        SettingItem(
-                            title = stringResource(Res.string.true_motion_target_rate),
-                            subtitle =
-                                if (trueMotionTargetHz == 0) {
-                                    autoLabel
-                                } else {
-                                    stringResource(Res.string.refresh_rate_format, trueMotionTargetHz)
-                                },
-                            smallSubtitle = true,
-                            onClick = {
-                                viewModel.setAlertData(
-                                    SettingAlertState(
-                                        title = runBlocking { getString(Res.string.true_motion_target_rate) },
-                                        selectOne =
-                                            SettingAlertState.SelectData(
-                                                listSelect =
-                                                    listOf((trueMotionTargetHz == 0) to autoLabel) +
-                                                        supportedRates.map { hz ->
-                                                            (trueMotionTargetHz == hz) to "$hz Hz"
-                                                        },
-                                            ),
-                                        confirm =
-                                            runBlocking { getString(Res.string.change) } to { state ->
-                                                val selected = state.selectOne?.getSelected()
-                                                val hz =
-                                                    if (selected == autoLabel) {
-                                                        0
-                                                    } else {
-                                                        selected?.removeSuffix(" Hz")?.toIntOrNull() ?: 0
-                                                    }
-                                                viewModel.setTrueMotionTargetHz(hz)
-                                            },
-                                        dismiss = runBlocking { getString(Res.string.cancel) },
-                                    ),
-                                )
-                            },
-                        )
-                    }
                 }
             }
         }
@@ -3078,5 +2991,116 @@ fun ExpandableSection(
         Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
             content()
         }
+    }
+}
+
+@Composable
+private fun AudioBetaFeatureItems(
+    viewModel: SettingsViewModel,
+    spatialAudioEnabled: Boolean,
+) {
+    val spatialAudioSupported = isSpatialAudioSupported()
+    SettingItem(
+        title = stringResource(Res.string.spatial_audio) + stringResource(Res.string.beta_suffix),
+        subtitle =
+            if (spatialAudioSupported) {
+                stringResource(Res.string.spatial_audio_description)
+            } else {
+                stringResource(Res.string.spatial_audio_unsupported)
+            },
+        isEnable = spatialAudioSupported,
+        switch = (spatialAudioEnabled to { viewModel.setSpatialAudioEnabled(it) }),
+        onDisable = { viewModel.setSpatialAudioEnabled(false) },
+        otherView = {
+            Icon(
+                imageVector = echoIcons.SpatialAudio,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp),
+            )
+        },
+    )
+    val dolbyEngineDetected = isOemDolbyEngineDetected()
+    val openSoundSettings = rememberOpenSoundSettingsAction()
+    SettingItem(
+        title = stringResource(Res.string.immersive_audio_passthrough) + stringResource(Res.string.beta_suffix),
+        subtitle =
+            if (dolbyEngineDetected) {
+                stringResource(Res.string.immersive_audio_passthrough_description)
+            } else {
+                stringResource(Res.string.immersive_audio_passthrough_unsupported)
+            },
+        isEnable = dolbyEngineDetected,
+        onClick = if (dolbyEngineDetected) openSoundSettings else null,
+        otherView = {
+            Icon(
+                imageVector = echoIcons.SurroundSound,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp),
+            )
+        },
+    )
+}
+
+@Composable
+private fun DisplaySettingsItems(
+    viewModel: SettingsViewModel,
+    trueMotionEnabled: Boolean,
+    trueMotionTargetHz: Int,
+) {
+    val highRefreshRateSupported = isHighRefreshRateSupported()
+    val supportedRates = getSupportedRefreshRatesHz()
+    val autoLabel = runBlocking { getString(Res.string.true_motion_auto) }
+    SettingItem(
+        title = stringResource(Res.string.true_motion) + stringResource(Res.string.beta_suffix),
+        subtitle =
+            if (highRefreshRateSupported) {
+                stringResource(Res.string.true_motion_description)
+            } else {
+                stringResource(Res.string.true_motion_unsupported)
+            },
+        isEnable = highRefreshRateSupported,
+        switch = (trueMotionEnabled to { viewModel.setTrueMotionEnabled(it) }),
+        onDisable = { viewModel.setTrueMotionEnabled(false) },
+    )
+    AnimatedVisibility(visible = trueMotionEnabled && highRefreshRateSupported) {
+        SettingItem(
+            title = stringResource(Res.string.true_motion_target_rate),
+            subtitle =
+                if (trueMotionTargetHz == 0) {
+                    autoLabel
+                } else {
+                    stringResource(Res.string.refresh_rate_format, trueMotionTargetHz)
+                },
+            smallSubtitle = true,
+            onClick = {
+                viewModel.setAlertData(
+                    SettingAlertState(
+                        title = runBlocking { getString(Res.string.true_motion_target_rate) },
+                        selectOne =
+                            SettingAlertState.SelectData(
+                                listSelect =
+                                    listOf((trueMotionTargetHz == 0) to autoLabel) +
+                                        supportedRates.map { hz ->
+                                            (trueMotionTargetHz == hz) to "$hz Hz"
+                                        },
+                            ),
+                        confirm =
+                            runBlocking { getString(Res.string.change) } to { state ->
+                                val selected = state.selectOne?.getSelected()
+                                val hz =
+                                    if (selected == autoLabel) {
+                                        0
+                                    } else {
+                                        selected?.removeSuffix(" Hz")?.toIntOrNull() ?: 0
+                                    }
+                                viewModel.setTrueMotionTargetHz(hz)
+                            },
+                        dismiss = runBlocking { getString(Res.string.cancel) },
+                    ),
+                )
+            },
+        )
     }
 }
