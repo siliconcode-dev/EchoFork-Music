@@ -4,16 +4,10 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
-    // Firebase is disabled until this project supplies its own Firebase
-    // configuration. The inherited androidApp/google-services.json.disabled
-    // belongs to the upstream Echo Music project (echo-aab3b) — re-enabling
-    // these plugins against it would ship this app's crash and analytics data
-    // to that project's owner.
-    //
-    // To enable: register echo.music.enhanced in your own Firebase project,
-    // drop its google-services.json into androidApp/, and uncomment below.
-    // id("com.google.gms.google-services")
-    // id("com.google.firebase.crashlytics")
+    // Firebase project owned by this fork (enhanced-echo-music), not upstream's.
+    // See androidApp/google-services.json.
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {

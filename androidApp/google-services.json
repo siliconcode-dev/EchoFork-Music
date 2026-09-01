@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "604346019547",
+    "project_id": "enhanced-echo-music",
+    "storage_bucket": "enhanced-echo-music.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604346019547:android:a39a6e9ee6ecf2418fe6fe",
+        "android_client_info": {
+          "package_name": "echo.music.enhanced"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqpPU9Fin2dBH47N26f24kBLRbS9FIxlY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
