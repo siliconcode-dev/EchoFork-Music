@@ -72,6 +72,7 @@ import echo.music.enhanced.extension.copy
 import echo.music.enhanced.ui.component.AppBottomNavigationBar
 import echo.music.enhanced.ui.component.AppNavigationRail
 import echo.music.enhanced.ui.component.LiquidGlassAppBottomNavigationBar
+import echo.music.enhanced.ui.component.WhatsNewDialog
 import echo.music.enhanced.ui.icon.ArrowForwardIos
 import echo.music.enhanced.ui.icon.echoIcons
 import echo.music.enhanced.ui.navigation.destination.home.AnalyticsDestination
@@ -134,6 +135,7 @@ fun App(viewModel: SharedViewModel = koinInject()) {
     val updateData by viewModel.updateResponse.collectAsStateWithLifecycle()
     val intent by viewModel.intent.collectAsStateWithLifecycle()
     val showNotificationPermissionDialog by viewModel.showNotificationPermissionDialog.collectAsStateWithLifecycle()
+    val shouldShowWhatsNew by viewModel.shouldShowWhatsNew.collectAsStateWithLifecycle()
 
 
     val isLiquidGlassEnabled by viewModel.getEnableLiquidGlass().collectAsStateWithLifecycle(DataStoreManager.FALSE)
@@ -794,6 +796,13 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
                                 }
                             }
                         },
+                    )
+                }
+
+                if (shouldShowWhatsNew) {
+                    WhatsNewDialog(
+                        versionName = VersionManager.getVersionName(),
+                        onDismiss = { viewModel.dismissWhatsNew() },
                     )
                 }
             },

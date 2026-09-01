@@ -1745,6 +1745,18 @@ class SharedViewModel(
 
     fun getTrueMotionTargetHz() = dataStoreManager.trueMotionTargetHz
 
+    /** True once, per version, until [dismissWhatsNew] is called — including on a fresh install. */
+    val shouldShowWhatsNew: StateFlow<Boolean> =
+        dataStoreManager.lastSeenWhatsNewVersion
+            .map { it != VersionManager.getVersionName() }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
+
+    fun dismissWhatsNew() {
+        viewModelScope.launch {
+            dataStoreManager.setLastSeenWhatsNewVersion(VersionManager.getVersionName())
+        }
+    }
+
     
 
     

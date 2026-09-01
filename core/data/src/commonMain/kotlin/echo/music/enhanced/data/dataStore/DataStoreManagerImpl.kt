@@ -1336,6 +1336,19 @@ internal class DataStoreManagerImpl(
         }
     }
 
+    override val lastSeenWhatsNewVersion: Flow<String> =
+        settingsDataStore.data.map { preferences ->
+            preferences[LAST_SEEN_WHATS_NEW_VERSION] ?: ""
+        }
+
+    override suspend fun setLastSeenWhatsNewVersion(version: String) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[LAST_SEEN_WHATS_NEW_VERSION] = version
+            }
+        }
+    }
+
     override val crossfadeDuration: Flow<Int> =
         settingsDataStore.data.map { preferences ->
             preferences[CROSSFADE_DURATION] ?: 5000
@@ -1703,6 +1716,7 @@ internal class DataStoreManagerImpl(
         val IMMERSIVE_AUDIO_PASSTHROUGH_ENABLED = stringPreferencesKey("immersive_audio_passthrough_enabled")
         val TRUE_MOTION_ENABLED = stringPreferencesKey("true_motion_enabled")
         val TRUE_MOTION_TARGET_HZ = intPreferencesKey("true_motion_target_hz")
+        val LAST_SEEN_WHATS_NEW_VERSION = stringPreferencesKey("last_seen_whats_new_version")
         val CROSSFADE_DURATION = intPreferencesKey("crossfade_duration")
         val CROSSFADE_DJ_MODE = stringPreferencesKey("crossfade_dj_mode")
         val CROSSFADE_SKIP_ALBUM = stringPreferencesKey("crossfade_skip_album")

@@ -376,6 +376,11 @@ interface DataStoreManager {
 
     suspend fun setTrueMotionTargetHz(hz: Int)
 
+    /** The versionName the What's New dialog was last acknowledged for, or empty if never shown. */
+    val lastSeenWhatsNewVersion: Flow<String>
+
+    suspend fun setLastSeenWhatsNewVersion(version: String)
+
     val crossfadeDuration: Flow<Int>
 
     suspend fun setCrossfadeDuration(duration: Int)
