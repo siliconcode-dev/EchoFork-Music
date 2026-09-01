@@ -61,11 +61,10 @@ class DiscordRPC(
         //  name for the presence header.
         private const val APP_NAME: String = "Enhanced Echo Music"
 
-        // TODO(branding): host this project's own icon and replace the URL. This
-        //  currently points at SimpMusic's asset storage, which may vanish or change
-        //  without notice and is not ours to depend on.
+        // Self-hosted via this repo's raw content instead of depending on SimpMusic's
+        // asset storage. Requires the `main` branch to exist with this file on it.
         private const val APP_ICON: String =
-            "https://fra.cloud.appwrite.io/v1/storage/buckets/683f1f620010ba0fa5b1/files/69007bc8001a28a7cea8/view?project=67ec0369002bd8a96885"
+            "https://raw.githubusercontent.com/siliconcode-dev/EchoFork-Music/main/assets/Echo-new.png"
 
         /**
          * Whether a Discord application has been configured for this build.
