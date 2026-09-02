@@ -1,6 +1,23 @@
 import ScreenshotFrame from "./ScreenshotFrame";
 import Reveal from "./Reveal";
 
+const SCREENS: { label: string; src: string }[] = [
+  { label: "Home", src: "/screenshots/01-home.webp" },
+  { label: "Now Playing", src: "/screenshots/02-now-playing.webp" },
+  { label: "Synced Lyrics", src: "/screenshots/03-lyrics.webp" },
+  { label: "Search", src: "/screenshots/04-search.webp" },
+  { label: "Library", src: "/screenshots/05-library.webp" },
+  { label: "Playlist", src: "/screenshots/06-playlist.webp" },
+  { label: "Song Menu", src: "/screenshots/08-song-menu.webp" },
+  { label: "Settings", src: "/screenshots/09-settings.webp" },
+  { label: "Spatial Audio", src: "/screenshots/10-settings-audio.webp" },
+  { label: "Appearance", src: "/screenshots/11-settings-interface.webp" },
+  { label: "Endless Queue", src: "/screenshots/12-queue.webp" },
+  { label: "Artist", src: "/screenshots/13-artist.webp" },
+  { label: "Album", src: "/screenshots/14-album.webp" },
+  { label: "Mini Player", src: "/screenshots/15-mini-player.webp" },
+];
+
 export default function Screenshots() {
   return (
     <section className="border-b-2 border-ink">
@@ -13,18 +30,21 @@ export default function Screenshots() {
             Built for the way you listen
           </h2>
           <p className="mx-auto mt-3 max-w-md font-mono text-xs uppercase tracking-wide text-muted">
-            Real screenshots incoming — this is a preview of the layout.
+            Real screens, straight off the device.
           </p>
         </Reveal>
 
         <Reveal
           staggerChildren=":scope > div"
-          className="mt-12 flex gap-6 overflow-x-auto pb-4 sm:justify-center"
+          className="mt-12 flex gap-6 overflow-x-auto pb-4 sm:justify-center sm:flex-wrap"
         >
-          <ScreenshotFrame label="Now Playing" variant="now-playing" />
-          <ScreenshotFrame label="Library" variant="library" />
-          <ScreenshotFrame label="Search" variant="search" />
-          <ScreenshotFrame label="Lyrics" variant="lyrics" />
+          {SCREENS.map((screen) => (
+            <ScreenshotFrame
+              key={screen.label}
+              label={screen.label}
+              src={screen.src}
+            />
+          ))}
         </Reveal>
       </div>
     </section>

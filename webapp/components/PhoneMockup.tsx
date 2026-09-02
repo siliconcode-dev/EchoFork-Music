@@ -1,4 +1,4 @@
-import Skeleton from "./Skeleton";
+import Image from "next/image";
 
 export default function PhoneMockup() {
   return (
@@ -10,30 +10,16 @@ export default function PhoneMockup() {
           <span>/// REC</span>
         </div>
 
-        {/* Now-playing skeleton */}
-        <div className="flex flex-col items-center gap-4 px-6 pb-8 pt-8">
-          <Skeleton className="h-40 w-40 border-2 border-ink" />
-          <Skeleton className="h-3 w-32" />
-          <Skeleton className="h-2.5 w-20" delay={100} />
-
-          <div className="mt-4 flex w-full items-end gap-1">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <Skeleton
-                key={i}
-                delay={i * 60}
-                className="w-full"
-                style={{ height: `${8 + ((i * 37) % 24)}px` }}
-              />
-            ))}
-          </div>
-
-          <div className="mt-3 flex items-center gap-6">
-            <div className="h-3 w-3 border-2 border-ink" />
-            <div className="h-5 w-5 border-2 border-ink" />
-            <div className="h-9 w-9 border-2 border-ink bg-accent" />
-            <div className="h-5 w-5 border-2 border-ink" />
-            <div className="h-3 w-3 border-2 border-ink" />
-          </div>
+        {/* Real Now Playing screenshot */}
+        <div className="relative aspect-[540/1136] w-full overflow-hidden">
+          <Image
+            src="/screenshots/02-now-playing.webp"
+            alt="Enhanced Echo Music Now Playing screen"
+            fill
+            sizes="(min-width: 640px) 300px, 260px"
+            className="object-cover object-top"
+            priority
+          />
         </div>
       </div>
     </div>
