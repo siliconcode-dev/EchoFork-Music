@@ -11,6 +11,8 @@ import {
   Sparkles,
   Radio,
   Unlock,
+  ListOrdered,
+  Repeat2,
   type LucideIcon,
 } from "lucide-react";
 import Reveal from "./Reveal";
@@ -53,6 +55,16 @@ const FEATURES: {
     icon: Music2,
     title: "High-Quality Streaming",
     body: "Up to 256kbps audio for supported accounts.",
+  },
+  {
+    icon: ListOrdered,
+    title: "Real Playlist Control",
+    body: "New songs land at the top, drag to reorder, or jump one straight to the top or bottom from its menu.",
+  },
+  {
+    icon: Repeat2,
+    title: "Smarter Endless Radio",
+    body: "Auto-continue reseeds from your last few tracks, not just one — less repetition, survives flaky connections.",
   },
   {
     icon: Download,

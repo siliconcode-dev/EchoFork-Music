@@ -9,6 +9,17 @@ export const metadata: Metadata = {
 
 const RELEASES = [
   {
+    version: "0.1.2",
+    date: "September 2026",
+    tag: "Fixes",
+    highlights: [
+      "Adding a song to a playlist now puts it at the top instead of burying it at the bottom — synced YouTube playlists stay in sync too.",
+      "Playlist reordering no longer requires switching to Custom Order sort first, and a real bug is fixed where dragging a song a long distance could scramble the rest of the list.",
+      "Each song's menu now has “Move to top” / “Move to bottom” — a precise way to reorder without dragging.",
+      "Endless-queue radio survives a flaky connection instead of losing your session, and now reseeds from your last few played tracks instead of just one — less repetition.",
+    ],
+  },
+  {
     version: "0.1.1",
     date: "September 2026",
     tag: "First release",
