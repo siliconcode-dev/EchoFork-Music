@@ -973,6 +973,31 @@ class LocalPlaylistViewModel(
         }
     }
 
+    /**
+     * "Move to top / to bottom" from a song's overflow menu — a precise, non-drag alternative to
+     * the drag handle. [currentPosition] is the song's DB `position` (from its
+     * [echo.music.enhanced.domain.data.entities.PairSongLocalPlaylist]), which is valid
+     * regardless of what sort the screen currently displays.
+     */
+    fun moveTrackToTop(currentPosition: Int) {
+        viewModelScope.launch {
+            if (uiState.value.filterState != FilterState.CustomOrder) {
+                onUIEvent(LocalPlaylistUIEvent.ChangeFilter(FilterState.CustomOrder))
+            }
+            changeLocalPlaylistItemPosition(currentPosition, 0)
+        }
+    }
+
+    fun moveTrackToBottom(currentPosition: Int) {
+        viewModelScope.launch {
+            if (uiState.value.filterState != FilterState.CustomOrder) {
+                onUIEvent(LocalPlaylistUIEvent.ChangeFilter(FilterState.CustomOrder))
+            }
+            val lastIndex = (uiState.value.trackCount - 1).coerceAtLeast(0)
+            changeLocalPlaylistItemPosition(currentPosition, lastIndex)
+        }
+    }
+
     suspend fun changeLocalPlaylistItemPosition(
         from: Int,
         to: Int,
@@ -1002,23 +1027,22 @@ class LocalPlaylistViewModel(
                     },
                 )
         } else {
-            // Unsynced playlist: local only, no loading dialog needed
-            val loadedList =
-                lazyTrackPagingItems.value?.itemSnapshotList?.toList() ?: return
-            val fromItem = loadedList.getOrNull(from)?.first ?: return
-            val toItem = loadedList.getOrNull(to)?.first ?: return
-            val fromPosition = loadedList.getOrNull(from)?.second?.position ?: from
-            val toPosition = loadedList.getOrNull(to)?.second?.position ?: to
-            val playlistId = uiState.value.id
-
+            // Unsynced playlist: local only, no loading dialog needed. Shift-based (not a
+            // two-item swap) so a non-adjacent jump like "move to top" is correct too.
             localPlaylistRepository
-                .changePositionOfSongInPlaylist(playlistId, fromItem.videoId, toPosition)
-                .lastOrNull()
-                ?.let { log("changeLocalPlaylistItemPosition: from $it") }
-            localPlaylistRepository
-                .changePositionOfSongInPlaylist(playlistId, toItem.videoId, fromPosition)
-                .lastOrNull()
-                ?.let { log("changeLocalPlaylistItemPosition: to $it") }
+                .moveItemInLocalPlaylist(
+                    playlistId = uiState.value.id,
+                    fromIndex = from,
+                    toIndex = to,
+                ).collectResource(
+                    onSuccess = {
+                        log("changeLocalPlaylistItemPosition (local): success $it")
+                    },
+                    onError = { message ->
+                        log("changeLocalPlaylistItemPosition (local): error $message")
+                        makeToast(message ?: getString(Res.string.error))
+                    },
+                )
         }
     }
 }

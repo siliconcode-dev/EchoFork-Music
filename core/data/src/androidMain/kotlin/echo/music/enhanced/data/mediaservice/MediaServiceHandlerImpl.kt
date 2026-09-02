@@ -73,6 +73,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -1480,36 +1482,16 @@ internal class MediaServiceHandlerImpl(
                                     )
                                 }
                             } else {
+                                // A failed fetch, not a genuinely exhausted session — see
+                                // getContinueTrack's onFailure branches. Leave the continuation
+                                // untouched so the next loadMore() call retries the same session
+                                // instead of silently discarding play history. Genuine exhaustion
+                                // (a successful response with no further continuation) is handled
+                                // above and, on the *next* loadMore() call, by the endless-queue
+                                // branch below once queueData.continuation is actually null.
+                                Logger.w(TAG, "Check loadMore: fetch failed, keeping continuation $continuation for retry")
                                 _queueData.update {
-                                    it.copy(
-                                        data =
-                                            it.data.copy(
-                                                continuation = null,
-                                            ),
-                                    )
-                                }
-                                if (runBlocking { dataStoreManager.endlessQueue.first() } == TRUE) {
-                                    Logger.w(TAG, "loadMore: Endless Queue")
-                                    val lastTrack =
-                                        queueData.value.data.listTracks
-                                            .lastOrNull() ?: return@launch
-                                    val radioId = "RDAMVM${lastTrack.videoId}"
-                                    if (radioId == queueData.value.data.playlistId) {
-                                        Logger.w(TAG, "loadMore: Already in radio mode")
-                                        return@launch
-                                    }
-                                    _queueData.update {
-                                        it.copy(
-                                            data =
-                                                it.data.copy(
-                                                    playlistId = radioId,
-                                                ),
-                                            queueState = QueueData.StateSource.STATE_INITIALIZED,
-                                        )
-                                    }
-                                    reorderShuffledQueue(player.getCurrentMediaTimeLine())
-                                    Logger.d("Check loadMore", "queueData: ${queueData.value}")
-                                    getRelated(lastTrack.videoId)
+                                    it.copy(queueState = QueueData.StateSource.STATE_INITIALIZED)
                                 }
                             }
                         }
@@ -1517,9 +1499,16 @@ internal class MediaServiceHandlerImpl(
             }
         } else if (runBlocking { dataStoreManager.endlessQueue.first() } == TRUE) {
             Logger.w(TAG, "loadMore: Endless Queue")
+            val recentSeedVideoIds =
+                queueData.value.data.listTracks
+                    .takeLast(10)
+                    .distinctBy { it.videoId }
+                    .takeLast(3)
+                    .map { it.videoId }
             val lastTrack =
                 queueData.value.data.listTracks
                     .lastOrNull() ?: return
+            if (recentSeedVideoIds.isEmpty()) return
             _queueData.update {
                 it.copy(
                     queueState = QueueData.StateSource.STATE_INITIALIZED,
@@ -1528,7 +1517,57 @@ internal class MediaServiceHandlerImpl(
             }
             reorderShuffledQueue(player.getCurrentMediaTimeLine())
             Logger.d("Check loadMore", "queueData: ${queueData.value}")
-            getRelated(lastTrack.videoId)
+            getRelatedMultiSeed(recentSeedVideoIds)
+        }
+    }
+
+    /**
+     * Reseeds the radio from the last few distinct recently-played tracks instead of only the
+     * single most recent one — closer to how YT Music's own radio accounts for more than the
+     * last song, since a single-video `next()` seed can't carry multi-track session context on
+     * its own. Results from each seed are interleaved (round-robin) and deduped against both each
+     * other and everything already in the queue, so the radio can't loop back to a played song.
+     */
+    private fun getRelatedMultiSeed(seedVideoIds: List<String>) {
+        if (queueData.value.queueState == QueueData.StateSource.STATE_INITIALIZING) return
+        if (seedVideoIds.isEmpty()) return
+        coroutineScope.launch {
+            val alreadyPlayed = queueData.value.data.listTracks.map { it.videoId }.toSet()
+            val perSeedResults =
+                seedVideoIds
+                    .map { videoId -> async { songRepository.getRelatedData(videoId).lastOrNull() } }
+                    .awaitAll()
+            val perSeedTracks =
+                perSeedResults.mapNotNull { it?.data?.first }
+
+            val merged = LinkedHashMap<String, Track>()
+            var index = 0
+            var addedAny = true
+            while (addedAny) {
+                addedAny = false
+                for (list in perSeedTracks) {
+                    val track = list.getOrNull(index) ?: continue
+                    addedAny = true
+                    if (track.videoId !in alreadyPlayed) {
+                        merged.putIfAbsent(track.videoId, track)
+                    }
+                }
+                index++
+            }
+
+            // Only one seed's continuation can be "the" session going forward — ride the most
+            // recently played seed's, since it's the freshest signal.
+            val newestContinuation = perSeedResults.lastOrNull()?.data?.second
+
+            if (merged.isNotEmpty()) {
+                loadMoreCatalog(merged.values.toCollection(arrayListOf()))
+            }
+            _queueData.update {
+                it.copy(
+                    queueState = QueueData.StateSource.STATE_INITIALIZED,
+                    data = it.data.copy(continuation = newestContinuation),
+                )
+            }
         }
     }
 

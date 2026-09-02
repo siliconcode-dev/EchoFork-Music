@@ -144,6 +144,8 @@
     <string name="send">Send</string>
     <string name="mail_subject">Report Crash</string>
     <string name="delete_song_from_playlist">Delete this song from playlist</string>
+    <string name="move_to_top">Move to top</string>
+    <string name="move_to_bottom">Move to bottom</string>
     <string name="log_in">Log in</string>
     <string name="log_in_to_YouTube">Log in to YouTube</string>
     <string name="log_in_to_get_personally_data">Log in to get personally data</string>

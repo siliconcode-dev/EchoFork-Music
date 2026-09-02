@@ -1387,6 +1387,8 @@ fun NowPlayingBottomSheet(
     onNavigateToOtherScreen: () -> Unit = {},
     onDelete: (() -> Unit)? = null,
     onLibraryDelete: (() -> Unit)? = null,
+    onMoveToTop: (() -> Unit)? = null,
+    onMoveToBottom: (() -> Unit)? = null,
     dataStoreManager: DataStoreManager = koinInject<DataStoreManager>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -1729,6 +1731,28 @@ fun NowPlayingBottomSheet(
                             ) {
                                 hideModalBottomSheet()
                                 onLibraryDelete?.invoke()
+                            }
+                        }
+                    }
+                    Crossfade(targetState = onMoveToTop != null) {
+                        if (it) {
+                            ActionButton(
+                                icon = echoIcons.KeyboardDoubleArrowUp,
+                                text = Res.string.move_to_top,
+                            ) {
+                                hideModalBottomSheet()
+                                onMoveToTop?.invoke()
+                            }
+                        }
+                    }
+                    Crossfade(targetState = onMoveToBottom != null) {
+                        if (it) {
+                            ActionButton(
+                                icon = echoIcons.KeyboardDoubleArrowDown,
+                                text = Res.string.move_to_bottom,
+                            ) {
+                                hideModalBottomSheet()
+                                onMoveToBottom?.invoke()
                             }
                         }
                     }

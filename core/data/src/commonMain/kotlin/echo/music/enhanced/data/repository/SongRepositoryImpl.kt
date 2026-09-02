@@ -396,7 +396,10 @@ internal class SongRepositoryImpl(
                             emit(Pair(data.toListTrack(), newContinuation))
                         }.onFailure { exception ->
                             exception.printStackTrace()
-                            emit(Pair(null, null))
+                            // Echo the same continuation back rather than nulling it: this is a
+                            // failed fetch, not proof the radio/playlist session is exhausted.
+                            // The caller uses this to distinguish "retry me" from "no more pages".
+                            emit(Pair(null, continuation))
                         }
                 } else {
                     youTube
@@ -429,7 +432,9 @@ internal class SongRepositoryImpl(
                             )
                         }.onFailure {
                             Logger.e(TAG, "getContinueTrack -> Error: ${it.message}")
-                            emit(Pair(null, null))
+                            // See the sibling onFailure above: echo the continuation back so this
+                            // reads as a failed fetch, not a genuinely exhausted session.
+                            emit(Pair(null, continuation))
                         }
                 }
             }

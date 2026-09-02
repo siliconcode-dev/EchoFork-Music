@@ -516,18 +516,25 @@ internal class LocalPlaylistRepositoryImpl(
                 localDataSource.insertSong(song)
             }
             val localPlaylist = localDataSource.getLocalPlaylist(id) ?: return@flow
-            val nextPosition = localPlaylist.tracks?.size ?: 0
+            val existingTracks = localPlaylist.tracks ?: mutableListOf()
+            // localPlaylist.tracks is a cache that reorders (drag / move-to-top / move-to-bottom)
+            // don't keep in sync — only its size is reliable, not the order within it. The true
+            // current top song has to come from position order in the pair table instead.
+            val oldTopVideoId = localDataSource.getAllPlaylistPairSongByPosition(id).firstOrNull()?.songId
             val nextPair =
                 PairSongLocalPlaylist(
                     playlistId = id,
                     songId = song.videoId,
-                    position = nextPosition,
+                    position = 0,
                     inPlaylist = now(),
                 )
             runBlocking {
+                if (existingTracks.isNotEmpty()) {
+                    localDataSource.shiftPositionsForward(id, 0, existingTracks.size)
+                }
                 localDataSource.insertPairSongLocalPlaylist(nextPair)
                 localDataSource.updateLocalPlaylistTracks(
-                    localPlaylist.tracks?.plus(song.videoId) ?: mutableListOf(song.videoId),
+                    listOf(song.videoId) + existingTracks,
                     id,
                 )
             }
@@ -542,13 +549,32 @@ internal class LocalPlaylistRepositoryImpl(
                     .onSuccess {
                         val data = it.playlistEditResults
                         if (data.isNotEmpty()) {
+                            var newSetVideoId: String? = null
                             for (d in data) {
+                                if (d.playlistEditVideoAddedResultData.videoId == song.videoId) {
+                                    newSetVideoId = d.playlistEditVideoAddedResultData.setVideoId
+                                }
                                 localDataSource.insertSetVideoId(
                                     SetVideoIdEntity(
                                         d.playlistEditVideoAddedResultData.videoId,
                                         d.playlistEditVideoAddedResultData.setVideoId,
                                     ),
                                 )
+                            }
+                            // YouTube appends server-side; move the new item to the front there
+                            // too so the synced playlist doesn't drift from the local top-insert.
+                            if (newSetVideoId != null && oldTopVideoId != null) {
+                                val oldTopSetVideoId = localDataSource.getSetVideoId(oldTopVideoId)?.setVideoId
+                                if (oldTopSetVideoId != null) {
+                                    youTube
+                                        .movePlaylistItem(
+                                            playlistId = ytId,
+                                            setVideoId = newSetVideoId,
+                                            movedSetVideoIdSuccessor = oldTopSetVideoId,
+                                        ).onFailure { e ->
+                                            Logger.e(TAG, "addTrackToLocalPlaylist: move to top on YouTube failed: ${e.message}")
+                                        }
+                                }
                             }
                             emit(LocalResource.Success(updatedYtMessage))
                         } else {
@@ -922,19 +948,58 @@ internal class LocalPlaylistRepositoryImpl(
                 }
 
             // Step 2: Update local DB positions
-            val movedPosition = movedPair.position
-            val targetPosition = allPairs[toIndex].position
-
-            if (fromIndex < toIndex) {
-                // Moving down: shift items between (from, to] backward by 1
-                localDataSource.shiftPositionsBackward(playlistId, movedPosition, targetPosition)
-            } else {
-                // Moving up: shift items between [to, from) forward by 1
-                localDataSource.shiftPositionsForward(playlistId, targetPosition, movedPosition)
-            }
-            // Place the moved item at the target position
-            localDataSource.editPositionOfSongInPlaylist(playlistId, movedVideoId, targetPosition)
+            shiftLocalPlaylistPositions(playlistId, allPairs, fromIndex, toIndex)
 
             emit(LocalResource.Success("Position updated"))
         }.flowOn(Dispatchers.IO)
+
+    override fun moveItemInLocalPlaylist(
+        playlistId: Long,
+        fromIndex: Int,
+        toIndex: Int,
+    ): Flow<LocalResource<String>> =
+        flow {
+            if (fromIndex == toIndex) {
+                emit(LocalResource.Success("No change"))
+                return@flow
+            }
+            emit(LocalResource.Loading())
+
+            val allPairs = localDataSource.getAllPlaylistPairSongByPosition(playlistId)
+            if (fromIndex < 0 || toIndex < 0 || fromIndex >= allPairs.size || toIndex >= allPairs.size) {
+                emit(LocalResource.Error("Index out of bounds"))
+                return@flow
+            }
+
+            shiftLocalPlaylistPositions(playlistId, allPairs, fromIndex, toIndex)
+
+            emit(LocalResource.Success("Position updated"))
+        }.flowOn(Dispatchers.IO)
+
+    /**
+     * Shifts every song between [fromIndex] and [toIndex] in [allPairs] by one position and
+     * places the moved song at [toIndex]'s position — correct for any distance, not just
+     * adjacent swaps. Shared by [moveItemInSyncedPlaylist] (after its YouTube API call) and
+     * [moveItemInLocalPlaylist].
+     */
+    private suspend fun shiftLocalPlaylistPositions(
+        playlistId: Long,
+        allPairs: List<PairSongLocalPlaylist>,
+        fromIndex: Int,
+        toIndex: Int,
+    ) {
+        val movedPair = allPairs[fromIndex]
+        val movedPosition = movedPair.position
+        val targetPosition = allPairs[toIndex].position
+
+        if (fromIndex < toIndex) {
+            // Moving down: shift items between (from, to] backward by 1
+            localDataSource.shiftPositionsBackward(playlistId, movedPosition, targetPosition)
+        } else {
+            // Moving up: shift items between [to, from) forward by 1
+            localDataSource.shiftPositionsForward(playlistId, targetPosition, movedPosition)
+        }
+        // Place the moved item at the target position
+        localDataSource.editPositionOfSongInPlaylist(playlistId, movedPair.songId, targetPosition)
+    }
 }

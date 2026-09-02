@@ -75,6 +75,22 @@ interface LocalPlaylistRepository {
         toIndex: Int,
     ): Flow<LocalResource<String>>
 
+    /**
+     * Move a song within a local-only (not YouTube-synced) playlist. Same shifting semantics as
+     * [moveItemInSyncedPlaylist] minus the YouTube API call, so a jump between non-adjacent
+     * indexes (e.g. "move to top") shifts every song in between rather than swapping just the
+     * two endpoints.
+     * @param playlistId Local playlist ID
+     * @param fromIndex The current index of the item being moved (0-based, in CustomOrder)
+     * @param toIndex The target index to move the item to (0-based, in CustomOrder)
+     * @return Flow<LocalResource<String>> success/error message
+     */
+    fun moveItemInLocalPlaylist(
+        playlistId: Long,
+        fromIndex: Int,
+        toIndex: Int,
+    ): Flow<LocalResource<String>>
+
     fun downloadStateFlow(id: Long): Flow<Int>
 
     fun getAllDownloadingLocalPlaylists(): Flow<List<LocalPlaylistEntity>>

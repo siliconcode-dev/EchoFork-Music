@@ -279,6 +279,9 @@ fun LocalPlaylistScreen(
     var currentItem by remember {
         mutableStateOf<SongEntity?>(null)
     }
+    var currentItemPosition by remember {
+        mutableStateOf<Int?>(null)
+    }
 
     var itemBottomSheetShow by remember {
         mutableStateOf(false)
@@ -319,7 +322,9 @@ fun LocalPlaylistScreen(
         )
     }
     val onItemMoreClick: (videoId: String) -> Unit = { videoId ->
-        currentItem = trackPagingItems.itemSnapshotList.findLast { it?.first?.videoId == videoId }?.first
+        val pair = trackPagingItems.itemSnapshotList.findLast { it?.first?.videoId == videoId }
+        currentItem = pair?.first
+        currentItemPosition = pair?.second?.position
         if (currentItem != null) {
             itemBottomSheetShow = true
         }
@@ -1285,28 +1290,31 @@ fun LocalPlaylistScreen(
                                             )
                                         }
                                         Spacer(Modifier.weight(1f))
-                                        AnimatedVisibility(
-                                            visible =
-                                                uiState.filterState == FilterState.CustomOrder,
-                                            enter = fadeIn(),
-                                            exit = fadeOut(),
+                                        TextButton(
+                                            onClick = {
+                                                if (changingOrder) {
+                                                    changingOrder = false
+                                                } else {
+                                                    if (uiState.filterState != FilterState.CustomOrder) {
+                                                        viewModel.onUIEvent(
+                                                            LocalPlaylistUIEvent.ChangeFilter(FilterState.CustomOrder),
+                                                        )
+                                                        viewModel.makeToast("Switched to Custom order so you can reorder tracks")
+                                                    }
+                                                    changingOrder = true
+                                                }
+                                            },
                                         ) {
-                                            TextButton(
-                                                onClick = {
-                                                    changingOrder = !changingOrder
-                                                },
-                                            ) {
-                                                Text(
-                                                    text =
-                                                        if (changingOrder) {
-                                                            "Done"
-                                                        } else {
-                                                            "Change order"
-                                                        },
-                                                    style = typo().bodySmall,
-                                                    color = Color.White,
-                                                )
-                                            }
+                                            Text(
+                                                text =
+                                                    if (changingOrder) {
+                                                        "Done"
+                                                    } else {
+                                                        "Change order"
+                                                    },
+                                                style = typo().bodySmall,
+                                                color = Color.White,
+                                            )
                                         }
                                     }
                                 }
@@ -1400,14 +1408,26 @@ fun LocalPlaylistScreen(
     }
     if (itemBottomSheetShow && currentItem != null) {
         val track = currentItem ?: return
+        val position = currentItemPosition
         NowPlayingBottomSheet(
             onDelete = { viewModel.deleteItem(uiState.id, track) },
             onDismiss = {
                 itemBottomSheetShow = false
                 currentItem = null
+                currentItemPosition = null
             },
             navController = navController,
             song = track,
+            onMoveToTop = if (position != null) {
+                { viewModel.moveTrackToTop(position) }
+            } else {
+                null
+            },
+            onMoveToBottom = if (position != null) {
+                { viewModel.moveTrackToBottom(position) }
+            } else {
+                null
+            },
         )
     }
     if (playlistBottomSheetShow) {
