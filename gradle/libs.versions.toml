@@ -102,6 +102,7 @@ compose-windows-arm64 = { module = "org.jetbrains.compose.desktop:desktop-jvm-wi
 compose-windows-x64 = { module = "org.jetbrains.compose.desktop:desktop-jvm-windows-x64", version.ref = "composeMultiplatform" }
 constraintlayout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintlayout-compose" }
 foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
+animation = { module = "org.jetbrains.compose.animation:animation", version.ref = "composeMultiplatform" }
 components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
 runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
 ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "composeMultiplatform" }
