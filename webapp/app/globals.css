@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  /* Warm "paper" surfaces — light, not a dark SaaS look. */
+  --color-canvas: #fffaf5;
+  --color-surface-soft: #faf6ee;
+  --color-surface-card: #f5f0e6;
+  --color-surface-dark: #150b2e;
+  --color-ink: #0a0a0a;
+  --color-body: #3a3a3a;
+  --color-muted: #6a6a6a;
+  --color-hairline: #e5e0d5;
+
+  /* Brand violet — the single driving accent (replaces the reference site's
+     multi-hue pastel accent set). */
+  --color-accent: #6c3ce9;
+  --color-accent-strong: #5528c9;
+  --color-accent-subtle: #ede6fc;
+  --color-accent-tint: #f5f0fd;
+
+  /* Violet-tinted tonal family for feature cards, instead of six unrelated
+     pastel hues. */
+  --color-card-violet: #e6dbfb;
+  --color-card-lilac: #f0e3fb;
+  --color-card-periwinkle: #dde3fb;
+  --color-card-lavender-pink: #f5dcf0;
+  --color-card-soft-indigo: #e1d9f7;
+  --color-card-pale-violet: #ece3fc;
+
+  --radius-pill: 9999px;
+  --spacing-section: 96px;
+
+  --font-display: "Unbounded", sans-serif;
+  --font-sans: "Bricolage Grotesque", sans-serif;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
