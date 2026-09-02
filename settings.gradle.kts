@@ -66,6 +66,8 @@ include(
     ":kugou",
     ":unison",
     ":shazamkit",
+    ":canvas",
+    ":applecanvas",
 )
 
 // core modules
@@ -89,6 +91,8 @@ project(":paxsenixlyrics").projectDir = File(serviceDir, "paxsenixlyrics")
 project(":kugou").projectDir = File(serviceDir, "kugou")
 project(":unison").projectDir = File(serviceDir, "unison")
 project(":shazamkit").projectDir = File(serviceDir, "shazamkit")
+project(":canvas").projectDir = File(serviceDir, "canvas")
+project(":applecanvas").projectDir = File(serviceDir, "applecanvas")
 
 // media modules
 project(":media3").projectDir = File(mediaDir, "media3")
