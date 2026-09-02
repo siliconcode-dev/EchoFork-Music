@@ -61,6 +61,7 @@ include(
     ":artistvideo",
     ":youlyplus",
     ":simpmusic",
+    ":betterlyrics",
 )
 
 // core modules
@@ -79,6 +80,7 @@ project(":kizzy").projectDir = File(serviceDir, "kizzy")
 project(":artistvideo").projectDir = File(serviceDir, "artistvideo")
 project(":youlyplus").projectDir = File(serviceDir, "youlyplus")
 project(":simpmusic").projectDir = File(serviceDir, "simpmusic")
+project(":betterlyrics").projectDir = File(serviceDir, "betterlyrics")
 
 // media modules
 project(":media3").projectDir = File(mediaDir, "media3")
