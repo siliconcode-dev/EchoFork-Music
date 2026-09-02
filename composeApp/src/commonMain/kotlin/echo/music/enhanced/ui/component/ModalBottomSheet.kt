@@ -228,6 +228,8 @@ import echomusic.composeapp.generated.resources.main_lyrics_provider
 import echomusic.composeapp.generated.resources.merging_audio_and_video
 import echomusic.composeapp.generated.resources.mime_type
 import echomusic.composeapp.generated.resources.move_down
+import echomusic.composeapp.generated.resources.move_to_bottom
+import echomusic.composeapp.generated.resources.move_to_top
 import echomusic.composeapp.generated.resources.move_up
 import echomusic.composeapp.generated.resources.no_album
 import echomusic.composeapp.generated.resources.no_description
