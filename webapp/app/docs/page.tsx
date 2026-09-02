@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
+import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Docs",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 function CodeBlock({ children }: { children: string }) {
   return (
-    <pre className="mt-4 overflow-x-auto rounded-lg bg-surface-dark p-4 text-xs leading-relaxed text-white/90">
+    <pre className="mt-4 overflow-x-auto border-2 border-ink bg-ink p-4 font-mono text-xs leading-relaxed text-canvas">
       <code>{children}</code>
     </pre>
   );
@@ -17,20 +18,29 @@ function CodeBlock({ children }: { children: string }) {
 
 function Section({
   id,
+  index,
   title,
   children,
 }: {
   id: string;
+  index: string;
   title: string;
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="mt-14 scroll-mt-24">
-      <h2 className="font-display text-lg font-medium text-ink">{title}</h2>
-      <div className="mt-4 space-y-4 text-sm leading-relaxed text-body">
-        {children}
-      </div>
-    </section>
+    <Reveal>
+      <section id={id} className="mt-14 scroll-mt-24 border-t-2 border-ink pt-8">
+        <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
+          [ {index} ]
+        </p>
+        <h2 className="mt-2 font-display text-lg font-black uppercase text-ink">
+          {title}
+        </h2>
+        <div className="mt-4 space-y-4 text-sm leading-relaxed text-body">
+          {children}
+        </div>
+      </section>
+    </Reveal>
   );
 }
 
@@ -44,19 +54,19 @@ export default function DocsPage() {
       />
 
       <div className="mx-auto max-w-3xl px-6">
-        <nav className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 border-y border-hairline/60 py-4 text-sm text-muted">
-          <a href="#install" className="hover:text-ink">
+        <nav className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 border-b-2 border-ink pb-6 font-mono text-xs uppercase tracking-wide text-muted">
+          <a href="#install" className="hover:text-accent">
             Install &amp; update
           </a>
-          <a href="#source" className="hover:text-ink">
+          <a href="#source" className="hover:text-accent">
             Building from source
           </a>
-          <a href="#features" className="hover:text-ink">
+          <a href="#features" className="hover:text-accent">
             Feature deep-dives
           </a>
         </nav>
 
-        <Section id="install" title="Install & update">
+        <Section id="install" index="01 // SETUP" title="Install & update">
           <p>
             Enhanced Echo Music isn&apos;t on the Play Store — it&apos;s
             distributed as a signed APK directly from GitHub Releases.
@@ -68,12 +78,12 @@ export default function DocsPage() {
                 href="https://github.com/siliconcode-dev/EchoFork-Music/releases/latest"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-accent-strong hover:underline"
+                className="text-accent underline decoration-2 underline-offset-2"
               >
                 latest release
               </a>{" "}
               and download the APK for your device&apos;s architecture — pick{" "}
-              <code className="rounded bg-surface-card px-1.5 py-0.5">
+              <code className="border border-ink bg-surface px-1.5 py-0.5">
                 universal
               </code>{" "}
               if you&apos;re not sure which one you need.
@@ -93,7 +103,7 @@ export default function DocsPage() {
           </p>
         </Section>
 
-        <Section id="source" title="Building from source">
+        <Section id="source" index="02 // BUILD" title="Building from source">
           <p>Requirements: JDK 21, Android SDK 37 (min SDK 26).</p>
           <CodeBlock>
             {`git clone https://github.com/siliconcode-dev/EchoFork-Music.git
@@ -102,12 +112,12 @@ cd EchoFork-Music
           </CodeBlock>
           <p>
             The APK is written to{" "}
-            <code className="rounded bg-surface-card px-1.5 py-0.5">
+            <code className="border border-ink bg-surface px-1.5 py-0.5">
               androidApp/build/outputs/apk/debug/
             </code>
             . Optional Last.fm scrobbling needs your own API credentials in a
             gitignored{" "}
-            <code className="rounded bg-surface-card px-1.5 py-0.5">
+            <code className="border border-ink bg-surface px-1.5 py-0.5">
               local.properties
             </code>{" "}
             — the feature just disables itself at runtime if they&apos;re
@@ -115,9 +125,9 @@ cd EchoFork-Music
           </p>
         </Section>
 
-        <Section id="features" title="Feature deep-dives">
+        <Section id="features" index="03 // DEEP-DIVE" title="Feature deep-dives">
           <div>
-            <h3 className="font-display text-sm font-medium text-ink">
+            <h3 className="font-display text-sm font-bold uppercase text-ink">
               Spatial Audio (Beta)
             </h3>
             <p className="mt-1">
@@ -130,7 +140,7 @@ cd EchoFork-Music
             </p>
           </div>
           <div>
-            <h3 className="font-display text-sm font-medium text-ink">
+            <h3 className="font-display text-sm font-bold uppercase text-ink">
               Immersive Audio Passthrough (Beta)
             </h3>
             <p className="mt-1">
@@ -143,7 +153,7 @@ cd EchoFork-Music
             </p>
           </div>
           <div>
-            <h3 className="font-display text-sm font-medium text-ink">
+            <h3 className="font-display text-sm font-bold uppercase text-ink">
               True Motion (Beta)
             </h3>
             <p className="mt-1">

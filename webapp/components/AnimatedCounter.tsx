@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { animate } from "animejs";
 
 export default function AnimatedCounter({
   value,
   prefix = "",
   suffix = "",
-  durationMs = 1200,
+  durationMs = 1400,
 }: {
   value: number;
   prefix?: string;
@@ -21,30 +22,40 @@ export default function AnimatedCounter({
     const el = ref.current;
     if (!el) return;
 
+    const reveal = () => {
+      if (hasRun.current) return;
+      hasRun.current = true;
+
+      const counter = { value: 0 };
+      animate(counter, {
+        value,
+        round: 1,
+        duration: durationMs,
+        ease: "outExpo",
+        onUpdate: () => setDisplay(counter.value),
+      });
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting || hasRun.current) return;
-        hasRun.current = true;
-
-        const start = performance.now();
-        const tick = (now: number) => {
-          const progress = Math.min((now - start) / durationMs, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          setDisplay(Math.round(eased * value));
-          if (progress < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
+        if (!entry.isIntersecting) return;
+        reveal();
         observer.disconnect();
       },
-      { threshold: 0.4 },
+      { threshold: 0.4, rootMargin: "0px 0px 200px 0px" },
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
+    const fallback = window.setTimeout(reveal, 1200);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+    };
   }, [value, durationMs]);
 
   return (
-    <span ref={ref}>
+    <span ref={ref} className="font-mono tabular-nums">
       {prefix}
       {display.toLocaleString()}
       {suffix}

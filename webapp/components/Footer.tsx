@@ -3,19 +3,19 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-hairline/60 bg-surface-soft">
+    <footer className="bg-surface">
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex flex-col gap-10 sm:flex-row sm:justify-between">
           <div className="max-w-xs">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               <Image
                 src="/icon.png"
                 alt=""
                 width={28}
                 height={28}
-                className="rounded-lg"
+                className="border-2 border-ink"
               />
-              <span className="font-display text-sm font-medium text-ink">
+              <span className="font-display text-sm font-medium uppercase text-ink">
                 Enhanced Echo Music
               </span>
             </div>
@@ -25,7 +25,7 @@ export default function Footer() {
                 href="https://github.com/iad1tya/Echo-Music"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline decoration-hairline underline-offset-2 hover:text-ink"
+                className="underline decoration-2 underline-offset-2 hover:text-accent"
               >
                 Echo Music
               </a>
@@ -36,22 +36,22 @@ export default function Footer() {
 
           <div className="flex gap-16">
             <div>
-              <div className="font-display text-xs font-medium uppercase tracking-wide text-muted">
+              <div className="font-mono text-xs font-bold uppercase tracking-wide text-ink">
                 Site
               </div>
-              <ul className="mt-3 space-y-2 text-sm text-body">
+              <ul className="mt-3 space-y-2 font-mono text-xs uppercase text-body">
                 <li>
-                  <Link href="/docs" className="hover:text-ink">
+                  <Link href="/docs" className="hover:text-accent">
                     Docs
                   </Link>
                 </li>
                 <li>
-                  <Link href="/changelog" className="hover:text-ink">
+                  <Link href="/changelog" className="hover:text-accent">
                     Changelog
                   </Link>
                 </li>
                 <li>
-                  <Link href="/credits" className="hover:text-ink">
+                  <Link href="/credits" className="hover:text-accent">
                     Credits
                   </Link>
                 </li>
@@ -59,17 +59,17 @@ export default function Footer() {
             </div>
 
             <div>
-              <div className="font-display text-xs font-medium uppercase tracking-wide text-muted">
+              <div className="font-mono text-xs font-bold uppercase tracking-wide text-ink">
                 Legal
               </div>
-              <ul className="mt-3 space-y-2 text-sm text-body">
+              <ul className="mt-3 space-y-2 font-mono text-xs uppercase text-body">
                 <li>
-                  <Link href="/privacy" className="hover:text-ink">
+                  <Link href="/privacy" className="hover:text-accent">
                     Privacy Policy
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terms" className="hover:text-ink">
+                  <Link href="/terms" className="hover:text-accent">
                     Terms &amp; Conditions
                   </Link>
                 </li>
@@ -78,7 +78,7 @@ export default function Footer() {
                     href="https://github.com/siliconcode-dev/EchoFork-Music/issues"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-ink"
+                    className="hover:text-accent"
                   >
                     Report an issue
                   </a>
@@ -88,14 +88,14 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-2 border-t border-hairline/60 pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-2 border-t-2 border-ink pt-6 font-mono text-[11px] uppercase tracking-wide text-muted sm:flex-row sm:items-center sm:justify-between">
           <span>
             Licensed under{" "}
             <a
               href="https://github.com/siliconcode-dev/EchoFork-Music/blob/main/LICENSE"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline decoration-hairline underline-offset-2 hover:text-ink"
+              className="underline decoration-2 underline-offset-2 hover:text-accent"
             >
               GPL-3.0
             </a>

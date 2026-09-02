@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Unbounded } from "next/font/google";
+import { Bricolage_Grotesque, Unbounded, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Nav from "@/components/Nav";
@@ -13,6 +13,12 @@ const bricolage = Bricolage_Grotesque({
 
 const unbounded = Unbounded({
   variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["400", "500", "700", "900"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
   weight: ["400", "500", "700"],
 });
@@ -55,7 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${bricolage.variable} ${unbounded.variable} antialiased`}
+        className={`${bricolage.variable} ${unbounded.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <Nav />
         <main>{children}</main>

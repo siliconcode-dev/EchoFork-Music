@@ -1,4 +1,6 @@
+import { Download, Code2 } from "lucide-react";
 import PhoneMockup from "./PhoneMockup";
+import Reveal from "./Reveal";
 
 const DOWNLOAD_URL =
   "https://github.com/siliconcode-dev/EchoFork-Music/releases/latest";
@@ -6,18 +8,13 @@ const SOURCE_URL = "https://github.com/siliconcode-dev/EchoFork-Music";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 20%, rgba(108,60,233,0.16) 0%, rgba(108,60,233,0.05) 35%, transparent 60%)",
-        }}
-      />
-
-      <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-20 sm:py-28 lg:grid-cols-2 lg:items-center">
-        <div className="reveal text-center lg:text-left">
-          <h1 className="font-display text-4xl font-medium leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-6xl">
+    <section className="border-b-2 border-ink">
+      <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 sm:py-28 lg:grid-cols-2 lg:items-center">
+        <Reveal className="text-center lg:text-left">
+          <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
+            [ REV 0.1.1 // ANDROID 8.0+ ]
+          </p>
+          <h1 className="mt-4 font-display text-4xl font-black uppercase leading-[0.95] tracking-tight text-ink sm:text-5xl lg:text-6xl">
             Your music,
             <br />
             <span className="text-accent">rebuilt louder.</span>
@@ -34,28 +31,30 @@ export default function Hero() {
               href={DOWNLOAD_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="ripple w-full rounded-pill bg-accent px-7 py-3 text-center text-sm font-medium text-white shadow-lg shadow-accent/25 transition hover:bg-accent-strong sm:w-auto"
+              className="press hard-shadow flex w-full items-center justify-center gap-2 border-2 border-ink bg-accent px-7 py-3 font-mono text-sm font-bold uppercase tracking-wide text-accent-ink sm:w-auto"
             >
+              <Download size={16} strokeWidth={2.5} />
               Download APK
             </a>
             <a
               href={SOURCE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="ripple w-full rounded-pill border border-hairline bg-white/60 px-7 py-3 text-center text-sm font-medium text-ink transition hover:bg-white sm:w-auto"
+              className="press hard-shadow flex w-full items-center justify-center gap-2 border-2 border-ink bg-canvas px-7 py-3 font-mono text-sm font-bold uppercase tracking-wide text-ink sm:w-auto"
             >
-              View Source Code
+              <Code2 size={16} strokeWidth={2.5} />
+              Source Code
             </a>
           </div>
 
-          <p className="mt-4 text-xs text-muted">
-            Android 8.0+ · Sideloaded APK, not on the Play Store
+          <p className="mt-4 font-mono text-[11px] uppercase tracking-wide text-muted">
+            Sideloaded APK — not on the Play Store
           </p>
-        </div>
+        </Reveal>
 
-        <div className="reveal" style={{ animationDelay: "120ms" }}>
+        <Reveal delay={150}>
           <PhoneMockup />
-        </div>
+        </Reveal>
       </div>
     </section>
   );

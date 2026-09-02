@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { Plus, X } from "lucide-react";
+import Reveal from "./Reveal";
 
 const FAQ_ITEMS = [
   {
@@ -37,39 +39,48 @@ export default function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="mx-auto max-w-3xl px-6 py-section">
-      <h2 className="reveal text-center font-display text-2xl font-medium text-ink sm:text-3xl">
-        Straight answers
-      </h2>
+    <section className="border-b-2 border-ink">
+      <div className="mx-auto max-w-3xl px-6 py-section">
+        <Reveal className="text-center">
+          <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
+            [ 04 // FAQ ]
+          </p>
+          <h2 className="mt-3 font-display text-2xl font-black uppercase text-ink sm:text-3xl">
+            Straight answers
+          </h2>
+        </Reveal>
 
-      <div className="mt-10 divide-y divide-hairline/60 rounded-xl border border-hairline/60 bg-surface-card/40">
-        {FAQ_ITEMS.map((item, i) => {
-          const isOpen = openIndex === i;
-          return (
-            <div key={item.q}>
-              <button
-                type="button"
-                onClick={() => setOpenIndex(isOpen ? null : i)}
-                className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left"
-                aria-expanded={isOpen}
-              >
-                <span className="font-display text-sm font-medium text-ink">
-                  {item.q}
-                </span>
-                <span
-                  className={`shrink-0 text-accent transition-transform ${isOpen ? "rotate-45" : ""}`}
+        <Reveal className="mt-10 divide-y-2 divide-ink border-2 border-ink">
+          {FAQ_ITEMS.map((item, i) => {
+            const isOpen = openIndex === i;
+            return (
+              <div key={item.q}>
+                <button
+                  type="button"
+                  onClick={() => setOpenIndex(isOpen ? null : i)}
+                  className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left"
+                  aria-expanded={isOpen}
                 >
-                  +
-                </span>
-              </button>
-              {isOpen && (
-                <p className="px-6 pb-5 text-sm leading-relaxed text-body">
-                  {item.a}
-                </p>
-              )}
-            </div>
-          );
-        })}
+                  <span className="font-display text-sm font-bold uppercase text-ink">
+                    {item.q}
+                  </span>
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center border-2 border-ink bg-accent text-accent-ink">
+                    {isOpen ? (
+                      <X size={14} strokeWidth={3} />
+                    ) : (
+                      <Plus size={14} strokeWidth={3} />
+                    )}
+                  </span>
+                </button>
+                {isOpen && (
+                  <p className="px-6 pb-5 text-sm leading-relaxed text-body">
+                    {item.a}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </Reveal>
       </div>
     </section>
   );

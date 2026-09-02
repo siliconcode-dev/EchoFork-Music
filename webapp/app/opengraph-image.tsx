@@ -19,37 +19,50 @@ export default async function Image() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background:
-            "radial-gradient(circle at 50% 40%, #7c4bf0 0%, #4a1fb0 55%, #150b2e 100%)",
+          background: "#0a0a0a",
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={iconSrc}
-          width={160}
-          height={160}
-          style={{ borderRadius: 32 }}
-          alt=""
-        />
         <div
           style={{
-            marginTop: 36,
-            fontSize: 60,
-            fontWeight: 700,
-            color: "#ffffff",
-            letterSpacing: -1,
+            display: "flex",
+            border: "6px solid #6c3ce9",
+            padding: "56px 72px",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          Enhanced Echo Music
-        </div>
-        <div
-          style={{
-            marginTop: 14,
-            fontSize: 28,
-            color: "rgba(255,255,255,0.75)",
-          }}
-        >
-          Free, ad-free YouTube Music client for Android
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={iconSrc}
+            width={140}
+            height={140}
+            style={{ border: "4px solid #ffffff" }}
+            alt=""
+          />
+          <div
+            style={{
+              marginTop: 32,
+              fontSize: 58,
+              fontWeight: 700,
+              color: "#ffffff",
+              letterSpacing: -1,
+              textTransform: "uppercase",
+            }}
+          >
+            Enhanced Echo Music
+          </div>
+          <div
+            style={{
+              marginTop: 16,
+              fontSize: 24,
+              color: "#6c3ce9",
+              fontFamily: "monospace",
+              textTransform: "uppercase",
+              letterSpacing: 2,
+            }}
+          >
+            {"[ FREE // AD-FREE // OPEN SOURCE ]"}
+          </div>
         </div>
       </div>
     ),

@@ -1,73 +1,86 @@
-const CARD_COLORS = [
-  "bg-card-violet",
-  "bg-card-lilac",
-  "bg-card-periwinkle",
-  "bg-card-lavender-pink",
-  "bg-card-soft-indigo",
-  "bg-card-pale-violet",
-];
+import {
+  Headphones,
+  Volume2,
+  Gauge,
+  AudioWaveform,
+  Shuffle,
+  Music2,
+  Download,
+  Captions,
+  Car,
+  Sparkles,
+  Radio,
+  Unlock,
+  type LucideIcon,
+} from "lucide-react";
+import Reveal from "./Reveal";
 
-const FEATURES = [
+const FEATURES: {
+  icon: LucideIcon;
+  title: string;
+  tag?: string;
+  body: string;
+}[] = [
   {
-    icon: "🎧",
+    icon: Headphones,
     title: "Spatial Audio",
     tag: "Beta",
     body: "Virtualized surround sound via your device's spatializer, right from Audio settings.",
   },
   {
-    icon: "🔊",
+    icon: Volume2,
     title: "Immersive Audio Passthrough",
     tag: "Beta",
     body: "Detects your device's own Dolby engine and gets you straight to its settings.",
   },
   {
-    icon: "📈",
+    icon: Gauge,
     title: "True Motion",
     tag: "Beta",
     body: "Adaptive high refresh rate, matched to your display, with manual control.",
   },
   {
-    icon: "✨",
+    icon: AudioWaveform,
     title: "Wavy Expressive UI",
     body: "Player progress bars use Material 3's expressive wavy style.",
   },
   {
-    icon: "🔀",
+    icon: Shuffle,
     title: "Crossfade & Gapless",
     body: "Smooth, seamless transitions between tracks — no dead air.",
   },
   {
-    icon: "🎵",
+    icon: Music2,
     title: "High-Quality Streaming",
     body: "Up to 256kbps audio for supported accounts.",
   },
   {
-    icon: "⬇️",
+    icon: Download,
     title: "Download for Offline",
     body: "Keep your favorite tracks and playlists available with no signal.",
   },
   {
-    icon: "📝",
+    icon: Captions,
     title: "Synced Lyrics + Canvas",
     body: "Word-by-word lyrics, with Spotify Canvas visualizations support.",
   },
   {
-    icon: "🚗",
+    icon: Car,
     title: "Android Auto",
     body: "Full in-car integration for hands-free listening.",
   },
   {
-    icon: "🤖",
+    icon: Sparkles,
     title: "AI Song Suggestions",
     body: "Playback-aware recommendations and automated custom playlists.",
   },
   {
-    icon: "📻",
+    icon: Radio,
     title: "Last.fm Scrobbling",
     body: "Optional — bring your own API key to track your listening history.",
   },
   {
-    icon: "🔓",
+    icon: Unlock,
     title: "100% Free & Open Source",
     body: "GPL-3.0, no ads, no subscriptions, no monetization of any kind.",
   },
@@ -75,34 +88,45 @@ const FEATURES = [
 
 export default function Features() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-section">
-      <div className="reveal mx-auto max-w-lg text-center">
-        <h2 className="font-display text-2xl font-medium text-ink sm:text-3xl">
-          Everything you need, nothing you don&apos;t
-        </h2>
-      </div>
+    <section className="border-b-2 border-ink">
+      <div className="mx-auto max-w-6xl px-6 py-section">
+        <Reveal className="mx-auto max-w-lg text-center">
+          <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
+            [ 03 // CAPABILITIES ]
+          </p>
+          <h2 className="mt-3 font-display text-2xl font-black uppercase text-ink sm:text-3xl">
+            Everything you need, nothing you don&apos;t
+          </h2>
+        </Reveal>
 
-      <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {FEATURES.map((feature, i) => (
-          <div
-            key={feature.title}
-            className={`reveal rounded-xl p-6 ${CARD_COLORS[i % CARD_COLORS.length]}`}
-            style={{ animationDelay: `${(i % 6) * 60}ms` }}
-          >
-            <span className="text-2xl">{feature.icon}</span>
-            <h3 className="mt-3 flex items-center gap-2 font-display text-sm font-medium text-ink">
-              {feature.title}
-              {feature.tag && (
-                <span className="rounded-pill bg-white/60 px-2 py-0.5 text-[10px] font-medium text-accent-strong">
-                  {feature.tag}
-                </span>
-              )}
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed text-body">
-              {feature.body}
-            </p>
-          </div>
-        ))}
+        <Reveal
+          staggerChildren=".feature-card-content"
+          className="mt-12 grid grid-cols-1 gap-[2px] border-2 border-ink bg-ink sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {FEATURES.map((feature) => {
+            const Icon = feature.icon;
+            return (
+              <div key={feature.title} className="bg-canvas p-6">
+                <div className="feature-card-content">
+                  <div className="flex h-10 w-10 items-center justify-center border-2 border-ink bg-canvas">
+                    <Icon size={18} strokeWidth={2} className="text-accent" />
+                  </div>
+                  <h3 className="mt-4 flex flex-wrap items-center gap-2 font-display text-sm font-bold uppercase text-ink">
+                    {feature.title}
+                    {feature.tag && (
+                      <span className="border border-ink bg-accent px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase text-accent-ink">
+                        {feature.tag}
+                      </span>
+                    )}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-body">
+                    {feature.body}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </Reveal>
       </div>
     </section>
   );

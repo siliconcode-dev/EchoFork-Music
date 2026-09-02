@@ -1,37 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  /* Warm "paper" surfaces — light, not a dark SaaS look. */
-  --color-canvas: #fffaf5;
-  --color-surface-soft: #faf6ee;
-  --color-surface-card: #f5f0e6;
-  --color-surface-dark: #150b2e;
+  /* Swiss Industrial Print — matte, creamish paper substrate, carbon ink, one accent. */
+  --color-canvas: #f5efdf;
+  --color-surface: #ece2c8;
   --color-ink: #0a0a0a;
-  --color-body: #3a3a3a;
-  --color-muted: #6a6a6a;
-  --color-hairline: #e5e0d5;
+  --color-body: #1a1a1a;
+  --color-muted: #5c5c5c;
+  --color-border: #0a0a0a;
 
-  /* Brand violet — the single driving accent (replaces the reference site's
-     multi-hue pastel accent set). */
+  /* Brand violet — the single utilitarian accent. No gradients, no tints. */
   --color-accent: #6c3ce9;
-  --color-accent-strong: #5528c9;
-  --color-accent-subtle: #ede6fc;
-  --color-accent-tint: #f5f0fd;
+  --color-accent-ink: #ffffff;
 
-  /* Violet-tinted tonal family for feature cards, instead of six unrelated
-     pastel hues. */
-  --color-card-violet: #e6dbfb;
-  --color-card-lilac: #f0e3fb;
-  --color-card-periwinkle: #dde3fb;
-  --color-card-lavender-pink: #f5dcf0;
-  --color-card-soft-indigo: #e1d9f7;
-  --color-card-pale-violet: #ece3fc;
-
-  --radius-pill: 9999px;
   --spacing-section: 96px;
 
   --font-display: "Unbounded", sans-serif;
   --font-sans: "Bricolage Grotesque", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 body {
@@ -40,29 +26,35 @@ body {
   font-family: var(--font-sans);
 }
 
-@keyframes reveal {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Sharp corners everywhere, no exceptions. */
+* {
+  border-radius: 0 !important;
 }
 
-.reveal {
-  animation: reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+.hairline {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--color-ink) 0,
+    var(--color-ink) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  height: 2px;
 }
 
-@keyframes ripple {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
+.hard-shadow {
+  box-shadow: 5px 5px 0 0 var(--color-ink);
 }
 
-.ripple {
-  position: relative;
-  overflow: hidden;
+.hard-shadow-sm {
+  box-shadow: 3px 3px 0 0 var(--color-ink);
+}
+
+.press:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 0 var(--color-ink) !important;
+}
+
+.press {
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }

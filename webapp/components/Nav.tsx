@@ -1,34 +1,35 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Download } from "lucide-react";
 
 const DOWNLOAD_URL =
   "https://github.com/siliconcode-dev/EchoFork-Music/releases/latest";
 
 export default function Nav() {
   return (
-    <header className="sticky top-0 z-50 border-b border-hairline/60 bg-canvas/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b-2 border-ink bg-canvas">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2.5">
           <Image
             src="/icon.png"
             alt=""
             width={32}
             height={32}
-            className="rounded-lg"
+            className="border-2 border-ink"
           />
-          <span className="font-display text-sm font-medium tracking-tight text-ink">
+          <span className="font-display text-sm font-medium uppercase tracking-tight text-ink">
             Enhanced Echo Music
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 text-sm text-body sm:flex">
-          <Link href="/docs" className="transition hover:text-ink">
+        <nav className="hidden items-center gap-6 font-mono text-xs font-medium uppercase tracking-wide text-body sm:flex">
+          <Link href="/docs" className="transition hover:text-accent">
             Docs
           </Link>
-          <Link href="/changelog" className="transition hover:text-ink">
+          <Link href="/changelog" className="transition hover:text-accent">
             Changelog
           </Link>
-          <Link href="/credits" className="transition hover:text-ink">
+          <Link href="/credits" className="transition hover:text-accent">
             Credits
           </Link>
         </nav>
@@ -37,8 +38,9 @@ export default function Nav() {
           href={DOWNLOAD_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="ripple rounded-pill bg-accent px-5 py-2 text-sm font-medium text-white transition hover:bg-accent-strong"
+          className="press hard-shadow-sm flex items-center gap-1.5 border-2 border-ink bg-accent px-4 py-2 font-mono text-xs font-bold uppercase tracking-wide text-accent-ink"
         >
+          <Download size={14} strokeWidth={2.5} />
           Download
         </a>
       </div>

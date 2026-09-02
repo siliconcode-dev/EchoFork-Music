@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
+import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Credits",
@@ -34,138 +35,154 @@ export default function CreditsPage() {
       />
 
       <div className="mx-auto max-w-3xl px-6">
-        <section className="mt-12">
-          <h2 className="font-display text-lg font-medium text-ink">
-            Upstream projects
-          </h2>
-          <div className="mt-4 space-y-4">
-            <div className="rounded-xl border border-hairline/60 bg-surface-card/40 p-5">
-              <a
-                href="https://github.com/iad1tya/Echo-Music"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-display text-sm font-medium text-accent-strong hover:underline"
-              >
-                Echo Music
-              </a>
-              <p className="mt-1 text-sm text-muted">
-                by Aditya (
+        <Reveal>
+          <section className="mt-12 border-t-2 border-ink pt-8">
+            <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
+              [ 01 // UPSTREAM ]
+            </p>
+            <h2 className="mt-2 font-display text-lg font-black uppercase text-ink">
+              Upstream projects
+            </h2>
+            <div className="mt-4 grid gap-[2px] bg-ink sm:grid-cols-2">
+              <div className="border-2 border-ink bg-canvas p-5">
                 <a
-                  href="https://github.com/iad1tya"
+                  href="https://github.com/iad1tya/Echo-Music"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-ink"
+                  className="font-display text-sm font-bold uppercase text-accent underline decoration-2 underline-offset-2"
                 >
-                  @iad1tya
+                  Echo Music
                 </a>
-                )
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-body">
-                The direct upstream of this fork — Enhanced Echo Music started
-                as, and continues to build on, Aditya&apos;s work.
-              </p>
-            </div>
+                <p className="mt-1 font-mono text-xs uppercase text-muted">
+                  by Aditya (
+                  <a
+                    href="https://github.com/iad1tya"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-accent"
+                  >
+                    @iad1tya
+                  </a>
+                  )
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-body">
+                  The direct upstream of this fork — Enhanced Echo Music
+                  started as, and continues to build on, Aditya&apos;s work.
+                </p>
+              </div>
 
-            <div className="rounded-xl border border-hairline/60 bg-surface-card/40 p-5">
-              <a
-                href="https://github.com/maxrave-dev/SimpMusic"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-display text-sm font-medium text-accent-strong hover:underline"
-              >
-                SimpMusic
-              </a>
-              <p className="mt-1 text-sm text-muted">
-                by{" "}
+              <div className="border-2 border-ink bg-canvas p-5">
                 <a
-                  href="https://github.com/maxrave-dev"
+                  href="https://github.com/maxrave-dev/SimpMusic"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-ink"
+                  className="font-display text-sm font-bold uppercase text-accent underline decoration-2 underline-offset-2"
                 >
-                  maxrave-dev
+                  SimpMusic
                 </a>
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-body">
-                The foundation Echo Music itself builds on. Both projects are
-                GPL-3.0, and this fork continues under the same license.
-              </p>
+                <p className="mt-1 font-mono text-xs uppercase text-muted">
+                  by{" "}
+                  <a
+                    href="https://github.com/maxrave-dev"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-accent"
+                  >
+                    maxrave-dev
+                  </a>
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-body">
+                  The foundation Echo Music itself builds on. Both projects
+                  are GPL-3.0, and this fork continues under the same
+                  license.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <p className="mt-6 text-sm leading-relaxed text-body">
-            If you find this software valuable, please consider supporting
-            the <strong>upstream</strong> developers, who did the bulk of
-            this work — links are in{" "}
-            <a
-              href="https://github.com/siliconcode-dev/EchoFork-Music#acknowledgements"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent-strong hover:underline"
-            >
-              the repo&apos;s README
-            </a>
-            .
-          </p>
-        </section>
-
-        <section className="mt-14">
-          <h2 className="font-display text-lg font-medium text-ink">
-            Open-source libraries
-          </h2>
-          <p className="mt-2 text-sm text-muted">
-            The major libraries this app is built on. The app itself also
-            ships an in-app open-source license screen (via AboutLibraries)
-            with the complete list.
-          </p>
-          <ul className="mt-6 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
-            {LIBRARIES.map((lib) => (
-              <li
-                key={lib.name}
-                className="flex items-baseline justify-between gap-4 border-b border-hairline/60 pb-2 text-sm"
+            <p className="mt-6 text-sm leading-relaxed text-body">
+              If you find this software valuable, please consider supporting
+              the <strong>upstream</strong> developers, who did the bulk of
+              this work — links are in{" "}
+              <a
+                href="https://github.com/siliconcode-dev/EchoFork-Music#acknowledgements"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent underline decoration-2 underline-offset-2"
               >
-                <span className="font-medium text-ink">{lib.name}</span>
-                <span className="text-right text-muted">{lib.note}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+                the repo&apos;s README
+              </a>
+              .
+            </p>
+          </section>
+        </Reveal>
 
-        <section className="mt-14">
-          <h2 className="font-display text-lg font-medium text-ink">
-            Contributors
-          </h2>
-          <p className="mt-2 text-sm leading-relaxed text-body">
-            This fork is maintained by{" "}
-            <a
-              href="https://github.com/siliconcode-dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent-strong hover:underline"
-            >
-              siliconcode-dev
-            </a>
-            . Contributions are welcome — see the{" "}
-            <a
-              href="https://github.com/siliconcode-dev/EchoFork-Music/blob/main/CONTRIBUTING.md"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent-strong hover:underline"
-            >
-              contributing guide
-            </a>{" "}
-            to get started. The full, up-to-date contributor list lives on{" "}
-            <a
-              href="https://github.com/siliconcode-dev/EchoFork-Music/graphs/contributors"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-accent-strong hover:underline"
-            >
-              GitHub
-            </a>
-            .
-          </p>
-        </section>
+        <Reveal>
+          <section className="mt-14 border-t-2 border-ink pt-8">
+            <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
+              [ 02 // DEPENDENCIES ]
+            </p>
+            <h2 className="mt-2 font-display text-lg font-black uppercase text-ink">
+              Open-source libraries
+            </h2>
+            <p className="mt-2 text-sm text-muted">
+              The major libraries this app is built on. The app itself also
+              ships an in-app open-source license screen (via AboutLibraries)
+              with the complete list.
+            </p>
+            <ul className="mt-6 grid grid-cols-1 gap-x-8 gap-y-0 sm:grid-cols-2">
+              {LIBRARIES.map((lib) => (
+                <li
+                  key={lib.name}
+                  className="flex items-baseline justify-between gap-4 border-b border-ink/30 py-2.5 font-mono text-xs uppercase"
+                >
+                  <span className="font-bold text-ink">{lib.name}</span>
+                  <span className="text-right text-muted">{lib.note}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </Reveal>
+
+        <Reveal>
+          <section className="mt-14 border-t-2 border-ink pt-8">
+            <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
+              [ 03 // TEAM ]
+            </p>
+            <h2 className="mt-2 font-display text-lg font-black uppercase text-ink">
+              Contributors
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-body">
+              This fork is maintained by{" "}
+              <a
+                href="https://github.com/siliconcode-dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent underline decoration-2 underline-offset-2"
+              >
+                siliconcode-dev
+              </a>
+              . Contributions are welcome — see the{" "}
+              <a
+                href="https://github.com/siliconcode-dev/EchoFork-Music/blob/main/CONTRIBUTING.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent underline decoration-2 underline-offset-2"
+              >
+                contributing guide
+              </a>{" "}
+              to get started. The full, up-to-date contributor list lives on{" "}
+              <a
+                href="https://github.com/siliconcode-dev/EchoFork-Music/graphs/contributors"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent underline decoration-2 underline-offset-2"
+              >
+                GitHub
+              </a>
+              .
+            </p>
+          </section>
+        </Reveal>
       </div>
     </div>
   );
