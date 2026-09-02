@@ -4,7 +4,7 @@ We welcome contributions from the community. To ensure a smooth collaboration pr
 
 ## Code of Conduct
 
-Maintain a professional, respectful, and inclusive environment in all interactions within issues, pull requests, and discussions.
+Maintain a professional, respectful, and inclusive environment in all interactions within issues, pull requests, and discussions. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for the full policy.
 
 ## Development Workflow
 
@@ -29,3 +29,5 @@ Please make sure `assembleDebug` succeeds before opening a pull request.
 ## Issue Reporting
 
 Before submitting a new issue or feature request, please search the existing issues to prevent duplicates. When creating an issue, utilize the provided templates and supply as much technical detail as possible, including logs, device specifications, and steps to reproduce.
+
+Found a security vulnerability instead? Don't open a public issue — see [SECURITY.md](SECURITY.md) for how to report it privately.
