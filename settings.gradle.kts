@@ -68,6 +68,7 @@ include(
     ":shazamkit",
     ":canvas",
     ":applecanvas",
+    ":echomusiccanvas",
 )
 
 // core modules
@@ -93,6 +94,7 @@ project(":unison").projectDir = File(serviceDir, "unison")
 project(":shazamkit").projectDir = File(serviceDir, "shazamkit")
 project(":canvas").projectDir = File(serviceDir, "canvas")
 project(":applecanvas").projectDir = File(serviceDir, "applecanvas")
+project(":echomusiccanvas").projectDir = File(serviceDir, "echomusiccanvas")
 
 // media modules
 project(":media3").projectDir = File(mediaDir, "media3")
