@@ -120,7 +120,6 @@ import echomusic.composeapp.generated.resources.this_link_is_not_supported
 import echomusic.composeapp.generated.resources.unknown
 import echomusic.composeapp.generated.resources.update_available
 import echomusic.composeapp.generated.resources.update_message
-import echomusic.composeapp.generated.resources.version_format
 import echomusic.composeapp.generated.resources.yes
 import kotlin.time.ExperimentalTime
 
@@ -314,7 +313,7 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
     LaunchedEffect(updateData) {
         val response = updateData ?: return@LaunchedEffect
         if (viewModel.showedUpdateDialog &&
-            response.tagName != getString(Res.string.version_format, VersionManager.getVersionName())
+            VersionManager.isRemoteVersionNewer(response.tagName)
         ) {
             shouldShowUpdateDialog = true
         }

@@ -2,6 +2,11 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.3] — 2026-09-02
+
+### Fixed
+- The "update available" dialog no longer offers an older release (e.g. v0.1.1) as if it were new. It previously flagged any release whose tag simply *differed* from the installed version; it now does a real newer-version comparison.
+
 ## [0.1.2] — 2026-09-02
 
 ### Fixed
