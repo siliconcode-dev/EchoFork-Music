@@ -2,6 +2,13 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.2] — 2026-09-02
+
+### Fixed
+- Adding a song to a playlist now inserts it at the top instead of always appending it to the bottom (synced YouTube playlists are kept in sync too).
+- Playlist reordering: "Change order" no longer requires switching to Custom Order sort first; fixed a bug where dragging a song a long distance in an unsynced playlist could corrupt the list order; added "Move to top" / "Move to bottom" to each song's menu as a precise, non-drag option.
+- Endless-queue radio no longer discards your listening session on a transient network hiccup, and now reseeds from your last few played tracks instead of only the very last one, so it's less likely to repeat a song you just heard.
+
 ## [0.1.1] — 2026-09-01
 
 ### Added
