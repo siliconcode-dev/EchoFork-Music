@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Download } from "lucide-react";
 
 const DOWNLOAD_URL =
-  "https://github.com/siliconcode-dev/EchoFork-Music/releases/latest";
+  "https://github.com/siliconcode-dev/EchoFork-Music/releases/latest/download/androidApp-universal-release.apk";
 
 export default function Nav() {
   return (

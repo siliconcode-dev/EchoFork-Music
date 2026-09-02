@@ -3,7 +3,7 @@ import PhoneMockup from "./PhoneMockup";
 import Reveal from "./Reveal";
 
 const DOWNLOAD_URL =
-  "https://github.com/siliconcode-dev/EchoFork-Music/releases/latest";
+  "https://github.com/siliconcode-dev/EchoFork-Music/releases/latest/download/androidApp-universal-release.apk";
 const SOURCE_URL = "https://github.com/siliconcode-dev/EchoFork-Music";
 
 export default function Hero() {
