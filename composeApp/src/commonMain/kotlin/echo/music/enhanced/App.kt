@@ -70,7 +70,6 @@ import echo.music.enhanced.expect.ui.layerBackdrop
 import echo.music.enhanced.expect.ui.rememberBackdrop
 import echo.music.enhanced.extension.copy
 import echo.music.enhanced.ui.component.AppBottomNavigationBar
-import echo.music.enhanced.ui.component.AppFloatingNavBar
 import echo.music.enhanced.ui.component.AppNavigationRail
 import echo.music.enhanced.ui.component.FloatingNavigationToolbar
 import echo.music.enhanced.ui.component.LiquidGlassAppBottomNavigationBar
@@ -143,8 +142,6 @@ fun App(viewModel: SharedViewModel = koinInject()) {
 
     val interfaceMode by viewModel.getInterfaceMode().collectAsStateWithLifecycle(DataStoreManager.INTERFACE_BETTER_ECHO)
     val isLiquidGlassEnabled = if (interfaceMode == DataStoreManager.INTERFACE_LIQUID_GLASS) TRUE else DataStoreManager.FALSE
-    val betterEchoNavStyle by
-        viewModel.getBetterEchoNavStyle().collectAsStateWithLifecycle(DataStoreManager.BETTER_ECHO_NAV_STYLE_FLOATING_TOOLBAR)
     val controllerState by viewModel.controllerState.collectAsStateWithLifecycle()
     val trueMotionEnabled by viewModel.getTrueMotionEnabled().collectAsStateWithLifecycle(DataStoreManager.FALSE)
     val trueMotionTargetHz by viewModel.getTrueMotionTargetHz().collectAsStateWithLifecycle(0)
@@ -417,25 +414,20 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
                                     viewModel.reloadDestination(klass)
                                 }
                             } else if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
-                                if (betterEchoNavStyle == DataStoreManager.BETTER_ECHO_NAV_STYLE_IOS_PILL) {
-                                    AppFloatingNavBar(
-                                        navController = navController,
-                                        showAnalyticsTab = showAnalyticsTab,
-                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                                    ) { klass ->
-                                        viewModel.reloadDestination(klass)
-                                    }
-                                } else {
-                                    FloatingNavigationToolbar(
-                                        navController = navController,
-                                        showAnalyticsTab = showAnalyticsTab,
-                                        shuffleEnabled = controllerState.isShuffle,
-                                        onShuffleClick = { viewModel.onUIEvent(UIEvent.Shuffle) },
-                                        onAiHubClick = { navController.navigate(SettingsDestination) },
-                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                                    ) { klass ->
-                                        viewModel.reloadDestination(klass)
-                                    }
+                                // v0.1.11.1 hotfix: AppFloatingNavBar (io.github.elyesmansour:floatingTabBar)
+                                // throws NoSuchMethodError on SharedTransitionScope.sharedElement$default on
+                                // real devices (confirmed crash reports). Forced onto FloatingNavigationToolbar
+                                // regardless of the saved betterEchoNavStyle preference until the library's
+                                // compose-animation version conflict is root-caused.
+                                FloatingNavigationToolbar(
+                                    navController = navController,
+                                    showAnalyticsTab = showAnalyticsTab,
+                                    shuffleEnabled = controllerState.isShuffle,
+                                    onShuffleClick = { viewModel.onUIEvent(UIEvent.Shuffle) },
+                                    onAiHubClick = { navController.navigate(SettingsDestination) },
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                                ) { klass ->
+                                    viewModel.reloadDestination(klass)
                                 }
                             } else {
                                 Box(

@@ -2,6 +2,12 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.11.1] — 2026-09-03
+
+### Fixed
+- **Crash on launch (Better Echo)**: the default floating nav bar could crash with "Asking for measurement result of unmeasured layout modifier" on some devices — an incompatible use of intrinsic sizing under the sliding-selection-pill background. Fixed.
+- **Crash when switching to the "iOS 26 style" nav** (or on every subsequent launch, for anyone who had already switched to it): threw `NoSuchMethodError` on `SharedTransitionScope.sharedElement`, caused by a version conflict in the third-party pill-nav library. That nav style is temporarily disabled (forced back to the default floating toolbar, regardless of your saved setting) until the underlying library conflict is resolved.
+
 ## [0.1.11] — 2026-09-03
 
 ### Added
