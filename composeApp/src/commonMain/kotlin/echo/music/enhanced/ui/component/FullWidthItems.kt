@@ -119,6 +119,9 @@ fun SongFullWidthItems(
     modifier: Modifier,
     rightView: @Composable (() -> Unit)? = null,
     forceDark: Boolean = LocalForceDarkText.current,
+    isSelectionMode: Boolean = false,
+    isSelected: Boolean = false,
+    onSelectToggle: (() -> Unit)? = null,
 ) {
     val contentColor = if (forceDark) Color.White else MaterialTheme.colorScheme.onSurface
     val subtitleColor = if (forceDark) Color(0xC4FFFFFF) else MaterialTheme.colorScheme.onSurfaceVariant
@@ -168,10 +171,14 @@ fun SongFullWidthItems(
                 modifier
                     .offset { IntOffset(offsetX.value.roundToInt(), 0) }
                     .clickable {
-                        onClickListener?.invoke(track?.videoId ?: songEntity?.videoId ?: "")
+                        if (isSelectionMode) {
+                            onSelectToggle?.invoke()
+                        } else {
+                            onClickListener?.invoke(track?.videoId ?: songEntity?.videoId ?: "")
+                        }
                     }.animateContentSize()
                     .pointerInput(Unit) {
-                        if (!isPlaying && onAddToQueue != null) {
+                        if (!isPlaying && onAddToQueue != null && !isSelectionMode) {
                             detectHorizontalDragGestures(
                                 onHorizontalDrag = { change, dragAmount ->
                                     if (offsetX.value + dragAmount > 0) {
@@ -208,6 +215,9 @@ fun SongFullWidthItems(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Spacer(modifier = Modifier.width(8.dp))
+                if (isSelectionMode) {
+                    androidx.compose.material3.Checkbox(checked = isSelected, onCheckedChange = { onSelectToggle?.invoke() })
+                }
                 Box(
                     modifier = Modifier.size(48.dp),
                     contentAlignment = Alignment.Center,

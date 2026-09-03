@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import echo.music.enhanced.ui.navigation.destination.home.AboutDestination
 import echo.music.enhanced.ui.navigation.destination.home.MoodDestination
 import echo.music.enhanced.ui.navigation.destination.home.RecentlySongsDestination
 import echo.music.enhanced.ui.navigation.destination.home.SettingsDestination
@@ -39,6 +40,12 @@ fun NavGraphBuilder.homeScreenGraph(
     }
     composable<echo.music.enhanced.ui.navigation.destination.home.EqualizerDestination> {
         echo.music.enhanced.ui.screen.home.EqualizerScreen(
+            navController = navController,
+            innerPadding = innerPadding,
+        )
+    }
+    composable<AboutDestination> {
+        echo.music.enhanced.ui.screen.home.AboutScreen(
             navController = navController,
             innerPadding = innerPadding,
         )

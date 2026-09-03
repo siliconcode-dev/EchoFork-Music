@@ -357,6 +357,7 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
         themeMode = themeMode,
         themeColorSource = themeColorSource,
         customThemeColor = parseThemeColorHex(customThemeColorHex),
+        interfaceMode = interfaceMode,
     ) {
         // Backdrop base must match the theme: white page → white glass, dark/AMOLED → black glass.
         // Read inside AppTheme so MaterialTheme reflects the resolved scheme (light background is #FFFFFF).

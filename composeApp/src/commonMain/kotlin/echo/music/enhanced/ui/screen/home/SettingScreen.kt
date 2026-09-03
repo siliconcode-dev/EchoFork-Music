@@ -127,8 +127,13 @@ import echo.music.enhanced.ui.component.ActionButton
 import echo.music.enhanced.ui.component.CenterLoadingBox
 import echo.music.enhanced.ui.component.EndOfPage
 import echo.music.enhanced.ui.component.LoadingDialog
+import echo.music.enhanced.expect.ui.layerBackdrop
+import echo.music.enhanced.expect.ui.rememberBackdrop
 import echo.music.enhanced.ui.component.RippleIconButton
+import echo.music.enhanced.ui.component.RowGroupCard
 import echo.music.enhanced.ui.component.SettingItem
+import echo.music.enhanced.ui.component.ThirdPartyLibrariesSheet
+import echo.music.enhanced.ui.component.liquidGlass
 import echo.music.enhanced.ui.icon.ArrowBackIosNew
 import echo.music.enhanced.ui.icon.Close
 import echo.music.enhanced.ui.icon.Error
@@ -136,6 +141,7 @@ import echo.music.enhanced.ui.icon.PeopleAlt
 import echo.music.enhanced.ui.icon.PlaylistAdd
 import echo.music.enhanced.ui.icon.*
 import echo.music.enhanced.ui.icon.echoIcons
+import echo.music.enhanced.ui.navigation.destination.home.AboutDestination
 import echo.music.enhanced.ui.navigation.destination.login.DiscordLoginDestination
 import echo.music.enhanced.ui.navigation.destination.login.LastfmLoginDestination
 import echo.music.enhanced.ui.navigation.destination.login.LoginDestination
@@ -194,6 +200,8 @@ import echomusic.composeapp.generated.resources.auto_backup
 import echomusic.composeapp.generated.resources.auto_backup_description
 import echomusic.composeapp.generated.resources.auto_check_for_update
 import echomusic.composeapp.generated.resources.auto_check_for_update_description
+import echomusic.composeapp.generated.resources.about_enhanced_echo_music
+import echomusic.composeapp.generated.resources.about_enhanced_echo_music_description
 import echomusic.composeapp.generated.resources.based_on
 import echomusic.composeapp.generated.resources.based_on_description
 import echomusic.composeapp.generated.resources.whats_coming_next
@@ -624,11 +632,23 @@ fun SettingScreen(
         viewModel.getThumbCacheSize(platformContext)
     }
 
+    // Liquid Glass: Settings' own local backdrop, same self-contained rememberBackdrop/
+    // layerBackdrop recipe already proven on Artist/Album/Playlist/Now Playing — the scrolling
+    // content is the backdrop SOURCE, and the fixed TopAppBar below (a sibling, not nested inside
+    // it) samples it as glass, mirroring the working nav-bar/content relationship in App.kt.
+    val settingsBackdrop = rememberBackdrop(MaterialTheme.colorScheme.background)
     LazyColumn(
         contentPadding = innerPadding,
         modifier =
             Modifier
-                .hazeSource(hazeState),
+                .hazeSource(hazeState)
+                .then(
+                    if (interfaceMode == DataStoreManager.INTERFACE_LIQUID_GLASS) {
+                        Modifier.layerBackdrop(settingsBackdrop)
+                    } else {
+                        Modifier
+                    },
+                ),
     ) {
         item {
             Spacer(Modifier.height(64.dp))
@@ -2377,61 +2397,71 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
-                val aboutItems: @Composable () -> Unit = {
-                    SettingItem(
-                        title = stringResource(Res.string.version),
-                        subtitle = stringResource(Res.string.version_format, VersionManager.getVersionName()),
-                    )
-                    SettingItem(
-                        title = stringResource(Res.string.auto_check_for_update),
-                        subtitle = stringResource(Res.string.auto_check_for_update_description),
-                        switch = (autoCheckUpdate to { viewModel.setAutoCheckUpdate(it) }),
-                    )
-                    SettingItem(
-                        title = stringResource(Res.string.check_for_update),
-                        subtitle = checkForUpdateSubtitle,
-                        onClick = {
-                            sharedViewModel.checkForUpdate()
-                        },
-                    )
-                    if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
-                        SettingItem(
-                            title = stringResource(Res.string.whats_coming_next),
-                            subtitle = stringResource(Res.string.whats_coming_next_description),
-                            onClick = {
-                                uriHandler.openUri("https://github.com/siliconcode-dev/EchoFork-Music/milestones")
-                            },
-                        )
+                val aboutItems =
+                    buildList<@Composable () -> Unit> {
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.version),
+                                subtitle = stringResource(Res.string.version_format, VersionManager.getVersionName()),
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.auto_check_for_update),
+                                subtitle = stringResource(Res.string.auto_check_for_update_description),
+                                switch = (autoCheckUpdate to { viewModel.setAutoCheckUpdate(it) }),
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.check_for_update),
+                                subtitle = checkForUpdateSubtitle,
+                                onClick = {
+                                    sharedViewModel.checkForUpdate()
+                                },
+                            )
+                        }
+                        if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.whats_coming_next),
+                                    subtitle = stringResource(Res.string.whats_coming_next_description),
+                                    onClick = {
+                                        uriHandler.openUri("https://github.com/siliconcode-dev/EchoFork-Music/milestones")
+                                    },
+                                )
+                            }
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.about_enhanced_echo_music),
+                                    subtitle = stringResource(Res.string.about_enhanced_echo_music_description),
+                                    onClick = {
+                                        navController.navigate(AboutDestination)
+                                    },
+                                )
+                            }
+                        } else {
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.based_on),
+                                    subtitle = stringResource(Res.string.based_on_description),
+                                    onClick = {
+                                        uriHandler.openUri("https://github.com/iad1tya/Echo-Music")
+                                    },
+                                )
+                            }
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.third_party_libraries),
+                                subtitle = stringResource(Res.string.description_and_licenses),
+                                onClick = {
+                                    showThirdPartyLibraries = true
+                                },
+                            )
+                        }
                     }
-                    SettingItem(
-                        title = stringResource(Res.string.based_on),
-                        subtitle = stringResource(Res.string.based_on_description),
-                        onClick = {
-                            uriHandler.openUri("https://github.com/iad1tya/Echo-Music")
-                        },
-                    )
-
-                    SettingItem(
-                        title = stringResource(Res.string.third_party_libraries),
-                        subtitle = stringResource(Res.string.description_and_licenses),
-                        onClick = {
-                            showThirdPartyLibraries = true
-                        },
-                    )
-                }
-                // Better Echo: groups About into a single card (adapted from upstream's
-                // Material3SettingsGroup-style About redesign) instead of a flat item list.
-                if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
-                    Card(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-                    ) {
-                        Column { aboutItems() }
-                    }
-                } else {
-                    aboutItems()
-                }
+                RowGroupCard(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = aboutItems)
             }
         }
         item(key = "end") {
@@ -2915,96 +2945,7 @@ fun SettingScreen(
     }
 
     if (showThirdPartyLibraries) {
-        val libraries by produceLibraries {
-            Res.readBytes("files/aboutlibraries.json").decodeToString()
-        }
-        val lazyListState = rememberLazyListState()
-        val canScrollBackward by remember {
-            derivedStateOf {
-                lazyListState.canScrollBackward
-            }
-        }
-        val sheetState =
-            rememberModalBottomSheetState(
-                skipPartiallyExpanded = true,
-                confirmValueChange = {
-                    !canScrollBackward
-                },
-            )
-        val coroutineScope = rememberCoroutineScope()
-        ModalBottomSheet(
-            modifier =
-                Modifier
-                    .fillMaxHeight(),
-            onDismissRequest = {
-                showThirdPartyLibraries = false
-            },
-            containerColor = MaterialTheme.colorScheme.surface,
-            dragHandle = {},
-            scrimColor = Color.Black.copy(alpha = .5f),
-            sheetState = sheetState,
-            contentWindowInsets = { WindowInsets(0, 0, 0, 0) },
-            shape = RectangleShape,
-        ) {
-            // Capture theme colors here: the ChipColors getters below run outside composition.
-            val surfaceContainerHighestColor = MaterialTheme.colorScheme.surfaceContainerHighest
-            val onSurfaceColor = MaterialTheme.colorScheme.onSurface
-            LibrariesContainer(
-                libraries?.copy(
-                    libraries =
-                        libraries
-                            ?.libraries
-                            ?.distinctBy {
-                                it.name
-                            }?.toImmutableList() ?: emptyList<Library>().toImmutableList(),
-                ),
-                Modifier.fillMaxSize(),
-                lazyListState = lazyListState,
-                contentPadding = innerPadding,
-                colors =
-                    LibraryDefaults.libraryColors(
-                        licenseChipColors =
-                            object : ChipColors {
-                                override val containerColor: Color
-                                    get() = surfaceContainerHighestColor
-                                override val contentColor: Color
-                                    get() = onSurfaceColor
-                            },
-                    ),
-                header = {
-                    item {
-                        TopAppBar(
-                            windowInsets = WindowInsets(0, 0, 0, 0),
-                            title = {
-                                Text(
-                                    text =
-                                        stringResource(
-                                            Res.string.third_party_libraries,
-                                        ),
-                                    style = typo().titleMedium,
-                                )
-                            },
-                            navigationIcon = {
-                                Box(Modifier.padding(horizontal = 5.dp)) {
-                                    RippleIconButton(
-                                        echoIcons.ArrowBackIosNew,
-                                        Modifier
-                                            .size(32.dp),
-                                        true,
-                                        tint = MaterialTheme.colorScheme.onSurface,
-                                    ) {
-                                        coroutineScope.launch {
-                                            sheetState.hide()
-                                            showThirdPartyLibraries = false
-                                        }
-                                    }
-                                }
-                            },
-                        )
-                    }
-                },
-            )
-        }
+        ThirdPartyLibrariesSheet(innerPadding = innerPadding, onDismiss = { showThirdPartyLibraries = false })
     }
 
     TopAppBar(
@@ -3031,10 +2972,13 @@ fun SettingScreen(
             }
         },
         modifier =
-            Modifier
-                .hazeEffect(hazeState, style = HazeMaterials.ultraThin()) {
+            if (interfaceMode == DataStoreManager.INTERFACE_LIQUID_GLASS) {
+                Modifier.liquidGlass(settingsBackdrop, shape = androidx.compose.ui.graphics.RectangleShape, interactive = false)
+            } else {
+                Modifier.hazeEffect(hazeState, style = HazeMaterials.ultraThin()) {
                     blurEnabled = true
-                },
+                }
+            },
         colors =
             TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,

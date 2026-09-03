@@ -2,6 +2,17 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.8] — 2026-09-03
+
+### Added
+- Better Echo now has a real, consistent visual identity instead of just the Library FAB and About card from v0.1.7: a "squircle stack" row-group shape language (pulled directly from upstream's own settings-list component) applied across Settings and Library, a softer rounded lyrics panel on Now Playing, a new floating rounded nav bar, and a larger corner-radius theme token that softens buttons and small M3 components app-wide.
+- A dedicated "About Enhanced Echo Music" screen in Better Echo mode: a scalloped Material 3 Expressive badge header, a wavy divider, developer credits, and a "Community & Info" card (repository, license, third-party libraries).
+- Multi-select in playlist detail screens (Better Echo mode): a "Select" button lets you pick multiple songs and remove them in one action, across both local and synced YouTube playlists.
+- Liquid Glass now also renders on the Settings screen's top bar, alongside its existing coverage (nav bar, mini-player, Artist/Album/Playlist, Now Playing).
+
+### Changed
+- The "What's New" dialog is updated again for this release (Better Echo's new look, multi-select, the About screen, Liquid Glass on Settings).
+
 ## [0.1.7] — 2026-09-03
 
 ### Added

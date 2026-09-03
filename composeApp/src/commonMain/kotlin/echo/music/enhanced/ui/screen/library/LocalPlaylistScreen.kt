@@ -216,6 +216,12 @@ fun LocalPlaylistScreen(
     }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val interfaceMode by sharedViewModel.getInterfaceMode().collectAsStateWithLifecycle(echo.music.enhanced.domain.manager.DataStoreManager.INTERFACE_BETTER_ECHO)
+    var isSelectionMode by remember { mutableStateOf(false) }
+    var selectedVideoIds by remember { mutableStateOf(setOf<String>()) }
+    LaunchedEffect(isSelectionMode) {
+        if (!isSelectionMode) selectedVideoIds = emptySet()
+    }
 
     val aiPainter = rememberVectorPainter(echoIcons.TipsAndUpdates)
     val limit = 1.5f
@@ -1290,31 +1296,69 @@ fun LocalPlaylistScreen(
                                             )
                                         }
                                         Spacer(Modifier.weight(1f))
-                                        TextButton(
-                                            onClick = {
-                                                if (changingOrder) {
-                                                    changingOrder = false
-                                                } else {
-                                                    if (uiState.filterState != FilterState.CustomOrder) {
-                                                        viewModel.onUIEvent(
-                                                            LocalPlaylistUIEvent.ChangeFilter(FilterState.CustomOrder),
-                                                        )
-                                                        viewModel.makeToast("Switched to Custom order so you can reorder tracks")
+                                        // Better Echo: multi-select entry — a dedicated button rather than long-press,
+                                        // since long-press on a row is already the drag-to-reorder gesture here.
+                                        if (interfaceMode == echo.music.enhanced.domain.manager.DataStoreManager.INTERFACE_BETTER_ECHO && !changingOrder) {
+                                            TextButton(onClick = { isSelectionMode = !isSelectionMode }) {
+                                                Text(
+                                                    text = if (isSelectionMode) "Cancel" else "Select",
+                                                    style = typo().bodySmall,
+                                                    color = Color.White,
+                                                )
+                                            }
+                                        }
+                                        if (!isSelectionMode) {
+                                            TextButton(
+                                                onClick = {
+                                                    if (changingOrder) {
+                                                        changingOrder = false
+                                                    } else {
+                                                        if (uiState.filterState != FilterState.CustomOrder) {
+                                                            viewModel.onUIEvent(
+                                                                LocalPlaylistUIEvent.ChangeFilter(FilterState.CustomOrder),
+                                                            )
+                                                            viewModel.makeToast("Switched to Custom order so you can reorder tracks")
+                                                        }
+                                                        changingOrder = true
                                                     }
-                                                    changingOrder = true
-                                                }
-                                            },
+                                                },
+                                            ) {
+                                                Text(
+                                                    text =
+                                                        if (changingOrder) {
+                                                            "Done"
+                                                        } else {
+                                                            "Change order"
+                                                        },
+                                                    style = typo().bodySmall,
+                                                    color = Color.White,
+                                                )
+                                            }
+                                        }
+                                    }
+                                    if (isSelectionMode) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
                                         ) {
                                             Text(
-                                                text =
-                                                    if (changingOrder) {
-                                                        "Done"
-                                                    } else {
-                                                        "Change order"
-                                                    },
+                                                text = "${selectedVideoIds.size} selected",
                                                 style = typo().bodySmall,
                                                 color = Color.White,
                                             )
+                                            Spacer(Modifier.weight(1f))
+                                            TextButton(
+                                                enabled = selectedVideoIds.isNotEmpty(),
+                                                onClick = {
+                                                    trackPagingItems.itemSnapshotList
+                                                        .mapNotNull { it?.first }
+                                                        .filter { it.videoId in selectedVideoIds }
+                                                        .forEach { song -> viewModel.deleteItem(id, song) }
+                                                    isSelectionMode = false
+                                                },
+                                            ) {
+                                                Text(text = "Remove", style = typo().bodySmall, color = Color.White)
+                                            }
                                         }
                                     }
                                 }
@@ -1348,6 +1392,16 @@ fun LocalPlaylistScreen(
                                 )
                             },
                             modifier = mod,
+                            isSelectionMode = isSelectionMode,
+                            isSelected = item.videoId in selectedVideoIds,
+                            onSelectToggle = {
+                                selectedVideoIds =
+                                    if (item.videoId in selectedVideoIds) {
+                                        selectedVideoIds - item.videoId
+                                    } else {
+                                        selectedVideoIds + item.videoId
+                                    }
+                            },
                         )
                     } else {
                         SongFullWidthItems(
@@ -1366,6 +1420,16 @@ fun LocalPlaylistScreen(
                                 )
                             },
                             modifier = mod,
+                            isSelectionMode = isSelectionMode,
+                            isSelected = item.videoId in selectedVideoIds,
+                            onSelectToggle = {
+                                selectedVideoIds =
+                                    if (item.videoId in selectedVideoIds) {
+                                        selectedVideoIds - item.videoId
+                                    } else {
+                                        selectedVideoIds + item.videoId
+                                    }
+                            },
                         )
                     }
                 }

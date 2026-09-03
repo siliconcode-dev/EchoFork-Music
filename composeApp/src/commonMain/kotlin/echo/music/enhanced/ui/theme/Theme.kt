@@ -1,16 +1,19 @@
 package echo.music.enhanced.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicColorScheme
 import echo.music.enhanced.domain.manager.DataStoreManager
@@ -108,6 +111,7 @@ fun AppTheme(
     themeMode: String = DataStoreManager.THEME_MODE_DARK,
     themeColorSource: String = DataStoreManager.THEME_COLOR_WALLPAPER,
     customThemeColor: Color? = null,
+    interfaceMode: String = DataStoreManager.INTERFACE_BETTER_ECHO,
     content:
         @Composable()
         () -> Unit,
@@ -155,8 +159,18 @@ fun AppTheme(
             )
         }
     SystemBarAppearanceEffect(isDark)
+    // Better Echo's one real shape-system signature, ported from upstream's `echomusicTheme()`:
+    // a much larger extraSmall corner radius than M3's ~4dp default, applied globally so built-in
+    // M3 components that read the theme token (not just RowGroupCard call sites) pick it up too.
+    val shapes =
+        if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+            Shapes(extraSmall = RoundedCornerShape(24.dp))
+        } else {
+            Shapes()
+        }
     MaterialExpressiveTheme(
         colorScheme = colorScheme,
+        shapes = shapes,
         content = {
             CompositionLocalProvider(
                 LocalContentColor provides colorScheme.onSurfaceVariant,

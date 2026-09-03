@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +39,7 @@ fun AppBottomNavigationBar(
     navController: NavController,
     isTranslucentBackground: Boolean = false,
     showAnalyticsTab: Boolean = false,
+    isBetterEcho: Boolean = false,
     reloadDestinationIfNeeded: (KClass<*>) -> Unit = { _ -> },
 ) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -69,11 +71,7 @@ fun AppBottomNavigationBar(
             selectedIndex = BottomNavScreen.Home.ordinal
         }
     }
-    Box(
-        modifier =
-            Modifier
-                .wrapContentSize(),
-    ) {
+    val navBarContent: @Composable () -> Unit = {
         NavigationBar(
             windowInsets = WindowInsets(0, 0, 0, 0),
             containerColor = Color.Transparent,
@@ -128,6 +126,23 @@ fun AppBottomNavigationBar(
                         ),
                 )
             }
+        }
+    }
+    // Better Echo: a floating rounded dock (same 24dp corner token as RowGroupCard) instead of
+    // Classic's edge-to-edge flat bar — visually distinct from both Classic and the glass dock.
+    if (isBetterEcho) {
+        Box(modifier = Modifier.wrapContentSize().padding(horizontal = 16.dp, vertical = 4.dp)) {
+            Surface(
+                shape = RoundedCornerShape(24.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                shadowElevation = 3.dp,
+            ) {
+                navBarContent()
+            }
+        }
+    } else {
+        Box(modifier = Modifier.wrapContentSize()) {
+            navBarContent()
         }
     }
 }

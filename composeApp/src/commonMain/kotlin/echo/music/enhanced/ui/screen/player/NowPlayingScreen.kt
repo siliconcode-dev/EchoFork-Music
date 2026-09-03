@@ -303,6 +303,7 @@ fun NowPlayingScreenContent(
     val shouldShowVideo by sharedViewModel.getVideo.collectAsStateWithLifecycle()
     val translatedVoteState by sharedViewModel.translatedVoteState.collectAsStateWithLifecycle()
     val lyricsVoteState by sharedViewModel.lyricsVoteState.collectAsStateWithLifecycle()
+    val interfaceMode by sharedViewModel.getInterfaceMode().collectAsStateWithLifecycle(echo.music.enhanced.domain.manager.DataStoreManager.INTERFACE_BETTER_ECHO)
 
     // Artwork Pager state — Spotify-style horizontal swipe between queue tracks.
     // The pager wraps the Canvas + Thumbnail layers. Controller layout below stays fixed.
@@ -2166,7 +2167,12 @@ fun NowPlayingScreenContent(
                         ) {
                             ElevatedCard(
                                 onClick = {},
-                                shape = RoundedCornerShape(8.dp),
+                                shape =
+                                    if (interfaceMode == echo.music.enhanced.domain.manager.DataStoreManager.INTERFACE_BETTER_ECHO) {
+                                        RoundedCornerShape(24.dp)
+                                    } else {
+                                        RoundedCornerShape(8.dp)
+                                    },
                                 colors =
                                     CardDefaults.elevatedCardColors().copy(
                                         containerColor = startColor.value,
@@ -2406,7 +2412,12 @@ fun NowPlayingScreenContent(
                         AnimatedVisibility(visible = screenDataState.songInfoData != null) {
                             ElevatedCard(
                                 onClick = {},
-                                shape = RoundedCornerShape(8.dp),
+                                shape =
+                                    if (interfaceMode == echo.music.enhanced.domain.manager.DataStoreManager.INTERFACE_BETTER_ECHO) {
+                                        RoundedCornerShape(24.dp)
+                                    } else {
+                                        RoundedCornerShape(8.dp)
+                                    },
                                 colors =
                                     CardDefaults.elevatedCardColors().copy(
                                         containerColor = startColor.value,
