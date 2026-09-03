@@ -2,6 +2,12 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.11] — 2026-09-03
+
+### Added
+- Better Echo now has a real nav bar, ported from upstream Echo Music's actual current source: the default floating toolbar with a sliding selection pill and a "More Options" sheet (Shuffle, and an AI Hub row that jumps straight to the AI settings section), plus an alternate "iOS 26 style" floating pill nav bar you can switch to from Settings > Interface.
+- Fixed a bug where Better Echo's rounded nav dock (added in v0.1.8) never actually rendered on-device — the setting existed but the parameter that triggers it was never passed through.
+
 ## [0.1.10] — 2026-09-03
 
 ### Changed

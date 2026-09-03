@@ -70,9 +70,13 @@ import echo.music.enhanced.expect.ui.layerBackdrop
 import echo.music.enhanced.expect.ui.rememberBackdrop
 import echo.music.enhanced.extension.copy
 import echo.music.enhanced.ui.component.AppBottomNavigationBar
+import echo.music.enhanced.ui.component.AppFloatingNavBar
 import echo.music.enhanced.ui.component.AppNavigationRail
+import echo.music.enhanced.ui.component.FloatingNavigationToolbar
 import echo.music.enhanced.ui.component.LiquidGlassAppBottomNavigationBar
 import echo.music.enhanced.ui.component.WhatsNewDialog
+import echo.music.enhanced.ui.navigation.destination.home.SettingsDestination
+import echo.music.enhanced.viewModel.UIEvent
 import echo.music.enhanced.ui.icon.ArrowForwardIos
 import echo.music.enhanced.ui.icon.echoIcons
 import echo.music.enhanced.ui.navigation.destination.home.AnalyticsDestination
@@ -139,6 +143,9 @@ fun App(viewModel: SharedViewModel = koinInject()) {
 
     val interfaceMode by viewModel.getInterfaceMode().collectAsStateWithLifecycle(DataStoreManager.INTERFACE_BETTER_ECHO)
     val isLiquidGlassEnabled = if (interfaceMode == DataStoreManager.INTERFACE_LIQUID_GLASS) TRUE else DataStoreManager.FALSE
+    val betterEchoNavStyle by
+        viewModel.getBetterEchoNavStyle().collectAsStateWithLifecycle(DataStoreManager.BETTER_ECHO_NAV_STYLE_FLOATING_TOOLBAR)
+    val controllerState by viewModel.controllerState.collectAsStateWithLifecycle()
     val trueMotionEnabled by viewModel.getTrueMotionEnabled().collectAsStateWithLifecycle(DataStoreManager.FALSE)
     val trueMotionTargetHz by viewModel.getTrueMotionTargetHz().collectAsStateWithLifecycle(0)
     ApplyTrueMotionRefreshRate(if (trueMotionEnabled == TRUE) trueMotionTargetHz else -1)
@@ -408,6 +415,27 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
                                     showAnalyticsTab = showAnalyticsTab,
                                 ) { klass ->
                                     viewModel.reloadDestination(klass)
+                                }
+                            } else if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                                if (betterEchoNavStyle == DataStoreManager.BETTER_ECHO_NAV_STYLE_IOS_PILL) {
+                                    AppFloatingNavBar(
+                                        navController = navController,
+                                        showAnalyticsTab = showAnalyticsTab,
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                                    ) { klass ->
+                                        viewModel.reloadDestination(klass)
+                                    }
+                                } else {
+                                    FloatingNavigationToolbar(
+                                        navController = navController,
+                                        showAnalyticsTab = showAnalyticsTab,
+                                        shuffleEnabled = controllerState.isShuffle,
+                                        onShuffleClick = { viewModel.onUIEvent(UIEvent.Shuffle) },
+                                        onAiHubClick = { navController.navigate(SettingsDestination) },
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                                    ) { klass ->
+                                        viewModel.reloadDestination(klass)
+                                    }
                                 }
                             } else {
                                 Box(

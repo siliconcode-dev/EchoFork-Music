@@ -484,6 +484,8 @@
     <string name="to_download_folder">" to Download folder"</string>
     <string name="download_speed">Download speed:  %1$s </string>
     <string name="shuffle">Shuffle</string>
+    <string name="more_options">More Options</string>
+    <string name="more_label">More</string>
     <string name="other_version">Other version</string>
     <string name="later">Later</string>
     <string name="fade_audio_effect">Fade audio effect</string>
@@ -565,6 +567,9 @@
     <string name="update_channel">Update channel</string>
     <string name="interface_mode">Interface</string>
     <string name="interface_mode_info">Switches live, no restart needed</string>
+    <string name="better_echo_nav_style">Better Echo Nav Style</string>
+    <string name="better_echo_nav_style_floating_toolbar">Floating Toolbar</string>
+    <string name="better_echo_nav_style_ios_pill">Floating Pill (iOS style)</string>
     <string name="interface_mode_classic" translatable="false">Classic</string>
     <string name="interface_mode_better_echo" translatable="false">Better Echo</string>
     <string name="interface_mode_liquid_glass" translatable="false">Liquid Glass</string>

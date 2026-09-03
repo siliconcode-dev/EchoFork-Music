@@ -184,6 +184,9 @@ class SettingsViewModel(
     private var _interfaceMode: MutableStateFlow<String?> = MutableStateFlow(null)
     val interfaceMode: StateFlow<String?> = _interfaceMode
 
+    private var _betterEchoNavStyle: MutableStateFlow<String?> = MutableStateFlow(null)
+    val betterEchoNavStyle: StateFlow<String?> = _betterEchoNavStyle
+
     private val _explicitContentEnabled = MutableStateFlow(false)
     val explicitContentEnabled: StateFlow<Boolean> = _explicitContentEnabled
 
@@ -406,6 +409,7 @@ class SettingsViewModel(
         getBackupDownloaded()
         getUpdateChannel()
         getInterfaceMode()
+        getBetterEchoNavStyle()
         getExplicitContentEnabled()
         getDiscordLoggedIn()
         getDiscordRichPresenceEnabled()
@@ -773,6 +777,21 @@ class SettingsViewModel(
         viewModelScope.launch {
             dataStoreManager.setInterfaceMode(mode)
             getInterfaceMode()
+        }
+    }
+
+    private fun getBetterEchoNavStyle() {
+        viewModelScope.launch {
+            dataStoreManager.betterEchoNavStyle.collect { style ->
+                _betterEchoNavStyle.value = style
+            }
+        }
+    }
+
+    fun setBetterEchoNavStyle(style: String) {
+        viewModelScope.launch {
+            dataStoreManager.setBetterEchoNavStyle(style)
+            getBetterEchoNavStyle()
         }
     }
 

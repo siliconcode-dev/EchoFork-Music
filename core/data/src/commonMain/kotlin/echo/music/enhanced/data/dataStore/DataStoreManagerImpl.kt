@@ -13,6 +13,7 @@ import echo.music.enhanced.common.SponsorBlockType
 import echo.music.enhanced.domain.data.model.network.ProxyConfiguration
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.AI_PROVIDER_GEMINI
+import echo.music.enhanced.domain.manager.DataStoreManager.Values.BETTER_ECHO_NAV_STYLE_FLOATING_TOOLBAR
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.FALSE
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.GITHUB
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.INTERFACE_BETTER_ECHO
@@ -1535,6 +1536,19 @@ internal class DataStoreManagerImpl(
         }
     }
 
+    override val betterEchoNavStyle: Flow<String> =
+        settingsDataStore.data.map { preferences ->
+            preferences[BETTER_ECHO_NAV_STYLE] ?: BETTER_ECHO_NAV_STYLE_FLOATING_TOOLBAR
+        }
+
+    override suspend fun setBetterEchoNavStyle(style: String) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[BETTER_ECHO_NAV_STYLE] = style
+            }
+        }
+    }
+
     override val ringPlayerEnabled: Flow<String> =
         settingsDataStore.data.map { preferences ->
             preferences[RING_PLAYER_ENABLED] ?: FALSE
@@ -1753,6 +1767,7 @@ internal class DataStoreManagerImpl(
         val ARTIST_BACKGROUND_VIDEO = stringPreferencesKey("artist_background_video")
         val SCRAPER_BACKEND = stringPreferencesKey("scraper_backend")
         val INTERFACE_MODE = stringPreferencesKey("interface_mode")
+        val BETTER_ECHO_NAV_STYLE = stringPreferencesKey("better_echo_nav_style")
         val TRANSLATION_LANGUAGE = stringPreferencesKey("translation_language")
         val USE_TRANSLATION_LANGUAGE = stringPreferencesKey("use_translation_language")
 

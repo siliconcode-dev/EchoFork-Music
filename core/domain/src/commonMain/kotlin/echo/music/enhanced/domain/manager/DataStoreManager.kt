@@ -441,6 +441,14 @@ interface DataStoreManager {
 
     suspend fun setInterfaceMode(mode: String)
 
+    /**
+     * Better Echo only: one of [BETTER_ECHO_NAV_STYLE_FLOATING_TOOLBAR],
+     * [BETTER_ECHO_NAV_STYLE_IOS_PILL] — which of upstream's two real nav-bar implementations to use.
+     */
+    val betterEchoNavStyle: Flow<String>
+
+    suspend fun setBetterEchoNavStyle(style: String)
+
     /** Whether the player should use the ring/vinyl UI instead of the normal layout. */
     val ringPlayerEnabled: Flow<String>
 
@@ -550,6 +558,9 @@ interface DataStoreManager {
         const val INTERFACE_CLASSIC = "classic"
         const val INTERFACE_BETTER_ECHO = "better_echo"
         const val INTERFACE_LIQUID_GLASS = "liquid_glass"
+
+        const val BETTER_ECHO_NAV_STYLE_FLOATING_TOOLBAR = "floating_toolbar"
+        const val BETTER_ECHO_NAV_STYLE_IOS_PILL = "ios_pill"
 
         const val FDROID = "fdroid"
         const val GITHUB_FOSS_NIGHTLY = "github_foss_nightly"

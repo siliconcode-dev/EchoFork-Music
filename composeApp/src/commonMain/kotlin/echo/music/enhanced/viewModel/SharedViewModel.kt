@@ -1931,6 +1931,8 @@ class SharedViewModel(
 
     fun getInterfaceMode() = dataStoreManager.interfaceMode
 
+    fun getBetterEchoNavStyle() = dataStoreManager.betterEchoNavStyle
+
     fun getTrueMotionEnabled() = dataStoreManager.trueMotionEnabled
 
     fun getTrueMotionTargetHz() = dataStoreManager.trueMotionTargetHz

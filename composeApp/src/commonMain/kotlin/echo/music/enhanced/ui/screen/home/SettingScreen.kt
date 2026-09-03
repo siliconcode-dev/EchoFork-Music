@@ -267,6 +267,9 @@ import echomusic.composeapp.generated.resources.interface_mode_better_echo
 import echomusic.composeapp.generated.resources.interface_mode_classic
 import echomusic.composeapp.generated.resources.interface_mode_info
 import echomusic.composeapp.generated.resources.interface_mode_liquid_glass
+import echomusic.composeapp.generated.resources.better_echo_nav_style
+import echomusic.composeapp.generated.resources.better_echo_nav_style_floating_toolbar
+import echomusic.composeapp.generated.resources.better_echo_nav_style_ios_pill
 import echomusic.composeapp.generated.resources.enable_rich_presence
 import echomusic.composeapp.generated.resources.enable_sponsor_block
 import echomusic.composeapp.generated.resources.enable_spotify_lyrics
@@ -570,6 +573,7 @@ fun SettingScreen(
     val autoBackupLastTime by viewModel.autoBackupLastTime.collectAsStateWithLifecycle()
     val updateChannel by viewModel.updateChannel.collectAsStateWithLifecycle()
     val interfaceMode by viewModel.interfaceMode.collectAsStateWithLifecycle()
+    val betterEchoNavStyle by viewModel.betterEchoNavStyle.collectAsStateWithLifecycle()
     val themeMode by sharedViewModel.getThemeMode().collectAsStateWithLifecycle(DataStoreManager.THEME_MODE_DARK)
     val themeColorSource by sharedViewModel.getThemeColorSource().collectAsStateWithLifecycle(DataStoreManager.THEME_COLOR_WALLPAPER)
     val customThemeColorHex by sharedViewModel.getCustomThemeColor().collectAsStateWithLifecycle(DataStoreManager.DEFAULT_THEME_COLOR_HEX)
@@ -981,6 +985,42 @@ fun SettingScreen(
                                     )
                                 },
                             )
+                        }
+                        if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                            val navStyleLabels =
+                                listOf(
+                                    DataStoreManager.BETTER_ECHO_NAV_STYLE_FLOATING_TOOLBAR to
+                                        stringResource(Res.string.better_echo_nav_style_floating_toolbar),
+                                    DataStoreManager.BETTER_ECHO_NAV_STYLE_IOS_PILL to
+                                        stringResource(Res.string.better_echo_nav_style_ios_pill),
+                                )
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.better_echo_nav_style),
+                                    subtitle =
+                                        navStyleLabels.firstOrNull { it.first == betterEchoNavStyle }?.second
+                                            ?: navStyleLabels.first().second,
+                                    onClick = {
+                                        viewModel.setAlertData(
+                                            SettingAlertState(
+                                                title = runBlocking { getString(Res.string.better_echo_nav_style) },
+                                                selectOne =
+                                                    SettingAlertState.SelectData(
+                                                        listSelect = navStyleLabels.map { (it.first == betterEchoNavStyle) to it.second },
+                                                    ),
+                                                confirm =
+                                                    runBlocking { getString(Res.string.change) } to { state ->
+                                                        val selected = state.selectOne?.getSelected()
+                                                        navStyleLabels.firstOrNull { it.second == selected }?.first?.let {
+                                                            viewModel.setBetterEchoNavStyle(it)
+                                                        }
+                                                    },
+                                                dismiss = runBlocking { getString(Res.string.cancel) },
+                                            ),
+                                        )
+                                    },
+                                )
+                            }
                         }
                     }
                 Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = userInterfaceItems)
