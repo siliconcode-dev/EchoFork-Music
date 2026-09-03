@@ -12,7 +12,7 @@ export default function Hero() {
       <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 sm:py-28 lg:grid-cols-2 lg:items-center">
         <Reveal className="text-center lg:text-left">
           <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
-            [ REV 0.1.1 // ANDROID 8.0+ ]
+            [ REV 0.1.7 // ANDROID 8.0+ ]
           </p>
           <h1 className="mt-4 font-display text-4xl font-black uppercase leading-[0.95] tracking-tight text-ink sm:text-5xl lg:text-6xl">
             Your music,

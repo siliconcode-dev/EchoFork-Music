@@ -13,6 +13,8 @@ import {
   Unlock,
   ListOrdered,
   Repeat2,
+  Palette,
+  ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
 import Reveal from "./Reveal";
@@ -45,6 +47,17 @@ const FEATURES: {
     icon: AudioWaveform,
     title: "Wavy Expressive UI",
     body: "Player progress bars use Material 3's expressive wavy style.",
+  },
+  {
+    icon: Palette,
+    title: "Choose Your Interface",
+    tag: "New",
+    body: "Classic, Better Echo, or Liquid Glass — pick your look in Settings. Switches live, no restart.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Reliability Fallback Scraper",
+    body: "An independent Innertube-based backend for search and playback, as a fallback if the default ever breaks.",
   },
   {
     icon: Shuffle,

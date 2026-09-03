@@ -7,7 +7,7 @@ export default function PhoneMockup() {
         {/* Status bar */}
         <div className="flex items-center justify-between border-b-2 border-ink px-4 py-2 font-mono text-[10px] uppercase text-ink">
           <span>09:41</span>
-          <span>/// REC</span>
+          <span>{"/// REC"}</span>
         </div>
 
         {/* Real Now Playing screenshot */}

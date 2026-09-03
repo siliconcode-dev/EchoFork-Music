@@ -9,6 +9,24 @@ export const metadata: Metadata = {
 
 const RELEASES = [
   {
+    version: "0.1.7",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "New \"Interface\" picker in Settings, replacing the old Liquid Glass toggle: choose Classic (today's UI), Better Echo (upstream's recent library/FAB/About redesign, adapted to this fork), or Liquid Glass (this fork's glass-material look). Switches live, no restart, and existing Liquid Glass users are carried over automatically.",
+      "Better Echo mode adds a consolidated \"Create Playlist\" button on the Library screen and a redesigned, card-based About section with a \"What's coming next\" link.",
+      "The \"What's New\" dialog — which had quietly kept showing the original v0.1.1 launch list on every update since — now reflects what's actually new, with a livelier Material 3 Expressive entrance animation.",
+    ],
+  },
+  {
+    version: "0.1.6",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "New \"Scraper Backend\" option in Settings: an experimental Innertube-based backend for search and playback, as a reliability fallback alongside the existing default. Everything else — playlists, library, liked songs, artist follow — works the same either way. Switching takes effect after restart.",
+    ],
+  },
+  {
     version: "0.1.5",
     date: "September 2026",
     tag: "New",
