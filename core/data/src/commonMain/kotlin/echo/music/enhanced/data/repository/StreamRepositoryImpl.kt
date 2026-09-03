@@ -15,7 +15,7 @@ import echo.music.enhanced.domain.extension.plusSeconds
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.repository.StreamRepository
 import echo.music.enhanced.domain.utils.Resource
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.kotlinytmusicscraper.models.MediaType
 import echo.music.enhanced.kotlinytmusicscraper.models.response.PlayerResponse
 import echo.music.enhanced.logger.Logger
@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 
 internal class StreamRepositoryImpl(
     private val localDataSource: LocalDataSource,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
 ) : StreamRepository {
     override suspend fun insertNewFormat(newFormat: NewFormatEntity) =
         withContext(Dispatchers.IO) {

@@ -356,6 +356,10 @@ import echomusic.composeapp.generated.resources.save_last_played
 import echomusic.composeapp.generated.resources.save_last_played_track_and_queue
 import echomusic.composeapp.generated.resources.save_playback_state
 import echomusic.composeapp.generated.resources.save_shuffle_and_repeat_mode
+import echomusic.composeapp.generated.resources.scraper_backend
+import echomusic.composeapp.generated.resources.scraper_backend_info
+import echomusic.composeapp.generated.resources.scraper_backend_innertube
+import echomusic.composeapp.generated.resources.scraper_backend_kotlin
 import echomusic.composeapp.generated.resources.send_back_listening_data_to_google
 import echomusic.composeapp.generated.resources.set
 import echomusic.composeapp.generated.resources.settings
@@ -515,6 +519,7 @@ fun SettingScreen(
     val spotifyLyrics by viewModel.spotifyLyrics.collectAsStateWithLifecycle()
     val spotifyCanvas by viewModel.spotifyCanvas.collectAsStateWithLifecycle()
     val canvasProvider by viewModel.canvasProvider.collectAsStateWithLifecycle()
+    val scraperBackend by viewModel.scraperBackend.collectAsStateWithLifecycle()
     val artistBackgroundVideo by viewModel.artistBackgroundVideo.collectAsStateWithLifecycle()
     val enableSponsorBlock by remember { viewModel.sponsorBlockEnabled.map { it == TRUE } }.collectAsStateWithLifecycle(initialValue = false)
     val skipSegments by viewModel.sponsorBlockCategories.collectAsStateWithLifecycle()
@@ -1034,6 +1039,42 @@ fun SettingScreen(
                     switch = (combineLocalAndYouTubeLiked to { viewModel.setCombineLocalAndYouTubeLiked(it) })
                 )
                  */
+                SettingItem(
+                    title = stringResource(Res.string.scraper_backend),
+                    subtitle =
+                        when (scraperBackend) {
+                            DataStoreManager.INNERTUBE -> stringResource(Res.string.scraper_backend_innertube)
+                            else -> stringResource(Res.string.scraper_backend_kotlin)
+                        } + " — " + stringResource(Res.string.scraper_backend_info),
+                    smallSubtitle = true,
+                    onClick = {
+                        viewModel.setAlertData(
+                            SettingAlertState(
+                                title = runBlocking { getString(Res.string.scraper_backend) },
+                                selectOne =
+                                    SettingAlertState.SelectData(
+                                        listSelect =
+                                            listOf(
+                                                (scraperBackend == DataStoreManager.KOTLIN_SCRAPER || scraperBackend == null) to
+                                                    runBlocking { getString(Res.string.scraper_backend_kotlin) },
+                                                (scraperBackend == DataStoreManager.INNERTUBE) to
+                                                    runBlocking { getString(Res.string.scraper_backend_innertube) },
+                                            ),
+                                    ),
+                                confirm =
+                                    runBlocking { getString(Res.string.change) } to { state ->
+                                        viewModel.setScraperBackend(
+                                            when (state.selectOne?.getSelected()) {
+                                                runBlocking { getString(Res.string.scraper_backend_innertube) } -> DataStoreManager.INNERTUBE
+                                                else -> DataStoreManager.KOTLIN_SCRAPER
+                                            },
+                                        )
+                                    },
+                                dismiss = runBlocking { getString(Res.string.cancel) },
+                            ),
+                        )
+                    },
+                )
                 SettingItem(
                     title = stringResource(Res.string.proxy),
                     subtitle = stringResource(Res.string.proxy_description),

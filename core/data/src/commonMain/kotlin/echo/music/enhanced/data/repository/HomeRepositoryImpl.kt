@@ -15,7 +15,7 @@ import echo.music.enhanced.domain.data.model.mood.moodmoments.MoodsMomentObject
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.repository.HomeRepository
 import echo.music.enhanced.domain.utils.Resource
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.logger.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -48,7 +48,7 @@ private const val MOOD_ARTWORK_TTL_MILLIS = 7L * 24 * 60 * 60 * 1000
 @OptIn(ExperimentalTime::class)
 internal class HomeRepositoryImpl(
     private val dataStoreManager: DataStoreManager,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
 ) : HomeRepository {
     /**
      * Same posture as the Room converters: a cache written by an older build must not crash the

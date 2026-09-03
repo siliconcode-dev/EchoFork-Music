@@ -94,6 +94,10 @@ kotlin {
                 implementation(projects.applecanvas)
                 implementation(projects.echomusiccanvas)
                 implementation(projects.artistvideo)
+
+                // Android-only Innertube scraper backend, called via the expect/actual bridge
+                // in data/scraper/InnertubeAdapter — this module has no commonMain/jvm target.
+                implementation(projects.innertube)
             }
         }
 

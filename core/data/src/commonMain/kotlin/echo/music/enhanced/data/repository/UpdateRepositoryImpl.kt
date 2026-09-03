@@ -3,14 +3,14 @@ package echo.music.enhanced.data.repository
 import echo.music.enhanced.domain.data.model.update.UpdateData
 import echo.music.enhanced.domain.repository.UpdateRepository
 import echo.music.enhanced.domain.utils.Resource
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 internal class UpdateRepositoryImpl(
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
 ) : UpdateRepository {
     override fun checkForGithubReleaseUpdate(): Flow<Resource<UpdateData>> =
         flow {

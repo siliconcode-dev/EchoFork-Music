@@ -134,6 +134,11 @@ interface DataStoreManager {
 
     suspend fun setArtistBackgroundVideo(enable: Boolean)
 
+    /** Which [echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper] backend to use — takes effect after restart. */
+    val scraperBackend: Flow<String>
+
+    suspend fun setScraperBackend(backend: String)
+
     val translationLanguage: Flow<String>
 
     suspend fun setTranslationLanguage(language: String)
@@ -537,6 +542,9 @@ interface DataStoreManager {
         const val APPLE_CANVAS = "apple_canvas"
         const val ECHOMUSIC_CANVAS = "echomusic_canvas"
         const val ARTISTVIDEO_CANVAS = "artistvideo_canvas"
+
+        const val KOTLIN_SCRAPER = "kotlin_scraper"
+        const val INNERTUBE = "innertube"
 
         const val FDROID = "fdroid"
         const val GITHUB_FOSS_NIGHTLY = "github_foss_nightly"

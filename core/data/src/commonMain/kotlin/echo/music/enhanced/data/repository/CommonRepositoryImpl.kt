@@ -8,7 +8,7 @@ import echo.music.enhanced.domain.data.model.cookie.CookieItem
 import echo.music.enhanced.domain.data.type.RecentlyType
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.repository.CommonRepository
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.kotlinytmusicscraper.models.YouTubeLocale
 import echo.music.enhanced.logger.Logger
 import echo.music.enhanced.spotify.Spotify
@@ -36,7 +36,7 @@ internal class CommonRepositoryImpl(
     private val coroutineScope: CoroutineScope,
     private val database: MusicDatabase,
     private val localDataSource: LocalDataSource,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
     private val spotify: Spotify,
     private val aiClient: AiClient,
 ) : CommonRepository {

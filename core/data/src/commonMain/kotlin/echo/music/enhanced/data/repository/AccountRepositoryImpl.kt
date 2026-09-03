@@ -5,7 +5,7 @@ import echo.music.enhanced.data.mapping.toDomainAccountInfo
 import echo.music.enhanced.domain.data.entities.GoogleAccountEntity
 import echo.music.enhanced.domain.data.model.account.AccountInfo
 import echo.music.enhanced.domain.repository.AccountRepository
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.logger.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -18,7 +18,7 @@ private const val TAG = "AccountRepositoryImpl"
 
 internal class AccountRepositoryImpl(
     private val localDataSource: LocalDataSource,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
 ) : AccountRepository {
     override fun getYouTubeCookie() = youTube.cookie
 

@@ -18,6 +18,7 @@ import echo.music.enhanced.domain.data.model.searchResult.videos.VideosResult
 import echo.music.enhanced.domain.repository.SearchRepository
 import echo.music.enhanced.domain.utils.Resource
 import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.logger.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +28,7 @@ import kotlinx.coroutines.withContext
 
 internal class SearchRepositoryImpl(
     private val localDataSource: LocalDataSource,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
 ) : SearchRepository {
     override fun getSearchHistory(): Flow<List<SearchHistory>> =
         flow {

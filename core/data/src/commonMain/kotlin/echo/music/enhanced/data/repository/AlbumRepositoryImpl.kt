@@ -10,7 +10,7 @@ import echo.music.enhanced.domain.data.model.browse.album.AlbumBrowse
 import echo.music.enhanced.domain.data.model.searchResult.albums.AlbumsResult
 import echo.music.enhanced.domain.repository.AlbumRepository
 import echo.music.enhanced.domain.utils.Resource
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.kotlinytmusicscraper.models.AlbumItem
 import echo.music.enhanced.logger.Logger
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,7 @@ private const val TAG = "AlbumRepositoryImpl"
 
 internal class AlbumRepositoryImpl(
     private val localDataSource: LocalDataSource,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
 ) : AlbumRepository {
     override fun getAllAlbums(limit: Int): Flow<List<AlbumEntity>> =
         flow {

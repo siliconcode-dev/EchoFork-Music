@@ -26,7 +26,7 @@ import echo.music.enhanced.domain.repository.PlaylistRepository
 import echo.music.enhanced.domain.utils.Resource
 import echo.music.enhanced.domain.utils.isRadioMix
 import echo.music.enhanced.domain.utils.toTrack
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.kotlinytmusicscraper.models.MusicShelfRenderer
 import echo.music.enhanced.kotlinytmusicscraper.models.SongItem
 import echo.music.enhanced.kotlinytmusicscraper.models.WatchEndpoint
@@ -49,7 +49,7 @@ import kotlinx.datetime.LocalDateTime
 internal class PlaylistRepositoryImpl(
     private val dataStoreManager: DataStoreManager,
     private val localDataSource: LocalDataSource,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
 ) : PlaylistRepository {
     override fun getAllPlaylists(limit: Int): Flow<List<PlaylistEntity>> =
         flow {

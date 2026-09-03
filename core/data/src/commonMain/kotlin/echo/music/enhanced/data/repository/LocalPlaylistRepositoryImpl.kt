@@ -30,7 +30,7 @@ import echo.music.enhanced.domain.utils.toListVideoId
 import echo.music.enhanced.domain.utils.toSongEntity
 import echo.music.enhanced.domain.utils.wrapDataResource
 import echo.music.enhanced.domain.utils.wrapMessageResource
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.kotlinytmusicscraper.extension.verifyYouTubePlaylistId
 import echo.music.enhanced.kotlinytmusicscraper.models.MusicShelfRenderer
 import echo.music.enhanced.kotlinytmusicscraper.models.SongItem
@@ -54,7 +54,7 @@ private const val TAG = "LocalPlaylistRepositoryImpl"
 
 internal class LocalPlaylistRepositoryImpl(
     private val localDataSource: LocalDataSource,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
 ) : LocalPlaylistRepository {
     override fun getLocalPlaylist(id: Long) =
         wrapDataResource {

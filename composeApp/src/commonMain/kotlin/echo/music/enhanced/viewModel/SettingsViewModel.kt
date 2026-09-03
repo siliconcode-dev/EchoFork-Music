@@ -101,6 +101,9 @@ class SettingsViewModel(
     val mainLyricsProvider: StateFlow<String?> = _mainLyricsProvider
     private var _canvasProvider: MutableStateFlow<String?> = MutableStateFlow(null)
     val canvasProvider: StateFlow<String?> = _canvasProvider
+
+    private var _scraperBackend: MutableStateFlow<String?> = MutableStateFlow(null)
+    val scraperBackend: StateFlow<String?> = _scraperBackend
     private var _artistBackgroundVideo: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val artistBackgroundVideo: StateFlow<Boolean> = _artistBackgroundVideo
 
@@ -370,6 +373,7 @@ class SettingsViewModel(
         getYoutubeSubtitleLanguage()
         getLyricsProvider()
         getCanvasProvider()
+        getScraperBackend()
         getArtistBackgroundVideo()
         getUseTranslation()
         getPlayVideoInsteadOfAudio()
@@ -1206,6 +1210,21 @@ class SettingsViewModel(
         viewModelScope.launch {
             dataStoreManager.setCanvasProvider(provider)
             getCanvasProvider()
+        }
+    }
+
+    fun getScraperBackend() {
+        viewModelScope.launch {
+            dataStoreManager.scraperBackend.collect { scraperBackend ->
+                _scraperBackend.emit(scraperBackend)
+            }
+        }
+    }
+
+    fun setScraperBackend(backend: String) {
+        viewModelScope.launch {
+            dataStoreManager.setScraperBackend(backend)
+            getScraperBackend()
         }
     }
 

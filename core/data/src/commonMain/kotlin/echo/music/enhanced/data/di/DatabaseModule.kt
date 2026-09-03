@@ -11,11 +11,16 @@ import echo.music.enhanced.data.db.MusicDatabase
 import echo.music.enhanced.data.db.datasource.AnalyticsDatasource
 import echo.music.enhanced.data.db.datasource.LocalDataSource
 import echo.music.enhanced.data.db.getDatabaseBuilder
+import echo.music.enhanced.data.scraper.InnertubeAdapter
 import echo.music.enhanced.domain.manager.DataStoreManager
+import echo.music.enhanced.domain.manager.DataStoreManager.Values.INNERTUBE
 import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.spotify.Spotify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.koin.dsl.module
 import echo.music.enhanced.aiservice.AiClient
 import echo.music.enhanced.lyrics.SimpMusicLyricsClient
@@ -59,8 +64,13 @@ val databaseModule =
         }
 
         // Move YouTube from Singleton to Koin DI
-        single(createdAtStart = true) {
-            YouTube()
+        single<YtMusicScraper>(createdAtStart = true) {
+            val youTube = YouTube()
+            // One-time synchronous read at process start — the scraper backend can't be swapped
+            // live (it's constructor-injected into 13 already-built repository singletons), so
+            // switching in Settings takes effect after restart. See InnertubeAdapter's kdoc.
+            val backend = runBlocking { get<DataStoreManager>().scraperBackend.first() }
+            if (backend == INNERTUBE) InnertubeAdapter(youTube) else youTube
         }
 
         single(createdAtStart = true) {

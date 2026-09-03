@@ -126,14 +126,14 @@ private const val TAG = "YouTubeScraper"
  * @author maxrave-dev
  */
 
-class YouTube {
+class YouTube : YtMusicScraper {
     private val ytMusic = Ytmusic()
 
     private val tidalTokenMutex = Mutex()
     private var tidalAccessToken: String? = null
     private var tidalTokenExpiresAt: Long = 0L
 
-    var cookiePath: Path?
+    override var cookiePath: Path?
         get() = ytMusic.cookiePath
         set(value) {
             ytMusic.cookiePath = value
@@ -142,7 +142,7 @@ class YouTube {
     /**
      * Set the locale and language for YouTube Music
      */
-    var locale: YouTubeLocale
+    override var locale: YouTubeLocale
         get() = ytMusic.locale
         set(value) {
             ytMusic.locale = value
@@ -151,13 +151,13 @@ class YouTube {
     /**
      * Set custom visitorData for client (default is @see [DEFAULT_VISITOR_DATA])
      */
-    var visitorData: String?
+    override var visitorData: String?
         get() = ytMusic.visitorData
         set(value) {
             ytMusic.visitorData = value
         }
 
-    var dataSyncId: String?
+    override var dataSyncId: String?
         get() = ytMusic.dataSyncId
         set(value) {
             ytMusic.dataSyncId = value
@@ -166,13 +166,13 @@ class YouTube {
     /**
      * Set cookie and authentication header for client (for log in option)
      */
-    var cookie: String?
+    override var cookie: String?
         get() = ytMusic.cookie
         set(value) {
             ytMusic.cookie = value
         }
 
-    var pageId: String?
+    override var pageId: String?
         get() = ytMusic.pageId
         set(value) {
             ytMusic.pageId = value
@@ -181,13 +181,13 @@ class YouTube {
     /**
      * TIDAL credentials, backed by [Ytmusic]. Set by the data layer from cached remote config.
      */
-    var tidalClientId: String
+    override var tidalClientId: String
         get() = ytMusic.tidalClientId
         set(value) {
             ytMusic.tidalClientId = value
         }
 
-    var tidalClientSecret: String
+    override var tidalClientSecret: String
         get() = ytMusic.tidalClientSecret
         set(value) {
             ytMusic.tidalClientSecret = value
@@ -215,14 +215,14 @@ class YouTube {
     /**
      * Remove proxy for client
      */
-    fun removeProxy() {
+    override fun removeProxy() {
         ytMusic.proxy = null
     }
 
     /**
      * Set the proxy for client
      */
-    fun setProxy(
+    override fun setProxy(
         isHttp: Boolean,
         host: String,
         port: Int,
@@ -254,7 +254,7 @@ class YouTube {
      * @param filter the search filter (see in [SearchFilter])
      * @return a [Result]<[SearchResult]> object
      */
-    suspend fun search(
+    override suspend fun search(
         query: String,
         filter: SearchFilter,
     ): Result<SearchResult> =
@@ -312,7 +312,7 @@ class YouTube {
      * @param continuation continuation token from [SearchResult.continuation]
      * @return a [Result]<[SearchResult]> object
      */
-    suspend fun searchContinuation(continuation: String): Result<SearchResult> =
+    override suspend fun searchContinuation(continuation: String): Result<SearchResult> =
         runCatching {
             val response = ytMusic.search(WEB_REMIX, continuation = continuation).body<SearchResponse>()
             SearchResult(
@@ -340,9 +340,9 @@ class YouTube {
      * @param withSongs if true, the function will get the songs data too
      * @return a [Result]<[AlbumPage]> object
      */
-    suspend fun album(
+    override suspend fun album(
         browseId: String,
-        withSongs: Boolean = true,
+        withSongs: Boolean,
     ): Result<AlbumPage> =
         runCatching {
             val response = ytMusic.browse(WEB_REMIX, browseId).body<BrowseResponse>()
@@ -546,7 +546,7 @@ class YouTube {
      * @param browseId the artist browseId
      * @return a [Result]<[ArtistPage]> object
      */
-    suspend fun artist(browseId: String): Result<ArtistPage> =
+    override suspend fun artist(browseId: String): Result<ArtistPage> =
         runCatching {
             val response = ytMusic.browse(WEB_REMIX, browseId).body<BrowseResponse>()
             ArtistPage(
@@ -633,7 +633,7 @@ class YouTube {
             )
         }
 
-    suspend fun getYouTubePlaylistFullTracksWithSetVideoId(playlistId: String): Result<List<Pair<SongItem, String>>> =
+    override suspend fun getYouTubePlaylistFullTracksWithSetVideoId(playlistId: String): Result<List<Pair<SongItem, String>>> =
         runCatching {
             val plId = if (playlistId.startsWith("VL")) playlistId else "VL$playlistId"
             // SongItem / SetVideoId
@@ -661,7 +661,7 @@ class YouTube {
             return@runCatching listPair
         }
 
-    suspend fun getSuggestionsTrackForPlaylist(playlistId: String): Result<Pair<String?, List<SongItem>?>?> =
+    override suspend fun getSuggestionsTrackForPlaylist(playlistId: String): Result<Pair<String?, List<SongItem>?>?> =
         runCatching {
             val initialResponse =
                 ytMusic
@@ -836,13 +836,13 @@ class YouTube {
      * @param setLogin if true, the function will set the cookie and authentication header
      * @return a [Result]<[BrowseResponse]> object
      */
-    suspend fun customQuery(
+    override suspend fun customQuery(
         browseId: String?,
-        params: String? = null,
-        continuation: String? = null,
-        country: String? = null,
-        setLogin: Boolean = true,
-    ) = runCatching {
+        params: String?,
+        continuation: String?,
+        country: String?,
+        setLogin: Boolean,
+    ): Result<BrowseResponse> = runCatching {
         ytMusic.browse(WEB_REMIX, browseId, params, continuation, country, setLogin).body<BrowseResponse>()
     }
 
@@ -861,22 +861,22 @@ class YouTube {
      * @param videoId the videoId of song
      * @return a [Result]<[List]<[SkipSegments]>> object
      */
-    suspend fun getSkipSegments(videoId: String): Result<List<SkipSegments>> =
+    override suspend fun getSkipSegments(videoId: String): Result<List<SkipSegments>> =
         runCatching {
             ytMusic.getSkipSegments(videoId).body<List<SkipSegments>>()
         }
 
-    suspend fun checkForGithubReleaseUpdate(): Result<GithubResponse> =
+    override suspend fun checkForGithubReleaseUpdate(): Result<GithubResponse> =
         runCatching {
             ytMusic.checkForGithubReleaseUpdate().body<GithubResponse>()
         }
 
-    suspend fun checkForFdroidUpdate(): Result<FdroidResponse> =
+    override suspend fun checkForFdroidUpdate(): Result<FdroidResponse> =
         runCatching {
             ytMusic.checkForFdroidUpdate().body<FdroidResponse>()
         }
 
-    suspend fun newRelease(): Result<ExplorePage> =
+    override suspend fun newRelease(): Result<ExplorePage> =
         runCatching {
             val response =
                 ytMusic.browse(WEB_REMIX, browseId = "FEmusic_new_releases").body<BrowseResponse>()
@@ -922,7 +922,7 @@ class YouTube {
             )
         }
 
-    suspend fun moodAndGenres(): Result<List<MoodAndGenres>> =
+    override suspend fun moodAndGenres(): Result<List<MoodAndGenres>> =
         runCatching {
             val response = ytMusic.browse(WEB_REMIX, browseId = "FEmusic_moods_and_genres").body<BrowseResponse>()
             response.contents
@@ -936,7 +936,7 @@ class YouTube {
                 .mapNotNull(MoodAndGenres.Companion::fromSectionListRendererContent)
         }
 
-    suspend fun browse(
+    override suspend fun browse(
         browseId: String,
         params: String?,
     ): Result<BrowseResult> =
@@ -1001,7 +1001,7 @@ class YouTube {
             )
         }
 
-    suspend fun getFullMetadata(videoId: String): Result<YouTubeInitialPage> =
+    override suspend fun getFullMetadata(videoId: String): Result<YouTubeInitialPage> =
         runCatching {
             val ytScrape = ytMusic.scrapeYouTube(videoId).body<String>()
             var response = ""
@@ -1024,7 +1024,7 @@ class YouTube {
             return@runCatching json.decodeFromString<YouTubeInitialPage>(response)
         }
 
-    suspend fun getLikedInfo(videoId: String): Result<LikeStatus> =
+    override suspend fun getLikedInfo(videoId: String): Result<LikeStatus> =
         runCatching {
             val response =
                 ytMusic
@@ -1049,7 +1049,7 @@ class YouTube {
             return@runCatching likeStatus ?: LikeStatus.INDIFFERENT
         }
 
-    suspend fun getSongInfo(videoId: String): Result<SongInfo> =
+    override suspend fun getSongInfo(videoId: String): Result<SongInfo> =
         runCatching {
             val ytNext = ytMusic.next(WEB, videoId, null, null, null, null, null).body<NextResponse>()
             val videoSecondary =
@@ -1280,13 +1280,13 @@ class YouTube {
         }
     }
 
-    fun isManifestUrl(url: String): Boolean = url.contains(".m3u8") || url.contains(".mpd") || url.contains("manifest")
+    override fun isManifestUrl(url: String): Boolean = url.contains(".m3u8") || url.contains(".mpd") || url.contains("manifest")
 
     @OptIn(ExperimentalTime::class)
-    suspend fun player(
+    override suspend fun player(
         videoId: String,
-        playlistId: String? = null,
-        noLogIn: Boolean = false,
+        playlistId: String?,
+        noLogIn: Boolean,
     ): Result<Triple<String?, PlayerResponse, MediaType>> =
         runCatching {
             val cpn =
@@ -1397,7 +1397,7 @@ class YouTube {
             )
         }
 
-    suspend fun updateWatchTime(
+    override suspend fun updateWatchTime(
         watchtimeUrl: String,
         watchtimeList: ArrayList<Float>,
         cpn: String,
@@ -1414,7 +1414,7 @@ class YouTube {
             }
         }
 
-    suspend fun updateWatchTimeFull(
+    override suspend fun updateWatchTimeFull(
         watchtimeUrl: String,
         cpn: String,
         playlistId: String?,
@@ -1442,7 +1442,7 @@ class YouTube {
      * Float: second watchtime
      * First watchtime is 5.54
      */
-    suspend fun initPlayback(
+    override suspend fun initPlayback(
         playbackUrl: String,
         atrUrl: String,
         watchtimeUrl: String,
@@ -1495,7 +1495,7 @@ class YouTube {
         }
     }
 
-    suspend fun nextYouTubePlaylists(continuation: String): Result<Pair<List<MusicTwoRowItemRenderer>, String?>> =
+    override suspend fun nextYouTubePlaylists(continuation: String): Result<Pair<List<MusicTwoRowItemRenderer>, String?>> =
         runCatching {
             val res =
                 ytMusic
@@ -1518,9 +1518,9 @@ class YouTube {
             )
         }
 
-    suspend fun next(
+    override suspend fun next(
         endpoint: WatchEndpoint,
-        continuation: String? = null,
+        continuation: String?,
     ): Result<NextResult> =
         runCatching {
             val response =
@@ -1697,7 +1697,7 @@ class YouTube {
                 }
         }
 
-    suspend fun visitorData(): String? =
+    override suspend fun visitorData(): String? =
         try {
             Json
                 .parseToJsonElement(ytMusic.getSwJsData().bodyAsText().substring(5))
@@ -1724,7 +1724,7 @@ class YouTube {
                 ?.toAccountInfo()
         }
 
-    suspend fun getAccountListWithPageId(customCookie: String): Result<List<AccountInfo>> =
+    override suspend fun getAccountListWithPageId(customCookie: String): Result<List<AccountInfo>> =
         runCatching {
             val res =
                 ytMusic
@@ -1743,12 +1743,12 @@ class YouTube {
         ytMusic.pipedStreams(videoId, pipedInstance).body<PipedResponse>()
     }
 
-    suspend fun getLibraryPlaylists() =
+    override suspend fun getLibraryPlaylists(): Result<BrowseResponse> =
         runCatching {
             ytMusic.browse(WEB_REMIX, "FEmusic_liked_playlists", setLogin = true).body<BrowseResponse>()
         }
 
-    suspend fun getMixedForYou() =
+    override suspend fun getMixedForYou(): Result<BrowseResponse> =
         runCatching {
             ytMusic.browse(WEB_REMIX, "FEmusic_mixed_for_you", setLogin = true).body<BrowseResponse>()
         }
@@ -1768,7 +1768,7 @@ class YouTube {
         }
     }
 
-    suspend fun getYTMusicSearchSuggestions(query: String) =
+    override suspend fun getYTMusicSearchSuggestions(query: String): Result<SearchSuggestions> =
         runCatching {
             val response = ytMusic.getSearchSuggestions(WEB_REMIX, query).body<GetSearchSuggestionsResponse>()
             SearchSuggestions(
@@ -1796,10 +1796,10 @@ class YouTube {
             )
         }
 
-    suspend fun getYouTubeCaption(
+    override suspend fun getYouTubeCaption(
         videoId: String,
         preferLang: String,
-    ) = runCatching {
+    ): Result<Pair<Transcript, Transcript?>> = runCatching {
         val ytWeb = ytMusic.player(WEB, videoId, null, null).body<YouTubeInitialPage>()
         val baseCaption =
             ytMusic
@@ -1834,18 +1834,18 @@ class YouTube {
             ytMusic.scrapeYouTube(videoId).body<String>()
         }
 
-    suspend fun removeItemYouTubePlaylist(
+    override suspend fun removeItemYouTubePlaylist(
         playlistId: String,
         videoId: String,
         setVideoId: String,
-    ) = runCatching {
+    ): Result<Int> = runCatching {
         ytMusic.removeItemYouTubePlaylist(playlistId, videoId, setVideoId).status.value
     }
 
-    suspend fun addPlaylistItem(
+    override suspend fun addPlaylistItem(
         playlistId: String,
         videoId: String,
-    ) = runCatching {
+    ): Result<AddItemYouTubePlaylistResponse> = runCatching {
         ytMusic.addItemYouTubePlaylist(playlistId, videoId).body<AddItemYouTubePlaylistResponse>()
     }
 
@@ -1857,25 +1857,25 @@ class YouTube {
      *        If null, the item is moved to the end of the playlist.
      * @return Result<Int> HTTP status code
      */
-    suspend fun movePlaylistItem(
+    override suspend fun movePlaylistItem(
         playlistId: String,
         setVideoId: String,
-        movedSetVideoIdSuccessor: String? = null,
-    ) = runCatching {
+        movedSetVideoIdSuccessor: String?,
+    ): Result<Int> = runCatching {
         ytMusic.moveItemYouTubePlaylist(playlistId, setVideoId, movedSetVideoIdSuccessor).status.value
     }
 
-    suspend fun editPlaylist(
+    override suspend fun editPlaylist(
         playlistId: String,
         title: String,
-    ) = runCatching {
+    ): Result<Int> = runCatching {
         ytMusic.editYouTubePlaylist(playlistId, title).status.value
     }
 
-    suspend fun createPlaylist(
+    override suspend fun createPlaylist(
         title: String,
         listVideoId: List<String>?,
-    ) = runCatching {
+    ): Result<CreatePlaylistResponse> = runCatching {
         ytMusic.createYouTubePlaylist(title, listVideoId).body<CreatePlaylistResponse>()
     }
 
@@ -1885,27 +1885,27 @@ class YouTube {
      * Returns the HTTP status rather than a parsed body, the same way the like endpoints do —
      * these calls answer with an empty payload, so the status is the whole result.
      */
-    suspend fun subscribeChannel(channelId: String) =
+    override suspend fun subscribeChannel(channelId: String): Result<Int> =
         runCatching {
             ytMusic.subscribeChannel(channelId).status.value
         }
 
-    suspend fun unsubscribeChannel(channelId: String) =
+    override suspend fun unsubscribeChannel(channelId: String): Result<Int> =
         runCatching {
             ytMusic.unsubscribeChannel(channelId).status.value
         }
 
-    suspend fun addToLiked(mediaId: String) =
+    override suspend fun addToLiked(mediaId: String): Result<Int> =
         runCatching {
             ytMusic.addToLiked(mediaId).status.value
         }
 
-    suspend fun removeFromLiked(mediaId: String) =
+    override suspend fun removeFromLiked(mediaId: String): Result<Int> =
         runCatching {
             ytMusic.removeFromLiked(mediaId).status.value
         }
 
-    suspend fun getSimpMusicChart() =
+    override suspend fun getSimpMusicChart(): Result<SimpMusicChartResponse> =
         runCatching {
             ytMusic.getSimpMusicChart().body<SimpMusicChartResponse>()
         }
@@ -1914,7 +1914,7 @@ class YouTube {
      * Fetch the remote app config (TIDAL credentials) from GitHub raw.
      * Returns a [Result] so callers can fall back silently when the fetch/parse fails.
      */
-    suspend fun getTidalRemoteConfig(): Result<RemoteConfig> =
+    override suspend fun getTidalRemoteConfig(): Result<RemoteConfig> =
         runCatching {
             ytMusic.getTidalRemoteConfig()
         }
@@ -1940,10 +1940,10 @@ class YouTube {
      * Search Tidal official API for metadata (bpm, key, keyScale).
      * Token is managed in-memory and auto-refreshed when expired.
      */
-    suspend fun searchTidalMetadata(
+    override suspend fun searchTidalMetadata(
         query: String,
         durationSeconds: Int,
-    ) = runCatching {
+    ): Result<TidalMetadataResult> = runCatching {
         val token = ensureTidalToken()
         val searchRes = ytMusic.searchTidalId(token, query).body<TidalSearchResponse>()
         val matchedItem =
@@ -1976,11 +1976,11 @@ class YouTube {
                 url.parameters["n"]
             }
 
-    fun download(
+    override fun download(
         track: SongItem,
         filePath: String,
         videoId: String,
-        isVideo: Boolean = false,
+        isVideo: Boolean,
     ): Flow<DownloadProgress> =
         channelFlow {
             // Video if videoId is not null
@@ -2080,7 +2080,7 @@ class YouTube {
                 }
         }.flowOn(Dispatchers.IO)
 
-    suspend fun is403Url(url: String) = ytMusic.is403Url(url)
+    override suspend fun is403Url(url: String): Boolean = ytMusic.is403Url(url)
 
     companion object {
         const val MAX_GET_QUEUE_SIZE = 1000

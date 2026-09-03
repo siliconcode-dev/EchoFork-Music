@@ -351,6 +351,10 @@
     <string name="canvas_provider_apple" translatable="false">Apple Music</string>
     <string name="canvas_provider_echomusic" translatable="false">EchoMusicCanvas (may be unavailable)</string>
     <string name="canvas_provider_artistvideo" translatable="false">ArtistVideo</string>
+    <string name="scraper_backend">Scraper Backend</string>
+    <string name="scraper_backend_info">Which backend fetches search results and playback streams. Switching takes effect after restart.</string>
+    <string name="scraper_backend_kotlin" translatable="false">Default</string>
+    <string name="scraper_backend_innertube" translatable="false">Innertube (Experimental)</string>
     <string name="enable_artist_background_video">Artist Background Video</string>
     <string name="artist_background_video_info">Show an ambient background video on artist pages, when available</string>
     <string name="spotify_lyrics_provider">Lyrics provided by Spotify</string>

@@ -2,6 +2,11 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.6] — 2026-09-03
+
+### Added
+- New "Scraper Backend" option in Settings > Content: an experimental Innertube-based backend for search and playback stream resolution, alongside the existing default scraper. Everything else (playlists, library, liked songs, artist follow, etc.) is unaffected regardless of which is selected. Switching takes effect after restart.
+
 ## [0.1.5] — 2026-09-03
 
 ### Added

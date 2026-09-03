@@ -13,7 +13,7 @@ import echo.music.enhanced.domain.data.model.searchResult.songs.Artist
 import echo.music.enhanced.domain.data.model.searchResult.songs.Thumbnail
 import echo.music.enhanced.domain.repository.PodcastRepository
 import echo.music.enhanced.domain.utils.Resource
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.logger.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.flowOn
 
 internal class PodcastRepositoryImpl(
     private val localDataSource: LocalDataSource,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
 ) : PodcastRepository {
     override fun getPodcastData(podcastId: String): Flow<Resource<PodcastBrowse>> =
         flow {

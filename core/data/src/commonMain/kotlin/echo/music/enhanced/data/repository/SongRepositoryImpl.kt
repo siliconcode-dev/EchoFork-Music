@@ -21,7 +21,7 @@ import echo.music.enhanced.domain.repository.SongRepository
 import echo.music.enhanced.domain.utils.MusicVideoType
 import echo.music.enhanced.domain.utils.Resource
 import echo.music.enhanced.domain.utils.isRadioQueueId
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.kotlinytmusicscraper.models.SongItem
 import echo.music.enhanced.kotlinytmusicscraper.models.WatchEndpoint
 import echo.music.enhanced.kotlinytmusicscraper.models.response.LikeStatus
@@ -46,7 +46,7 @@ private const val TAG = "SongRepositoryImpl"
 internal class SongRepositoryImpl(
     private val dataStoreManager: DataStoreManager,
     private val localDataSource: LocalDataSource,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
 ) : SongRepository {
     override fun getAllSongs(limit: Int): Flow<List<SongEntity>> =
         flow {

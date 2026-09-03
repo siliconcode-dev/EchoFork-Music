@@ -15,6 +15,7 @@ import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.AI_PROVIDER_GEMINI
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.FALSE
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.GITHUB
+import echo.music.enhanced.domain.manager.DataStoreManager.Values.KOTLIN_SCRAPER
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.LOCAL_PLAYLIST_FILTER_OLDER_FIRST
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.PROXY_TYPE_HTTP
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.PROXY_TYPE_SOCKS
@@ -479,6 +480,19 @@ internal class DataStoreManagerImpl(
         withContext(Dispatchers.IO) {
             settingsDataStore.edit { settings ->
                 settings[ARTIST_BACKGROUND_VIDEO] = if (enable) TRUE else FALSE
+            }
+        }
+    }
+
+    override val scraperBackend: Flow<String> =
+        settingsDataStore.data.map { preferences ->
+            preferences[SCRAPER_BACKEND] ?: KOTLIN_SCRAPER
+        }
+
+    override suspend fun setScraperBackend(backend: String) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[SCRAPER_BACKEND] = backend
             }
         }
     }
@@ -1737,6 +1751,7 @@ internal class DataStoreManagerImpl(
         val LYRICS_PROVIDER = stringPreferencesKey("lyrics_provider")
         val CANVAS_PROVIDER = stringPreferencesKey("canvas_provider")
         val ARTIST_BACKGROUND_VIDEO = stringPreferencesKey("artist_background_video")
+        val SCRAPER_BACKEND = stringPreferencesKey("scraper_backend")
         val TRANSLATION_LANGUAGE = stringPreferencesKey("translation_language")
         val USE_TRANSLATION_LANGUAGE = stringPreferencesKey("use_translation_language")
 

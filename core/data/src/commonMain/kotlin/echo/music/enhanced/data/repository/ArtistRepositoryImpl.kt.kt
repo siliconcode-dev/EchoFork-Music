@@ -7,7 +7,7 @@ import echo.music.enhanced.domain.data.entities.ArtistEntity
 import echo.music.enhanced.domain.data.model.browse.artist.ArtistBrowse
 import echo.music.enhanced.domain.repository.ArtistRepository
 import echo.music.enhanced.domain.utils.Resource
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.logger.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -21,7 +21,7 @@ import kotlinx.datetime.LocalDateTime
 
 internal class ArtistRepositoryImpl(
     private val localDataSource: LocalDataSource,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
     private val dataStoreManager: DataStoreManager,
 ) : ArtistRepository {
     override fun getAllArtists(limit: Int): Flow<List<ArtistEntity>> =

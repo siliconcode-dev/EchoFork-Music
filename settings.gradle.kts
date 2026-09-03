@@ -69,6 +69,7 @@ include(
     ":canvas",
     ":applecanvas",
     ":echomusiccanvas",
+    ":innertube",
 )
 
 // core modules
@@ -95,6 +96,7 @@ project(":shazamkit").projectDir = File(serviceDir, "shazamkit")
 project(":canvas").projectDir = File(serviceDir, "canvas")
 project(":applecanvas").projectDir = File(serviceDir, "applecanvas")
 project(":echomusiccanvas").projectDir = File(serviceDir, "echomusiccanvas")
+project(":innertube").projectDir = File(serviceDir, "innertube")
 
 // media modules
 project(":media3").projectDir = File(mediaDir, "media3")

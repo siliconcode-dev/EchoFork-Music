@@ -22,7 +22,7 @@ import echo.music.enhanced.domain.utils.toPlainLrcString
 import echo.music.enhanced.domain.utils.toRichSyncLrcString
 import echo.music.enhanced.domain.utils.toSyncedLrcString
 import echo.music.enhanced.domain.utils.toSyncedLyrics
-import echo.music.enhanced.kotlinytmusicscraper.YouTube
+import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import echo.music.enhanced.logger.Logger
 import echo.music.enhanced.spotify.Spotify
 import kotlinx.coroutines.Dispatchers
@@ -55,7 +55,7 @@ import kotlin.time.ExperimentalTime
 
 internal class LyricsCanvasRepositoryImpl(
     private val localDataSource: LocalDataSource,
-    private val youTube: YouTube,
+    private val youTube: YtMusicScraper,
     private val spotify: Spotify,
     private val simpMusicLyrics: SimpMusicLyricsClient,
     private val aiClient: AiClient,
