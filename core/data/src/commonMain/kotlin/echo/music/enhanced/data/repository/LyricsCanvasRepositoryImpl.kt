@@ -34,10 +34,15 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import echo.music.enhanced.aiservice.AiClient
+import echo.music.enhanced.data.lyrics.fetchKuGouLyrics
+import echo.music.enhanced.data.lyrics.fetchPaxsenixLyrics
+import echo.music.enhanced.data.lyrics.fetchUnisonLyrics
+import echo.music.enhanced.data.lyrics.fetchYouLyPlusLyrics
 import echo.music.enhanced.lyrics.SimpMusicLyricsClient
 import echo.music.enhanced.lyrics.am.toImageUrl
 import echo.music.enhanced.lyrics.models.request.LyricsBody
 import echo.music.enhanced.lyrics.models.request.TranslatedLyricsBody
+import echo.music.enhanced.lyrics.parser.parseSyncedLyrics
 import echo.music.enhanced.lyrics.parser.parseTtmlLyrics
 import kotlin.math.abs
 import kotlin.time.Clock
@@ -444,6 +449,83 @@ internal class LyricsCanvasRepositoryImpl(
                 }.onFailure {
                     it.printStackTrace()
                     emit(Resource.Error<Lyrics>("BetterLyrics search failed"))
+                }
+        }.flowOn(Dispatchers.IO)
+
+    override fun getYouLyPlusLyrics(
+        artist: String,
+        track: String,
+        duration: Int?,
+    ): Flow<Resource<Lyrics>> =
+        flow {
+            fetchYouLyPlusLyrics(track, artist, duration ?: 0, null)
+                .onSuccess { lrc ->
+                    if (lrc.isEmpty()) {
+                        emit(Resource.Error<Lyrics>("No YouLyPlus lyrics found"))
+                        return@onSuccess
+                    }
+                    emit(Resource.Success(parseSyncedLyrics(lrc).toLyrics()))
+                }.onFailure {
+                    it.printStackTrace()
+                    emit(Resource.Error<Lyrics>("YouLyPlus search failed"))
+                }
+        }.flowOn(Dispatchers.IO)
+
+    override fun getPaxsenixLyrics(
+        artist: String,
+        track: String,
+        duration: Int?,
+    ): Flow<Resource<Lyrics>> =
+        flow {
+            fetchPaxsenixLyrics(track, artist, duration ?: 0, null)
+                .onSuccess { lrc ->
+                    if (lrc.isEmpty()) {
+                        emit(Resource.Error<Lyrics>("No Paxsenix lyrics found"))
+                        return@onSuccess
+                    }
+                    emit(Resource.Success(parseSyncedLyrics(lrc).toLyrics()))
+                }.onFailure {
+                    it.printStackTrace()
+                    emit(Resource.Error<Lyrics>("Paxsenix search failed"))
+                }
+        }.flowOn(Dispatchers.IO)
+
+    override fun getKuGouLyrics(
+        artist: String,
+        track: String,
+        duration: Int?,
+    ): Flow<Resource<Lyrics>> =
+        flow {
+            fetchKuGouLyrics(track, artist, duration ?: 0, null)
+                .onSuccess { lrc ->
+                    if (lrc.isEmpty()) {
+                        emit(Resource.Error<Lyrics>("No KuGou lyrics found"))
+                        return@onSuccess
+                    }
+                    emit(Resource.Success(parseSyncedLyrics(lrc).toLyrics()))
+                }.onFailure {
+                    it.printStackTrace()
+                    emit(Resource.Error<Lyrics>("KuGou search failed"))
+                }
+        }.flowOn(Dispatchers.IO)
+
+    override fun getUnisonLyrics(
+        videoId: String?,
+        artist: String,
+        track: String,
+        duration: Int?,
+    ): Flow<Resource<Lyrics>> =
+        flow {
+            fetchUnisonLyrics(videoId, track, artist, null, duration ?: -1)
+                .onSuccess { lrc ->
+                    if (lrc.isEmpty()) {
+                        emit(Resource.Error<Lyrics>("No Unison lyrics found"))
+                        return@onSuccess
+                    }
+                    emit(Resource.Success(parseSyncedLyrics(lrc).toLyrics()))
+                }.onFailure {
+                    it.printStackTrace()
+                    emit(Resource.Error<Lyrics>("Unison search failed"))
                 }
         }.flowOn(Dispatchers.IO)
 

@@ -519,6 +519,10 @@ interface DataStoreManager {
         const val YOUTUBE = "youtube"
         const val LRCLIB = "lrclib"
         const val BETTER_LYRICS = "better_lyrics"
+        const val YOULYPLUS = "youlyplus"
+        const val PAXSENIX = "paxsenix"
+        const val KUGOU = "kugou"
+        const val UNISON = "unison"
 
         const val FDROID = "fdroid"
         const val GITHUB_FOSS_NIGHTLY = "github_foss_nightly"

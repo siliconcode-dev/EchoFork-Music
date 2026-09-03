@@ -427,6 +427,10 @@
     <string name="five_seconds">Five seconds</string>
     <string name="lrclib" translatable="false">LRCLIB</string>
     <string name="better_lyrics" translatable="false">BetterLyrics</string>
+    <string name="youlyplus_lyrics" translatable="false">YouLyPlus</string>
+    <string name="paxsenix_lyrics" translatable="false">Paxsenix</string>
+    <string name="kugou_lyrics" translatable="false">KuGou</string>
+    <string name="unison_lyrics" translatable="false">Unison</string>
     <string name="lyrics_provider_lrc">Lyrics provided by LRCLIB</string>
     <string name="sync_first">Sync this playlist to YouTube Music first</string>
     <string name="endless_queue">Endless queue</string>

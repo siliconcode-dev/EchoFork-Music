@@ -1309,6 +1309,39 @@ class SharedViewModel(
                         duration,
                     )
                 }
+
+                DataStoreManager.YOULYPLUS -> {
+                    getYouLyPlusLyrics(
+                        song,
+                        (artist ?: "").toString(),
+                        duration,
+                    )
+                }
+
+                DataStoreManager.PAXSENIX -> {
+                    getPaxsenixLyrics(
+                        song,
+                        (artist ?: "").toString(),
+                        duration,
+                    )
+                }
+
+                DataStoreManager.KUGOU -> {
+                    getKuGouLyrics(
+                        song,
+                        (artist ?: "").toString(),
+                        duration,
+                    )
+                }
+
+                DataStoreManager.UNISON -> {
+                    getUnisonLyrics(
+                        videoId,
+                        song,
+                        (artist ?: "").toString(),
+                        duration,
+                    )
+                }
             }
         }
     }
@@ -1493,6 +1526,152 @@ class SharedViewModel(
                                 artist,
                                 duration,
                             )
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun getYouLyPlusLyrics(
+        song: SongEntity,
+        artist: String,
+        duration: Int,
+    ) {
+        viewModelScope.launch {
+            lyricsCanvasRepository
+                .getYouLyPlusLyrics(
+                    artist,
+                    song.title,
+                    duration,
+                ).collectLatest { res ->
+                    val data = res.data
+                    when (res) {
+                        is Resource.Success if (data != null) -> {
+                            Logger.d(tag, "Get YouLyPlus Lyrics Success")
+                            updateLyrics(
+                                song.videoId,
+                                duration,
+                                data,
+                                false,
+                                LyricsProvider.YOULYPLUS,
+                            )
+                            insertLyrics(data.toLyricsEntity(song.videoId))
+                            getAITranslationLyrics(song.videoId, data)
+                        }
+
+                        else -> {
+                            log("Get YouLyPlus Lyrics Error: ${res.message}")
+                            getSavedLyrics(song.toTrack().copy(durationSeconds = duration))
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun getPaxsenixLyrics(
+        song: SongEntity,
+        artist: String,
+        duration: Int,
+    ) {
+        viewModelScope.launch {
+            lyricsCanvasRepository
+                .getPaxsenixLyrics(
+                    artist,
+                    song.title,
+                    duration,
+                ).collectLatest { res ->
+                    val data = res.data
+                    when (res) {
+                        is Resource.Success if (data != null) -> {
+                            Logger.d(tag, "Get Paxsenix Lyrics Success")
+                            updateLyrics(
+                                song.videoId,
+                                duration,
+                                data,
+                                false,
+                                LyricsProvider.PAXSENIX,
+                            )
+                            insertLyrics(data.toLyricsEntity(song.videoId))
+                            getAITranslationLyrics(song.videoId, data)
+                        }
+
+                        else -> {
+                            log("Get Paxsenix Lyrics Error: ${res.message}")
+                            getSavedLyrics(song.toTrack().copy(durationSeconds = duration))
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun getKuGouLyrics(
+        song: SongEntity,
+        artist: String,
+        duration: Int,
+    ) {
+        viewModelScope.launch {
+            lyricsCanvasRepository
+                .getKuGouLyrics(
+                    artist,
+                    song.title,
+                    duration,
+                ).collectLatest { res ->
+                    val data = res.data
+                    when (res) {
+                        is Resource.Success if (data != null) -> {
+                            Logger.d(tag, "Get KuGou Lyrics Success")
+                            updateLyrics(
+                                song.videoId,
+                                duration,
+                                data,
+                                false,
+                                LyricsProvider.KUGOU,
+                            )
+                            insertLyrics(data.toLyricsEntity(song.videoId))
+                            getAITranslationLyrics(song.videoId, data)
+                        }
+
+                        else -> {
+                            log("Get KuGou Lyrics Error: ${res.message}")
+                            getSavedLyrics(song.toTrack().copy(durationSeconds = duration))
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun getUnisonLyrics(
+        videoId: String,
+        song: SongEntity,
+        artist: String,
+        duration: Int,
+    ) {
+        viewModelScope.launch {
+            lyricsCanvasRepository
+                .getUnisonLyrics(
+                    videoId,
+                    artist,
+                    song.title,
+                    duration,
+                ).collectLatest { res ->
+                    val data = res.data
+                    when (res) {
+                        is Resource.Success if (data != null) -> {
+                            Logger.d(tag, "Get Unison Lyrics Success")
+                            updateLyrics(
+                                song.videoId,
+                                duration,
+                                data,
+                                false,
+                                LyricsProvider.UNISON,
+                            )
+                            insertLyrics(data.toLyricsEntity(song.videoId))
+                            getAITranslationLyrics(song.videoId, data)
+                        }
+
+                        else -> {
+                            log("Get Unison Lyrics Error: ${res.message}")
+                            getSavedLyrics(song.toTrack().copy(durationSeconds = duration))
                         }
                     }
                 }
@@ -2027,6 +2206,10 @@ enum class LyricsProvider {
     SPOTIFY,
     LRCLIB,
     BETTER_LYRICS,
+    YOULYPLUS,
+    PAXSENIX,
+    KUGOU,
+    UNISON,
     AI,
     OFFLINE,
 }

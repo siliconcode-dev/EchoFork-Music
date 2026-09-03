@@ -159,7 +159,8 @@ dependencies {
 
     implementation(projects.composeApp)
     implementation(projects.data)
-    
+    implementation(projects.paxsenixlyrics)
+
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")

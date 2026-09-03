@@ -219,6 +219,7 @@ import echomusic.composeapp.generated.resources.endless_queue
 import echomusic.composeapp.generated.resources.error_occurred
 import echomusic.composeapp.generated.resources.itag
 import echomusic.composeapp.generated.resources.key
+import echomusic.composeapp.generated.resources.kugou_lyrics
 import echomusic.composeapp.generated.resources.like
 import echomusic.composeapp.generated.resources.like_and_dislike
 import echomusic.composeapp.generated.resources.liked
@@ -237,6 +238,7 @@ import echomusic.composeapp.generated.resources.no_playlist_found
 import echomusic.composeapp.generated.resources.now_playing
 import echomusic.composeapp.generated.resources.now_playing_upper
 import echomusic.composeapp.generated.resources.ok
+import echomusic.composeapp.generated.resources.paxsenix_lyrics
 import echomusic.composeapp.generated.resources.pitch
 import echomusic.composeapp.generated.resources.play_next
 import echomusic.composeapp.generated.resources.playback_speed
@@ -268,10 +270,12 @@ import echomusic.composeapp.generated.resources.sync_first
 import echomusic.composeapp.generated.resources.synced
 import echomusic.composeapp.generated.resources.title
 import echomusic.composeapp.generated.resources.to_download_folder
+import echomusic.composeapp.generated.resources.unison_lyrics
 import echomusic.composeapp.generated.resources.unknown
 import echomusic.composeapp.generated.resources.update_playlist
 import echomusic.composeapp.generated.resources.warning
 import echomusic.composeapp.generated.resources.yes
+import echomusic.composeapp.generated.resources.youlyplus_lyrics
 import echomusic.composeapp.generated.resources.your_discord_token
 import echomusic.composeapp.generated.resources.your_playlists
 import echomusic.composeapp.generated.resources.your_sp_dc_param_of_spotify_cookie
@@ -1519,6 +1523,10 @@ fun NowPlayingBottomSheet(
                     DataStoreManager.LRCLIB -> 1
                     DataStoreManager.YOUTUBE -> 2
                     DataStoreManager.BETTER_LYRICS -> 3
+                    DataStoreManager.YOULYPLUS -> 4
+                    DataStoreManager.PAXSENIX -> 5
+                    DataStoreManager.KUGOU -> 6
+                    DataStoreManager.UNISON -> 7
                     else -> 0
                 },
             )
@@ -1583,6 +1591,54 @@ fun NowPlayingBottomSheet(
                         Spacer(modifier = Modifier.size(10.dp))
                         Text(text = stringResource(Res.string.better_lyrics), style = typo().labelSmall)
                     }
+                    Row(
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 4.dp)
+                                .fillMaxWidth()
+                                .clickable { selected = 4 },
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(selected = selected == 4, onClick = { selected = 4 })
+                        Spacer(modifier = Modifier.size(10.dp))
+                        Text(text = stringResource(Res.string.youlyplus_lyrics), style = typo().labelSmall)
+                    }
+                    Row(
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 4.dp)
+                                .fillMaxWidth()
+                                .clickable { selected = 5 },
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(selected = selected == 5, onClick = { selected = 5 })
+                        Spacer(modifier = Modifier.size(10.dp))
+                        Text(text = stringResource(Res.string.paxsenix_lyrics), style = typo().labelSmall)
+                    }
+                    Row(
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 4.dp)
+                                .fillMaxWidth()
+                                .clickable { selected = 6 },
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(selected = selected == 6, onClick = { selected = 6 })
+                        Spacer(modifier = Modifier.size(10.dp))
+                        Text(text = stringResource(Res.string.kugou_lyrics), style = typo().labelSmall)
+                    }
+                    Row(
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 4.dp)
+                                .fillMaxWidth()
+                                .clickable { selected = 7 },
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(selected = selected == 7, onClick = { selected = 7 })
+                        Spacer(modifier = Modifier.size(10.dp))
+                        Text(text = stringResource(Res.string.unison_lyrics), style = typo().labelSmall)
+                    }
                 }
             },
             confirmButton = {
@@ -1595,6 +1651,10 @@ fun NowPlayingBottomSheet(
                                     1 -> DataStoreManager.LRCLIB
                                     2 -> DataStoreManager.YOUTUBE
                                     3 -> DataStoreManager.BETTER_LYRICS
+                                    4 -> DataStoreManager.YOULYPLUS
+                                    5 -> DataStoreManager.PAXSENIX
+                                    6 -> DataStoreManager.KUGOU
+                                    7 -> DataStoreManager.UNISON
                                     else -> DataStoreManager.SIMPMUSIC
                                 },
                             ),

@@ -38,6 +38,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import echo.music.enhanced.crashlytics.configCrashlytics
 import echo.music.enhanced.lastfm.configLastfm
+import echo.music.enhanced.paxsenixlyrics.Paxsenix
 import java.lang.reflect.Field
 
 class EchoMusicApplication :
@@ -54,6 +55,7 @@ class EchoMusicApplication :
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         configCrashlytics(this, "")
         configLastfm(BuildKonfig.lastfmApiKey, BuildKonfig.lastfmSecret)
+        Paxsenix.init(this)
         startKoin {
             androidLogger(level = Level.DEBUG)
             androidContext(this@EchoMusicApplication)

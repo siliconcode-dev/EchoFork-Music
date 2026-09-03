@@ -286,6 +286,7 @@ import echomusic.composeapp.generated.resources.keep_your_youtube_playlist_offli
 import echomusic.composeapp.generated.resources.keep_your_youtube_playlist_offline_description
 import echomusic.composeapp.generated.resources.kill_service_on_exit
 import echomusic.composeapp.generated.resources.kill_service_on_exit_description
+import echomusic.composeapp.generated.resources.kugou_lyrics
 import echomusic.composeapp.generated.resources.language
 import echomusic.composeapp.generated.resources.last_backup
 import echomusic.composeapp.generated.resources.last_checked_at
@@ -317,6 +318,7 @@ import echomusic.composeapp.generated.resources.equalizer_description
 import echomusic.composeapp.generated.resources.openai
 import echomusic.composeapp.generated.resources.openai_api_compatible
 import echomusic.composeapp.generated.resources.other_app
+import echomusic.composeapp.generated.resources.paxsenix_lyrics
 import echomusic.composeapp.generated.resources.play_explicit_content
 import echomusic.composeapp.generated.resources.play_explicit_content_description
 import echomusic.composeapp.generated.resources.play_video_for_video_track_instead_of_audio_only
@@ -383,6 +385,7 @@ import echomusic.composeapp.generated.resources.true_motion_auto
 import echomusic.composeapp.generated.resources.true_motion_description
 import echomusic.composeapp.generated.resources.true_motion_target_rate
 import echomusic.composeapp.generated.resources.true_motion_unsupported
+import echomusic.composeapp.generated.resources.unison_lyrics
 import echomusic.composeapp.generated.resources.unknown
 import echomusic.composeapp.generated.resources.update_channel
 import echomusic.composeapp.generated.resources.upload_your_listening_history_to_youtube_music_server_it_will_make_yt_music_recommendation_system_better_working_only_if_logged_in
@@ -398,6 +401,7 @@ import echomusic.composeapp.generated.resources.warning
 import echomusic.composeapp.generated.resources.weekly
 import echomusic.composeapp.generated.resources.what_segments_will_be_skipped
 import echomusic.composeapp.generated.resources.you_can_see_the_content_below_the_bottom_bar
+import echomusic.composeapp.generated.resources.youlyplus_lyrics
 import echomusic.composeapp.generated.resources.youtube_account
 import echomusic.composeapp.generated.resources.youtube_subtitle_language
 import echomusic.composeapp.generated.resources.youtube_subtitle_language_message
@@ -1362,6 +1366,10 @@ fun SettingScreen(
                             DataStoreManager.YOUTUBE -> stringResource(Res.string.youtube_transcript)
                             DataStoreManager.LRCLIB -> stringResource(Res.string.lrclib)
                             DataStoreManager.BETTER_LYRICS -> stringResource(Res.string.better_lyrics)
+                            DataStoreManager.YOULYPLUS -> stringResource(Res.string.youlyplus_lyrics)
+                            DataStoreManager.PAXSENIX -> stringResource(Res.string.paxsenix_lyrics)
+                            DataStoreManager.KUGOU -> stringResource(Res.string.kugou_lyrics)
+                            DataStoreManager.UNISON -> stringResource(Res.string.unison_lyrics)
                             else -> stringResource(Res.string.unknown)
                         },
                     onClick = {
@@ -1379,6 +1387,14 @@ fun SettingScreen(
                                                 (mainLyricsProvider == DataStoreManager.LRCLIB) to runBlocking { getString(Res.string.lrclib) },
                                                 (mainLyricsProvider == DataStoreManager.BETTER_LYRICS) to
                                                     runBlocking { getString(Res.string.better_lyrics) },
+                                                (mainLyricsProvider == DataStoreManager.YOULYPLUS) to
+                                                    runBlocking { getString(Res.string.youlyplus_lyrics) },
+                                                (mainLyricsProvider == DataStoreManager.PAXSENIX) to
+                                                    runBlocking { getString(Res.string.paxsenix_lyrics) },
+                                                (mainLyricsProvider == DataStoreManager.KUGOU) to
+                                                    runBlocking { getString(Res.string.kugou_lyrics) },
+                                                (mainLyricsProvider == DataStoreManager.UNISON) to
+                                                    runBlocking { getString(Res.string.unison_lyrics) },
                                             ),
                                     ),
                                 confirm =
@@ -1389,6 +1405,10 @@ fun SettingScreen(
                                                 runBlocking { getString(Res.string.youtube_transcript) } -> DataStoreManager.YOUTUBE
                                                 runBlocking { getString(Res.string.lrclib) } -> DataStoreManager.LRCLIB
                                                 runBlocking { getString(Res.string.better_lyrics) } -> DataStoreManager.BETTER_LYRICS
+                                                runBlocking { getString(Res.string.youlyplus_lyrics) } -> DataStoreManager.YOULYPLUS
+                                                runBlocking { getString(Res.string.paxsenix_lyrics) } -> DataStoreManager.PAXSENIX
+                                                runBlocking { getString(Res.string.kugou_lyrics) } -> DataStoreManager.KUGOU
+                                                runBlocking { getString(Res.string.unison_lyrics) } -> DataStoreManager.UNISON
                                                 else -> DataStoreManager.SIMPMUSIC
                                             },
                                         )

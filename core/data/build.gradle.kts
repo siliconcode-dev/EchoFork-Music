@@ -80,6 +80,13 @@ kotlin {
                 implementation(libs.koin.android)
                 implementation(projects.media3)
                 implementation(libs.room.ktx)
+
+                // Android-only lyrics providers, called via the expect/actual bridge in
+                // data/lyrics/NewLyricsProviders — these modules have no commonMain/jvm target.
+                implementation(projects.youlyplus)
+                implementation(projects.paxsenixlyrics)
+                implementation(projects.kugou)
+                implementation(projects.unison)
             }
         }
 

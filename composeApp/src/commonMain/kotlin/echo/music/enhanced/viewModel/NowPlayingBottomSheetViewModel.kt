@@ -11,8 +11,12 @@ import echo.music.enhanced.domain.data.model.searchResult.songs.Artist
 import echo.music.enhanced.domain.data.model.streams.YouTubeWatchEndpoint
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.BETTER_LYRICS
+import echo.music.enhanced.domain.manager.DataStoreManager.Values.KUGOU
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.LRCLIB
+import echo.music.enhanced.domain.manager.DataStoreManager.Values.PAXSENIX
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.SIMPMUSIC
+import echo.music.enhanced.domain.manager.DataStoreManager.Values.UNISON
+import echo.music.enhanced.domain.manager.DataStoreManager.Values.YOULYPLUS
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.YOUTUBE
 import echo.music.enhanced.domain.mediaservice.handler.DownloadHandler
 import echo.music.enhanced.domain.mediaservice.handler.PlaylistType
@@ -121,6 +125,22 @@ class NowPlayingBottomSheetViewModel(
 
                             BETTER_LYRICS -> {
                                 _uiState.update { it.copy(mainLyricsProvider = BETTER_LYRICS) }
+                            }
+
+                            YOULYPLUS -> {
+                                _uiState.update { it.copy(mainLyricsProvider = YOULYPLUS) }
+                            }
+
+                            PAXSENIX -> {
+                                _uiState.update { it.copy(mainLyricsProvider = PAXSENIX) }
+                            }
+
+                            KUGOU -> {
+                                _uiState.update { it.copy(mainLyricsProvider = KUGOU) }
+                            }
+
+                            UNISON -> {
+                                _uiState.update { it.copy(mainLyricsProvider = UNISON) }
                             }
 
                             else -> {

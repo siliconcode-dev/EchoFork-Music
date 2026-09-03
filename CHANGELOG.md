@@ -2,6 +2,11 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.4] — 2026-09-03
+
+### Added
+- 4 new Lyrics providers in Settings > Lyrics: YouLyPlus, Paxsenix, KuGou, and Unison, alongside the existing SimpMusic/YouTube/LRCLIB/BetterLyrics options.
+
 ## [0.1.3] — 2026-09-02
 
 ### Fixed
