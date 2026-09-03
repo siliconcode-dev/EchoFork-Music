@@ -181,8 +181,8 @@ class SettingsViewModel(
     private var _backupDownloaded: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val backupDownloaded: StateFlow<Boolean> = _backupDownloaded
 
-    private var _enableLiquidGlass: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val enableLiquidGlass: StateFlow<Boolean> = _enableLiquidGlass
+    private var _interfaceMode: MutableStateFlow<String?> = MutableStateFlow(null)
+    val interfaceMode: StateFlow<String?> = _interfaceMode
 
     private val _explicitContentEnabled = MutableStateFlow(false)
     val explicitContentEnabled: StateFlow<Boolean> = _explicitContentEnabled
@@ -345,9 +345,9 @@ class SettingsViewModel(
         getYoutubeSubtitleLanguage()
         getHelpBuildLyricsDatabase()
         viewModelScope.launch {
-            enableLiquidGlass.collect {
-                if (getPlatform() != Platform.Android && it) {
-                    setEnableLiquidGlass(false)
+            interfaceMode.collect {
+                if (getPlatform() != Platform.Android && it == DataStoreManager.INTERFACE_LIQUID_GLASS) {
+                    setInterfaceMode(DataStoreManager.INTERFACE_BETTER_ECHO)
                 }
             }
         }
@@ -405,7 +405,7 @@ class SettingsViewModel(
         getContributorNameAndEmail()
         getBackupDownloaded()
         getUpdateChannel()
-        getEnableLiquidGlass()
+        getInterfaceMode()
         getExplicitContentEnabled()
         getDiscordLoggedIn()
         getDiscordRichPresenceEnabled()
@@ -761,18 +761,18 @@ class SettingsViewModel(
         }
     }
 
-    private fun getEnableLiquidGlass() {
+    private fun getInterfaceMode() {
         viewModelScope.launch {
-            dataStoreManager.enableLiquidGlass.collect { enableLiquidGlass ->
-                _enableLiquidGlass.value = enableLiquidGlass == DataStoreManager.TRUE
+            dataStoreManager.interfaceMode.collect { mode ->
+                _interfaceMode.value = mode
             }
         }
     }
 
-    fun setEnableLiquidGlass(enableLiquidGlass: Boolean) {
+    fun setInterfaceMode(mode: String) {
         viewModelScope.launch {
-            dataStoreManager.setEnableLiquidGlass(enableLiquidGlass)
-            getEnableLiquidGlass()
+            dataStoreManager.setInterfaceMode(mode)
+            getInterfaceMode()
         }
     }
 

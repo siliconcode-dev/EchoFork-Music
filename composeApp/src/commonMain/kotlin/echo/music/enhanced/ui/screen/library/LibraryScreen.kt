@@ -28,6 +28,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -59,6 +61,7 @@ import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import echo.music.enhanced.common.LibraryChipType
+import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.utils.LocalResource
 import echo.music.enhanced.logger.Logger
 import echo.music.enhanced.extension.copy
@@ -70,10 +73,13 @@ import echo.music.enhanced.ui.component.LibraryItem
 import echo.music.enhanced.ui.component.LibraryItemState
 import echo.music.enhanced.ui.component.LibraryItemType
 import echo.music.enhanced.ui.component.LibraryTilingBox
+import echo.music.enhanced.ui.icon.Add
 import echo.music.enhanced.ui.icon.PeopleAlt
 import echo.music.enhanced.ui.icon.echoIcons
 import echo.music.enhanced.ui.theme.typo
 import echo.music.enhanced.viewModel.LibraryViewModel
+import echo.music.enhanced.viewModel.SharedViewModel
+import org.koin.compose.koinInject
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
@@ -112,10 +118,12 @@ import echomusic.composeapp.generated.resources.your_youtube_playlists
 fun LibraryScreen(
     innerPadding: PaddingValues,
     viewModel: LibraryViewModel = koinViewModel(),
+    sharedViewModel: SharedViewModel = koinInject(),
     navController: NavController,
     onScrolling: (onTop: Boolean) -> Unit = {},
 ) {
     val density = LocalDensity.current
+    val interfaceMode by sharedViewModel.getInterfaceMode().collectAsStateWithLifecycle(DataStoreManager.INTERFACE_BETTER_ECHO)
 
     val loggedIn by viewModel.youtubeLoggedIn.collectAsStateWithLifecycle(initialValue = false)
     val nowPlaying by viewModel.nowPlayingVideoId.collectAsStateWithLifecycle()
@@ -318,6 +326,28 @@ fun LibraryScreen(
             else -> {}
 
 
+        }
+    }
+    // Better Echo: a single persistent "Create Playlist" FAB (consolidating what Classic only
+    // offers as an inline prompt inside the empty Local Playlists grid), adapted from upstream's
+    // library FAB consolidation.
+    if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(innerPadding)
+                    .padding(16.dp),
+        ) {
+            FloatingActionButton(
+                onClick = { showAddSheet = true },
+                modifier = Modifier.align(Alignment.BottomEnd),
+                shape = CircleShape,
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+            ) {
+                Icon(imageVector = echoIcons.Add, contentDescription = stringResource(Res.string.create))
+            }
         }
     }
     val coroutineScope = rememberCoroutineScope()

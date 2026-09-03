@@ -40,6 +40,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -194,6 +196,8 @@ import echomusic.composeapp.generated.resources.auto_check_for_update
 import echomusic.composeapp.generated.resources.auto_check_for_update_description
 import echomusic.composeapp.generated.resources.based_on
 import echomusic.composeapp.generated.resources.based_on_description
+import echomusic.composeapp.generated.resources.whats_coming_next
+import echomusic.composeapp.generated.resources.whats_coming_next_description
 import echomusic.composeapp.generated.resources.backup
 import echomusic.composeapp.generated.resources.backup_downloaded
 import echomusic.composeapp.generated.resources.backup_downloaded_description
@@ -249,8 +253,11 @@ import echomusic.composeapp.generated.resources.download_quality
 import echomusic.composeapp.generated.resources.downloaded_cache
 import echomusic.composeapp.generated.resources.enable_artist_background_video
 import echomusic.composeapp.generated.resources.enable_canvas
-import echomusic.composeapp.generated.resources.enable_liquid_glass_effect
-import echomusic.composeapp.generated.resources.enable_liquid_glass_effect_description
+import echomusic.composeapp.generated.resources.interface_mode
+import echomusic.composeapp.generated.resources.interface_mode_better_echo
+import echomusic.composeapp.generated.resources.interface_mode_classic
+import echomusic.composeapp.generated.resources.interface_mode_info
+import echomusic.composeapp.generated.resources.interface_mode_liquid_glass
 import echomusic.composeapp.generated.resources.enable_rich_presence
 import echomusic.composeapp.generated.resources.enable_sponsor_block
 import echomusic.composeapp.generated.resources.enable_spotify_lyrics
@@ -553,7 +560,7 @@ fun SettingScreen(
     val autoBackupMaxFiles by viewModel.autoBackupMaxFiles.collectAsStateWithLifecycle()
     val autoBackupLastTime by viewModel.autoBackupLastTime.collectAsStateWithLifecycle()
     val updateChannel by viewModel.updateChannel.collectAsStateWithLifecycle()
-    val enableLiquidGlass by viewModel.enableLiquidGlass.collectAsStateWithLifecycle()
+    val interfaceMode by viewModel.interfaceMode.collectAsStateWithLifecycle()
     val themeMode by sharedViewModel.getThemeMode().collectAsStateWithLifecycle(DataStoreManager.THEME_MODE_DARK)
     val themeColorSource by sharedViewModel.getThemeColorSource().collectAsStateWithLifecycle(DataStoreManager.THEME_COLOR_WALLPAPER)
     val customThemeColorHex by sharedViewModel.getCustomThemeColor().collectAsStateWithLifecycle(DataStoreManager.DEFAULT_THEME_COLOR_HEX)
@@ -820,15 +827,40 @@ fun SettingScreen(
                     )
                 }
 
-                if (getPlatform() == Platform.Android) {
-                    SettingItem(
-                        title = stringResource(Res.string.enable_liquid_glass_effect),
-                        subtitle = stringResource(Res.string.enable_liquid_glass_effect_description),
-                        smallSubtitle = true,
-                        switch = (enableLiquidGlass to { viewModel.setEnableLiquidGlass(it) }),
-                        isEnable = getPlatform() == Platform.Android,
-                    )
-                }
+                val interfaceModeLabels =
+                    buildList {
+                        add(DataStoreManager.INTERFACE_CLASSIC to stringResource(Res.string.interface_mode_classic))
+                        add(DataStoreManager.INTERFACE_BETTER_ECHO to stringResource(Res.string.interface_mode_better_echo))
+                        if (getPlatform() == Platform.Android) {
+                            add(DataStoreManager.INTERFACE_LIQUID_GLASS to stringResource(Res.string.interface_mode_liquid_glass))
+                        }
+                    }
+                SettingItem(
+                    title = stringResource(Res.string.interface_mode),
+                    subtitle =
+                        (interfaceModeLabels.firstOrNull { it.first == interfaceMode }?.second ?: interfaceModeLabels.first().second) +
+                            " — " + stringResource(Res.string.interface_mode_info),
+                    smallSubtitle = true,
+                    onClick = {
+                        viewModel.setAlertData(
+                            SettingAlertState(
+                                title = runBlocking { getString(Res.string.interface_mode) },
+                                selectOne =
+                                    SettingAlertState.SelectData(
+                                        listSelect = interfaceModeLabels.map { (it.first == interfaceMode) to it.second },
+                                    ),
+                                confirm =
+                                    runBlocking { getString(Res.string.change) } to { state ->
+                                        val selected = state.selectOne?.getSelected()
+                                        interfaceModeLabels.firstOrNull { it.second == selected }?.first?.let {
+                                            viewModel.setInterfaceMode(it)
+                                        }
+                                    },
+                                dismiss = runBlocking { getString(Res.string.cancel) },
+                            ),
+                        )
+                    },
+                )
             }
         }
         item(key = "content") {
@@ -2345,37 +2377,61 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
-                SettingItem(
-                    title = stringResource(Res.string.version),
-                    subtitle = stringResource(Res.string.version_format, VersionManager.getVersionName()),
-                )
-                SettingItem(
-                    title = stringResource(Res.string.auto_check_for_update),
-                    subtitle = stringResource(Res.string.auto_check_for_update_description),
-                    switch = (autoCheckUpdate to { viewModel.setAutoCheckUpdate(it) }),
-                )
-                SettingItem(
-                    title = stringResource(Res.string.check_for_update),
-                    subtitle = checkForUpdateSubtitle,
-                    onClick = {
-                        sharedViewModel.checkForUpdate()
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.based_on),
-                    subtitle = stringResource(Res.string.based_on_description),
-                    onClick = {
-                        uriHandler.openUri("https://github.com/iad1tya/Echo-Music")
-                    },
-                )
+                val aboutItems: @Composable () -> Unit = {
+                    SettingItem(
+                        title = stringResource(Res.string.version),
+                        subtitle = stringResource(Res.string.version_format, VersionManager.getVersionName()),
+                    )
+                    SettingItem(
+                        title = stringResource(Res.string.auto_check_for_update),
+                        subtitle = stringResource(Res.string.auto_check_for_update_description),
+                        switch = (autoCheckUpdate to { viewModel.setAutoCheckUpdate(it) }),
+                    )
+                    SettingItem(
+                        title = stringResource(Res.string.check_for_update),
+                        subtitle = checkForUpdateSubtitle,
+                        onClick = {
+                            sharedViewModel.checkForUpdate()
+                        },
+                    )
+                    if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                        SettingItem(
+                            title = stringResource(Res.string.whats_coming_next),
+                            subtitle = stringResource(Res.string.whats_coming_next_description),
+                            onClick = {
+                                uriHandler.openUri("https://github.com/siliconcode-dev/EchoFork-Music/milestones")
+                            },
+                        )
+                    }
+                    SettingItem(
+                        title = stringResource(Res.string.based_on),
+                        subtitle = stringResource(Res.string.based_on_description),
+                        onClick = {
+                            uriHandler.openUri("https://github.com/iad1tya/Echo-Music")
+                        },
+                    )
 
-                SettingItem(
-                    title = stringResource(Res.string.third_party_libraries),
-                    subtitle = stringResource(Res.string.description_and_licenses),
-                    onClick = {
-                        showThirdPartyLibraries = true
-                    },
-                )
+                    SettingItem(
+                        title = stringResource(Res.string.third_party_libraries),
+                        subtitle = stringResource(Res.string.description_and_licenses),
+                        onClick = {
+                            showThirdPartyLibraries = true
+                        },
+                    )
+                }
+                // Better Echo: groups About into a single card (adapted from upstream's
+                // Material3SettingsGroup-style About redesign) instead of a flat item list.
+                if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+                    ) {
+                        Column { aboutItems() }
+                    }
+                } else {
+                    aboutItems()
+                }
             }
         }
         item(key = "end") {

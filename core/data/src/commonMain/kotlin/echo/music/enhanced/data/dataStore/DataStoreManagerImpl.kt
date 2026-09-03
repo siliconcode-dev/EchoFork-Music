@@ -15,6 +15,8 @@ import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.AI_PROVIDER_GEMINI
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.FALSE
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.GITHUB
+import echo.music.enhanced.domain.manager.DataStoreManager.Values.INTERFACE_BETTER_ECHO
+import echo.music.enhanced.domain.manager.DataStoreManager.Values.INTERFACE_LIQUID_GLASS
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.KOTLIN_SCRAPER
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.LOCAL_PLAYLIST_FILTER_OLDER_FIRST
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.PROXY_TYPE_HTTP
@@ -1515,22 +1517,20 @@ internal class DataStoreManagerImpl(
         }
     }
 
-    override val enableLiquidGlass: Flow<String>
-        get() =
-            settingsDataStore.data.map { preferences ->
-                preferences[LIQUID_GLASS] ?: FALSE
-            }
+    /**
+     * One-time migration: users already on the old `enableLiquidGlass` boolean toggle land on
+     * [INTERFACE_LIQUID_GLASS] instead of silently losing the effect once that toggle is
+     * replaced by this picker; everyone else defaults to [INTERFACE_BETTER_ECHO].
+     */
+    override val interfaceMode: Flow<String> =
+        settingsDataStore.data.map { preferences ->
+            preferences[INTERFACE_MODE] ?: if (preferences[LIQUID_GLASS] == TRUE) INTERFACE_LIQUID_GLASS else INTERFACE_BETTER_ECHO
+        }
 
-    override suspend fun setEnableLiquidGlass(enable: Boolean) {
+    override suspend fun setInterfaceMode(mode: String) {
         withContext(Dispatchers.IO) {
-            if (enable) {
-                settingsDataStore.edit { settings ->
-                    settings[LIQUID_GLASS] = TRUE
-                }
-            } else {
-                settingsDataStore.edit { settings ->
-                    settings[LIQUID_GLASS] = FALSE
-                }
+            settingsDataStore.edit { settings ->
+                settings[INTERFACE_MODE] = mode
             }
         }
     }
@@ -1752,6 +1752,7 @@ internal class DataStoreManagerImpl(
         val CANVAS_PROVIDER = stringPreferencesKey("canvas_provider")
         val ARTIST_BACKGROUND_VIDEO = stringPreferencesKey("artist_background_video")
         val SCRAPER_BACKEND = stringPreferencesKey("scraper_backend")
+        val INTERFACE_MODE = stringPreferencesKey("interface_mode")
         val TRANSLATION_LANGUAGE = stringPreferencesKey("translation_language")
         val USE_TRANSLATION_LANGUAGE = stringPreferencesKey("use_translation_language")
 

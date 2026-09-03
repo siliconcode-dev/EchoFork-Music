@@ -1929,7 +1929,7 @@ class SharedViewModel(
 
     fun getTranslucentBottomBar() = dataStoreManager.translucentBottomBar
 
-    fun getEnableLiquidGlass() = dataStoreManager.enableLiquidGlass
+    fun getInterfaceMode() = dataStoreManager.interfaceMode
 
     fun getTrueMotionEnabled() = dataStoreManager.trueMotionEnabled
 

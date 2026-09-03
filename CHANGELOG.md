@@ -2,6 +2,15 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.7] — 2026-09-03
+
+### Added
+- New "Interface" picker in Settings (replacing the old "Enable Liquid Glass Effect" toggle): choose between **Classic** (today's UI, unchanged), **Better Echo** (upstream's recent library/FAB/About UX changes, adapted to this fork), and **Liquid Glass** (this fork's glass-material system). Switches live, no restart. Existing Liquid Glass users are carried over automatically.
+- Better Echo mode: a consolidated "Create Playlist" FAB on the Library screen, and a redesigned card-based About section with a new "What's coming next" link.
+
+### Changed
+- The "What's New" dialog now reflects recent releases (Interface modes, the Innertube scraper backend, new lyrics/canvas providers) instead of the original v0.1.1 launch list, and got a Material 3 Expressive polish: bouncier spring entrance animations and a bolder, larger title.
+
 ## [0.1.6] — 2026-09-03
 
 ### Added

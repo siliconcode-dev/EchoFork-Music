@@ -137,7 +137,8 @@ fun App(viewModel: SharedViewModel = koinInject()) {
     val shouldShowWhatsNew by viewModel.shouldShowWhatsNew.collectAsStateWithLifecycle()
 
 
-    val isLiquidGlassEnabled by viewModel.getEnableLiquidGlass().collectAsStateWithLifecycle(DataStoreManager.FALSE)
+    val interfaceMode by viewModel.getInterfaceMode().collectAsStateWithLifecycle(DataStoreManager.INTERFACE_BETTER_ECHO)
+    val isLiquidGlassEnabled = if (interfaceMode == DataStoreManager.INTERFACE_LIQUID_GLASS) TRUE else DataStoreManager.FALSE
     val trueMotionEnabled by viewModel.getTrueMotionEnabled().collectAsStateWithLifecycle(DataStoreManager.FALSE)
     val trueMotionTargetHz by viewModel.getTrueMotionTargetHz().collectAsStateWithLifecycle(0)
     ApplyTrueMotionRefreshRate(if (trueMotionEnabled == TRUE) trueMotionTargetHz else -1)

@@ -436,9 +436,10 @@ interface DataStoreManager {
 
     suspend fun setBackupDownloaded(backupDownloaded: Boolean)
 
-    val enableLiquidGlass: Flow<String>
+    /** One of [INTERFACE_CLASSIC], [INTERFACE_BETTER_ECHO], [INTERFACE_LIQUID_GLASS] — applies live, no restart. */
+    val interfaceMode: Flow<String>
 
-    suspend fun setEnableLiquidGlass(enable: Boolean)
+    suspend fun setInterfaceMode(mode: String)
 
     /** Whether the player should use the ring/vinyl UI instead of the normal layout. */
     val ringPlayerEnabled: Flow<String>
@@ -545,6 +546,10 @@ interface DataStoreManager {
 
         const val KOTLIN_SCRAPER = "kotlin_scraper"
         const val INNERTUBE = "innertube"
+
+        const val INTERFACE_CLASSIC = "classic"
+        const val INTERFACE_BETTER_ECHO = "better_echo"
+        const val INTERFACE_LIQUID_GLASS = "liquid_glass"
 
         const val FDROID = "fdroid"
         const val GITHUB_FOSS_NIGHTLY = "github_foss_nightly"

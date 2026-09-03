@@ -123,6 +123,8 @@
     <string name="github">Github</string>
     <string name="based_on">Based on</string>
     <string name="based_on_description">Echo Music by Aditya, built on SimpMusic by maxrave-dev</string>
+    <string name="whats_coming_next">What\'s coming next</string>
+    <string name="whats_coming_next_description">See planned features and in-progress work on GitHub</string>
     <string name="title">Title</string>
     <string name="custom_order">Custom order</string>
     <string name="album">Album</string>
@@ -176,14 +178,14 @@
     <string name="whats_new_title">What's New</string>
     <string name="whats_new_version_format" translatable="false">Version %1$s</string>
     <string name="whats_new_dismiss">Got it</string>
-    <string name="whats_new_wavy_title">Wavy playback bar</string>
-    <string name="whats_new_wavy_description">The player's progress indicators now use Material 3's expressive wavy style.</string>
-    <string name="whats_new_spatial_audio_title">Spatial Audio</string>
-    <string name="whats_new_spatial_audio_description">Virtualized surround sound on supported devices, right from the Audio settings.</string>
-    <string name="whats_new_immersive_audio_title">Immersive Audio Passthrough</string>
-    <string name="whats_new_immersive_audio_description">Detects your device's own Dolby engine, when it has one, and gets you straight to its settings.</string>
-    <string name="whats_new_true_motion_title">True Motion</string>
-    <string name="whats_new_true_motion_description">Adaptive high refresh rate, matched to your display, with manual control when you want it.</string>
+    <string name="whats_new_interface_title">Classic, Better Echo, or Liquid Glass</string>
+    <string name="whats_new_interface_description">Pick your interface in Settings — today's Classic look, upstream's Better Echo layout, or the glass-material Liquid Glass style. Switches live, no restart.</string>
+    <string name="whats_new_scraper_backend_title">Innertube scraper backend</string>
+    <string name="whats_new_scraper_backend_description">A second, independent backend for search and playback — a reliability fallback if the default ever breaks. Switch it in Settings.</string>
+    <string name="whats_new_lyrics_providers_title">More lyrics providers</string>
+    <string name="whats_new_lyrics_providers_description">YouLyPlus, Paxsenix, KuGou, and Unison joined SimpMusic, YouTube, LRCLIB, and BetterLyrics as selectable lyrics sources.</string>
+    <string name="whats_new_canvas_providers_title">More Canvas providers</string>
+    <string name="whats_new_canvas_providers_description">Tidal, Apple Music, EchoMusicCanvas, and ArtistVideo joined Spotify Canvas, plus an artist background video option.</string>
     <string name="version_format" translatable="false">v%1$s</string>
     <string name="streaming_data_provider_piped">Streaming data provider (Piped)</string>
     <string name="itag">Itag</string>
@@ -540,8 +542,11 @@
     <string name="list_all_cookies_of_this_page">List all cookies of this page</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="update_channel">Update channel</string>
-    <string name="enable_liquid_glass_effect">Enable liquid glass (BETA)</string>
-    <string name="enable_liquid_glass_effect_description">Enable iOS's liquid glass effect in some position (Android 13+)</string>
+    <string name="interface_mode">Interface</string>
+    <string name="interface_mode_info">Switches live, no restart needed</string>
+    <string name="interface_mode_classic" translatable="false">Classic</string>
+    <string name="interface_mode_better_echo" translatable="false">Better Echo</string>
+    <string name="interface_mode_liquid_glass" translatable="false">Liquid Glass</string>
     <string name="your_library">Your library</string>
     <string name="play_explicit_content">Play explicit content</string>
     <string name="play_explicit_content_description">Enable to play explicit content</string>

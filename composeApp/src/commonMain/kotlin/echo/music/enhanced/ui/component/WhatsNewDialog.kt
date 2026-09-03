@@ -1,5 +1,12 @@
 package echo.music.enhanced.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,37 +19,47 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import echo.music.enhanced.ui.icon.AutoGraph
-import echo.music.enhanced.ui.icon.Speed
-import echo.music.enhanced.ui.icon.SpatialAudio
-import echo.music.enhanced.ui.icon.SurroundSound
+import echo.music.enhanced.ui.icon.Lyrics
+import echo.music.enhanced.ui.icon.PlayCircle
+import echo.music.enhanced.ui.icon.Sync
+import echo.music.enhanced.ui.icon.Tune
 import echo.music.enhanced.ui.icon.echoIcons
 import echo.music.enhanced.ui.theme.typo
 import echomusic.composeapp.generated.resources.Res
+import echomusic.composeapp.generated.resources.whats_new_canvas_providers_description
+import echomusic.composeapp.generated.resources.whats_new_canvas_providers_title
 import echomusic.composeapp.generated.resources.whats_new_dismiss
-import echomusic.composeapp.generated.resources.whats_new_immersive_audio_description
-import echomusic.composeapp.generated.resources.whats_new_immersive_audio_title
-import echomusic.composeapp.generated.resources.whats_new_spatial_audio_description
-import echomusic.composeapp.generated.resources.whats_new_spatial_audio_title
+import echomusic.composeapp.generated.resources.whats_new_interface_description
+import echomusic.composeapp.generated.resources.whats_new_interface_title
+import echomusic.composeapp.generated.resources.whats_new_lyrics_providers_description
+import echomusic.composeapp.generated.resources.whats_new_lyrics_providers_title
+import echomusic.composeapp.generated.resources.whats_new_scraper_backend_description
+import echomusic.composeapp.generated.resources.whats_new_scraper_backend_title
 import echomusic.composeapp.generated.resources.whats_new_title
-import echomusic.composeapp.generated.resources.whats_new_true_motion_description
-import echomusic.composeapp.generated.resources.whats_new_true_motion_title
 import echomusic.composeapp.generated.resources.whats_new_version_format
-import echomusic.composeapp.generated.resources.whats_new_wavy_description
-import echomusic.composeapp.generated.resources.whats_new_wavy_title
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -54,15 +71,19 @@ private data class WhatsNewEntry(
 
 private val whatsNewEntries =
     listOf(
-        WhatsNewEntry(echoIcons.SpatialAudio, Res.string.whats_new_spatial_audio_title, Res.string.whats_new_spatial_audio_description),
+        WhatsNewEntry(echoIcons.Tune, Res.string.whats_new_interface_title, Res.string.whats_new_interface_description),
+        WhatsNewEntry(echoIcons.Sync, Res.string.whats_new_scraper_backend_title, Res.string.whats_new_scraper_backend_description),
+        WhatsNewEntry(echoIcons.Lyrics, Res.string.whats_new_lyrics_providers_title, Res.string.whats_new_lyrics_providers_description),
         WhatsNewEntry(
-            echoIcons.SurroundSound,
-            Res.string.whats_new_immersive_audio_title,
-            Res.string.whats_new_immersive_audio_description,
+            echoIcons.PlayCircle,
+            Res.string.whats_new_canvas_providers_title,
+            Res.string.whats_new_canvas_providers_description,
         ),
-        WhatsNewEntry(echoIcons.Speed, Res.string.whats_new_true_motion_title, Res.string.whats_new_true_motion_description),
-        WhatsNewEntry(echoIcons.AutoGraph, Res.string.whats_new_wavy_title, Res.string.whats_new_wavy_description),
     )
+
+// M3 Expressive spring: a bouncier, livelier feel than the platform default ease curves.
+private val expressiveOffsetSpring =
+    spring<IntOffset>(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,64 +96,84 @@ fun WhatsNewDialog(
             onDismissRequest = onDismiss,
             modifier = Modifier.wrapContentSize(),
         ) {
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.large,
-                color = rememberSurfaceDarkColors().container,
-                contentColor = rememberSurfaceDarkColors().content,
-                tonalElevation = AlertDialogDefaults.TonalElevation,
-                shadowElevation = 1.dp,
+            var dialogVisible by remember { mutableStateOf(false) }
+            LaunchedEffect(Unit) { dialogVisible = true }
+            AnimatedVisibility(
+                visible = dialogVisible,
+                enter = fadeIn(tween(220)) + slideInVertically(expressiveOffsetSpring) { fullHeight -> fullHeight / 3 },
             ) {
-                Column(Modifier.padding(24.dp)) {
-                    Text(
-                        text = stringResource(Res.string.whats_new_title),
-                        style = typo().headlineMedium,
-                    )
-                    Text(
-                        text = stringResource(Res.string.whats_new_version_format, versionName),
-                        style = typo().bodyMedium,
-                    )
-                    Spacer(Modifier.height(20.dp))
-                    Column {
-                        whatsNewEntries.forEach { entry ->
-                            Row(
-                                modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
-                                verticalAlignment = Alignment.Top,
-                            ) {
-                                Surface(
-                                    shape = CircleShape,
-                                    color = MaterialTheme.colorScheme.primaryContainer,
-                                    modifier = Modifier.size(40.dp),
-                                ) {
-                                    Box(contentAlignment = Alignment.Center) {
-                                        Icon(
-                                            imageVector = entry.icon,
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                            modifier = Modifier.size(20.dp),
-                                        )
-                                    }
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(28.dp),
+                    color = rememberSurfaceDarkColors().container,
+                    contentColor = rememberSurfaceDarkColors().content,
+                    tonalElevation = AlertDialogDefaults.TonalElevation,
+                    shadowElevation = 1.dp,
+                ) {
+                    Column(Modifier.padding(24.dp)) {
+                        Text(
+                            text = stringResource(Res.string.whats_new_title),
+                            style = typo().headlineLarge.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        Text(
+                            text = stringResource(Res.string.whats_new_version_format, versionName),
+                            style = typo().bodyMedium,
+                        )
+                        Spacer(Modifier.height(20.dp))
+                        Column {
+                            whatsNewEntries.forEachIndexed { index, entry ->
+                                var rowVisible by remember { mutableStateOf(false) }
+                                LaunchedEffect(Unit) {
+                                    delay(80L * index)
+                                    rowVisible = true
                                 }
-                                Spacer(Modifier.width(16.dp))
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = stringResource(entry.title),
-                                        style = typo().titleSmall,
-                                    )
-                                    Text(
-                                        text = stringResource(entry.description),
-                                        style = typo().bodySmall,
-                                    )
+                                AnimatedVisibility(
+                                    visible = rowVisible,
+                                    enter = fadeIn(tween(220)) + slideInHorizontally(expressiveOffsetSpring) { it / 4 },
+                                ) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+                                        verticalAlignment = Alignment.Top,
+                                    ) {
+                                        Surface(
+                                            shape = CircleShape,
+                                            color = MaterialTheme.colorScheme.primaryContainer,
+                                            modifier = Modifier.size(44.dp),
+                                        ) {
+                                            Box(contentAlignment = Alignment.Center) {
+                                                Icon(
+                                                    imageVector = entry.icon,
+                                                    contentDescription = null,
+                                                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                                    modifier = Modifier.size(22.dp),
+                                                )
+                                            }
+                                        }
+                                        Spacer(Modifier.width(16.dp))
+                                        Column(modifier = Modifier.weight(1f)) {
+                                            Text(
+                                                text = stringResource(entry.title),
+                                                style = typo().titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                                            )
+                                            Text(
+                                                text = stringResource(entry.description),
+                                                style = typo().bodySmall,
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-                    Spacer(Modifier.height(12.dp))
-                    TextButton(
-                        onClick = onDismiss,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(stringResource(Res.string.whats_new_dismiss))
+                        Spacer(Modifier.height(16.dp))
+                        Button(
+                            onClick = onDismiss,
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                        ) {
+                            Text(stringResource(Res.string.whats_new_dismiss))
+                        }
                     }
                 }
             }
