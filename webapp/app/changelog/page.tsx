@@ -9,6 +9,31 @@ export const metadata: Metadata = {
 
 const RELEASES = [
   {
+    version: "0.1.5",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "New Canvas Provider picker in Settings: Tidal and Apple Music join Spotify as sources for the looping video background on the Now Playing screen, plus an experimental community-submitted option.",
+      "New \"Artist Background Video\" setting: an ambient backdrop video on artist pages, independent of what's currently playing.",
+    ],
+  },
+  {
+    version: "0.1.4",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "4 new Lyrics providers in Settings: YouLyPlus, Paxsenix, KuGou, and Unison, alongside the existing SimpMusic, YouTube, LRCLIB, and BetterLyrics options — more chances of finding synced lyrics for obscure or regional tracks.",
+    ],
+  },
+  {
+    version: "0.1.3",
+    date: "September 2026",
+    tag: "Fix",
+    highlights: [
+      "The \"update available\" dialog no longer offers an older release as if it were new — it previously flagged any release whose tag simply differed from the installed version, even a downgrade.",
+    ],
+  },
+  {
     version: "0.1.2",
     date: "September 2026",
     tag: "Fixes",

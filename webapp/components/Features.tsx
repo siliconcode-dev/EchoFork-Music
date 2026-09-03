@@ -74,7 +74,7 @@ const FEATURES: {
   {
     icon: Captions,
     title: "Synced Lyrics + Canvas",
-    body: "Word-by-word lyrics, with Spotify Canvas visualizations support.",
+    body: "Word-by-word lyrics from 8 providers, plus a looping video background from 5 canvas sources — pick whichever works best for a track.",
   },
   {
     icon: Car,
