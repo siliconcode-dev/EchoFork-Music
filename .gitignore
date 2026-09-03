@@ -1,6 +1,9 @@
 *.iml
 .gradle
 /local.properties
+# Temporary local clone of upstream Echo Music, used as a direct porting reference for the
+# v0.1.9-v0.1.13 Better Echo UI/UX port. Never committed; removed once the port is done.
+/upstream-latest/
 /.idea/
 .DS_Store
 /build

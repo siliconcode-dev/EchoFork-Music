@@ -161,7 +161,7 @@ fun AppTheme(
     SystemBarAppearanceEffect(isDark)
     // Better Echo's one real shape-system signature, ported from upstream's `echomusicTheme()`:
     // a much larger extraSmall corner radius than M3's ~4dp default, applied globally so built-in
-    // M3 components that read the theme token (not just RowGroupCard call sites) pick it up too.
+    // M3 components that read the theme token (not just Material3SettingsGroup call sites) pick it up too.
     val shapes =
         if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
             Shapes(extraSmall = RoundedCornerShape(24.dp))

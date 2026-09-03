@@ -43,7 +43,7 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.ui.component.RippleIconButton
-import echo.music.enhanced.ui.component.RowGroupCard
+import echo.music.enhanced.ui.component.Material3SettingsGroup
 import echo.music.enhanced.ui.component.ScallopedShape
 import echo.music.enhanced.ui.component.ThirdPartyLibrariesSheet
 import echo.music.enhanced.ui.component.WavyDivider
@@ -178,7 +178,7 @@ fun AboutScreen(
                         Text(text = DEVELOPER_GITHUB, style = typo().titleMedium.copy(fontWeight = FontWeight.Bold))
                     }
                     Spacer(Modifier.height(16.dp))
-                    RowGroupCard(
+                    Material3SettingsGroup(
                         interfaceMode = DataStoreManager.INTERFACE_BETTER_ECHO,
                         items =
                             listOf<@Composable () -> Unit> {
@@ -222,7 +222,7 @@ fun AboutScreen(
                     val licenseDesc = stringResource(Res.string.about_license_description)
                     val thirdPartyLabel = stringResource(Res.string.third_party_libraries)
                     val thirdPartyDesc = stringResource(Res.string.description_and_licenses)
-                    RowGroupCard(
+                    Material3SettingsGroup(
                         interfaceMode = DataStoreManager.INTERFACE_BETTER_ECHO,
                         items =
                             listOf<@Composable () -> Unit>(

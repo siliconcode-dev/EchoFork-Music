@@ -57,6 +57,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -130,7 +131,7 @@ import echo.music.enhanced.ui.component.LoadingDialog
 import echo.music.enhanced.expect.ui.layerBackdrop
 import echo.music.enhanced.expect.ui.rememberBackdrop
 import echo.music.enhanced.ui.component.RippleIconButton
-import echo.music.enhanced.ui.component.RowGroupCard
+import echo.music.enhanced.ui.component.Material3SettingsGroup
 import echo.music.enhanced.ui.component.SettingItem
 import echo.music.enhanced.ui.component.ThirdPartyLibrariesSheet
 import echo.music.enhanced.ui.component.liquidGlass
@@ -622,6 +623,40 @@ fun SettingScreen(
     }
     var currentSection by rememberSaveable { mutableStateOf<String?>(null) }
 
+    // Better Echo settings search — ported intent of upstream's search-result "isHighlighted"
+    // scroll target (see Material3SettingsGroup.kt/ScrollToHighlightEffect.kt), adapted to this
+    // screen's actual ExpandableSection accordion: matching sets currentSection to the target
+    // section's title, which the accordion already renders as the only visible section, then
+    // scrolls it into view.
+    var settingsSearchQuery by rememberSaveable { mutableStateOf("") }
+    val settingsListState = rememberLazyListState()
+    val searchableSectionTitles =
+        buildList {
+            add("account" to "Account")
+            add("user_interface" to stringResource(Res.string.user_interface))
+            add("content" to stringResource(Res.string.content))
+            if (getPlatform() == Platform.Android) {
+                add("audio" to stringResource(Res.string.audio))
+                add("display" to stringResource(Res.string.display))
+            }
+            add("playback" to stringResource(Res.string.playback))
+            add("listening_history" to stringResource(Res.string.listening_history))
+            add("lyrics" to stringResource(Res.string.lyrics))
+            add("AI" to stringResource(Res.string.ai))
+            if (viewModel.lastfmAvailable) {
+                add("lastfm" to stringResource(Res.string.lastfm_integration))
+            }
+            add("sponsor_block" to stringResource(Res.string.sponsorBlock))
+            if (getPlatform() == Platform.Android) {
+                add("storage" to stringResource(Res.string.storage))
+            }
+            add("backup" to stringResource(Res.string.backup))
+            add("about_us" to stringResource(Res.string.about_us))
+        }
+    // Index of each searchable section within the LazyColumn's actual item sequence: 0 is the
+    // leading spacer/search-bar item, 1 is "account", then +1 per subsequent item(key=...) in the
+    // exact order they're emitted below (mirrors the same Android/lastfmAvailable conditionals).
+    val searchableSectionIndex = searchableSectionTitles.mapIndexed { index, pair -> pair.first to (index + 1) }.toMap()
 
     LaunchedEffect(true) {
         viewModel.getAllGoogleAccount()
@@ -638,6 +673,7 @@ fun SettingScreen(
     // it) samples it as glass, mirroring the working nav-bar/content relationship in App.kt.
     val settingsBackdrop = rememberBackdrop(MaterialTheme.colorScheme.background)
     LazyColumn(
+        state = settingsListState,
         contentPadding = innerPadding,
         modifier =
             Modifier
@@ -652,120 +688,173 @@ fun SettingScreen(
     ) {
         item {
             Spacer(Modifier.height(64.dp))
+            if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                TextField(
+                    value = settingsSearchQuery,
+                    onValueChange = { query ->
+                        settingsSearchQuery = query
+                        if (query.isBlank()) {
+                            currentSection = null
+                        } else {
+                            val match = searchableSectionTitles.firstOrNull { it.second.contains(query, ignoreCase = true) }
+                            currentSection = match?.second
+                            match?.let { (key, _) ->
+                                searchableSectionIndex[key]?.let { targetIndex ->
+                                    coroutineScope.launch { settingsListState.animateScrollToItem(targetIndex) }
+                                }
+                            }
+                        }
+                    },
+                    placeholder = { Text(stringResource(Res.string.settings)) },
+                    leadingIcon = { Icon(imageVector = echoIcons.Search, contentDescription = null) },
+                    trailingIcon = {
+                        if (settingsSearchQuery.isNotEmpty()) {
+                            RippleIconButton(
+                                onClick = {
+                                    settingsSearchQuery = ""
+                                    currentSection = null
+                                },
+                                imageVector = echoIcons.Close,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    },
+                    singleLine = true,
+                    shape = RoundedCornerShape(24.dp),
+                    colors = TextFieldDefaults.colors(focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                )
+                Spacer(Modifier.height(8.dp))
+            }
         }
         item(key = "account") {
             ExpandableSection(title = "Account", icon = echoIcons.AccountCircle,
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
-                SettingItem(
-                    title = stringResource(Res.string.youtube_account),
-                    subtitle = stringResource(Res.string.manage_your_youtube_accounts),
-                    onClick = {
-                        viewModel.getAllGoogleAccount()
-                        showYouTubeAccountDialog = true
-                    },
-                )
-
-                SettingItem(
-                    // The title follows the state: a row that still reads "Log in" while logged in
-                    // gives no clue that tapping it signs you out.
-                    title =
-                        if (spotifyLoggedIn) {
-                            stringResource(Res.string.log_out_from_spotify)
-                        } else {
-                            stringResource(Res.string.log_in_to_spotify)
-                        },
-                    subtitle =
-                        if (spotifyLoggedIn) {
-                            stringResource(Res.string.logged_in)
-                        } else {
-                            stringResource(Res.string.intro_login_to_spotify)
-                        },
-                    onClick = {
-                        if (spotifyLoggedIn) {
-                            viewModel.confirmLogOut(
-                                confirmLabel = runBlocking { getString(Res.string.log_out_from_spotify) },
-                            ) { viewModel.setSpotifyLogIn(false) }
-                        } else {
-                            navController.navigate(SpotifyLoginDestination)
+                val accountItems =
+                    buildList<@Composable () -> Unit> {
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.youtube_account),
+                                subtitle = stringResource(Res.string.manage_your_youtube_accounts),
+                                onClick = {
+                                    viewModel.getAllGoogleAccount()
+                                    showYouTubeAccountDialog = true
+                                },
+                            )
                         }
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.enable_spotify_lyrics),
-                    subtitle = stringResource(Res.string.spotify_lyrícs_info),
-                    switch = (spotifyLyrics to { viewModel.setSpotifyLyrics(it) }),
-                    isEnable = spotifyLoggedIn,
-                    onDisable = {
-                        if (spotifyLyrics) {
-                            viewModel.setSpotifyLyrics(false)
-                        }
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.enable_canvas),
-                    subtitle = stringResource(Res.string.canvas_info),
-                    switch = (spotifyCanvas to { viewModel.setSpotifyCanvas(it) }),
-                )
-                SettingItem(
-                    title = stringResource(Res.string.canvas_provider),
-                    subtitle =
-                        when (canvasProvider) {
-                            DataStoreManager.TIDAL -> stringResource(Res.string.canvas_provider_tidal)
-                            DataStoreManager.APPLE_CANVAS -> stringResource(Res.string.canvas_provider_apple)
-                            DataStoreManager.ECHOMUSIC_CANVAS -> stringResource(Res.string.canvas_provider_echomusic)
-                            DataStoreManager.ARTISTVIDEO_CANVAS -> stringResource(Res.string.canvas_provider_artistvideo)
-                            else -> stringResource(Res.string.canvas_provider_spotify)
-                        },
-                    isEnable = spotifyCanvas,
-                    onClick = {
-                        viewModel.setAlertData(
-                            SettingAlertState(
-                                title = runBlocking { getString(Res.string.canvas_provider) },
-                                selectOne =
-                                    SettingAlertState.SelectData(
-                                        listSelect =
-                                            listOf(
-                                                (canvasProvider == DataStoreManager.SPOTIFY || canvasProvider == null) to
-                                                    runBlocking { getString(Res.string.canvas_provider_spotify) },
-                                                (canvasProvider == DataStoreManager.TIDAL) to
-                                                    runBlocking { getString(Res.string.canvas_provider_tidal) },
-                                                (canvasProvider == DataStoreManager.APPLE_CANVAS) to
-                                                    runBlocking { getString(Res.string.canvas_provider_apple) },
-                                                (canvasProvider == DataStoreManager.ECHOMUSIC_CANVAS) to
-                                                    runBlocking { getString(Res.string.canvas_provider_echomusic) },
-                                                (canvasProvider == DataStoreManager.ARTISTVIDEO_CANVAS) to
-                                                    runBlocking { getString(Res.string.canvas_provider_artistvideo) },
-                                            ),
-                                    ),
-                                confirm =
-                                    runBlocking { getString(Res.string.change) } to { state ->
-                                        viewModel.setCanvasProvider(
-                                            when (state.selectOne?.getSelected()) {
-                                                runBlocking { getString(Res.string.canvas_provider_tidal) } -> DataStoreManager.TIDAL
-                                                runBlocking { getString(Res.string.canvas_provider_apple) } -> DataStoreManager.APPLE_CANVAS
-                                                runBlocking {
-                                                    getString(Res.string.canvas_provider_echomusic)
-                                                } -> DataStoreManager.ECHOMUSIC_CANVAS
-                                                runBlocking {
-                                                    getString(Res.string.canvas_provider_artistvideo)
-                                                } -> DataStoreManager.ARTISTVIDEO_CANVAS
-                                                else -> DataStoreManager.SPOTIFY
-                                            },
-                                        )
+                        add {
+                            SettingItem(
+                                // The title follows the state: a row that still reads "Log in" while logged in
+                                // gives no clue that tapping it signs you out.
+                                title =
+                                    if (spotifyLoggedIn) {
+                                        stringResource(Res.string.log_out_from_spotify)
+                                    } else {
+                                        stringResource(Res.string.log_in_to_spotify)
                                     },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.enable_artist_background_video),
-                    subtitle = stringResource(Res.string.artist_background_video_info),
-                    switch = (artistBackgroundVideo to { viewModel.setArtistBackgroundVideo(it) }),
-                )
+                                subtitle =
+                                    if (spotifyLoggedIn) {
+                                        stringResource(Res.string.logged_in)
+                                    } else {
+                                        stringResource(Res.string.intro_login_to_spotify)
+                                    },
+                                onClick = {
+                                    if (spotifyLoggedIn) {
+                                        viewModel.confirmLogOut(
+                                            confirmLabel = runBlocking { getString(Res.string.log_out_from_spotify) },
+                                        ) { viewModel.setSpotifyLogIn(false) }
+                                    } else {
+                                        navController.navigate(SpotifyLoginDestination)
+                                    }
+                                },
+                            )
                         }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.enable_spotify_lyrics),
+                                subtitle = stringResource(Res.string.spotify_lyrícs_info),
+                                switch = (spotifyLyrics to { viewModel.setSpotifyLyrics(it) }),
+                                isEnable = spotifyLoggedIn,
+                                onDisable = {
+                                    if (spotifyLyrics) {
+                                        viewModel.setSpotifyLyrics(false)
+                                    }
+                                },
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.enable_canvas),
+                                subtitle = stringResource(Res.string.canvas_info),
+                                switch = (spotifyCanvas to { viewModel.setSpotifyCanvas(it) }),
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.canvas_provider),
+                                subtitle =
+                                    when (canvasProvider) {
+                                        DataStoreManager.TIDAL -> stringResource(Res.string.canvas_provider_tidal)
+                                        DataStoreManager.APPLE_CANVAS -> stringResource(Res.string.canvas_provider_apple)
+                                        DataStoreManager.ECHOMUSIC_CANVAS -> stringResource(Res.string.canvas_provider_echomusic)
+                                        DataStoreManager.ARTISTVIDEO_CANVAS -> stringResource(Res.string.canvas_provider_artistvideo)
+                                        else -> stringResource(Res.string.canvas_provider_spotify)
+                                    },
+                                isEnable = spotifyCanvas,
+                                onClick = {
+                                    viewModel.setAlertData(
+                                        SettingAlertState(
+                                            title = runBlocking { getString(Res.string.canvas_provider) },
+                                            selectOne =
+                                                SettingAlertState.SelectData(
+                                                    listSelect =
+                                                        listOf(
+                                                            (canvasProvider == DataStoreManager.SPOTIFY || canvasProvider == null) to
+                                                                runBlocking { getString(Res.string.canvas_provider_spotify) },
+                                                            (canvasProvider == DataStoreManager.TIDAL) to
+                                                                runBlocking { getString(Res.string.canvas_provider_tidal) },
+                                                            (canvasProvider == DataStoreManager.APPLE_CANVAS) to
+                                                                runBlocking { getString(Res.string.canvas_provider_apple) },
+                                                            (canvasProvider == DataStoreManager.ECHOMUSIC_CANVAS) to
+                                                                runBlocking { getString(Res.string.canvas_provider_echomusic) },
+                                                            (canvasProvider == DataStoreManager.ARTISTVIDEO_CANVAS) to
+                                                                runBlocking { getString(Res.string.canvas_provider_artistvideo) },
+                                                        ),
+                                                ),
+                                            confirm =
+                                                runBlocking { getString(Res.string.change) } to { state ->
+                                                    viewModel.setCanvasProvider(
+                                                        when (state.selectOne?.getSelected()) {
+                                                            runBlocking { getString(Res.string.canvas_provider_tidal) } -> DataStoreManager.TIDAL
+                                                            runBlocking { getString(Res.string.canvas_provider_apple) } -> DataStoreManager.APPLE_CANVAS
+                                                            runBlocking {
+                                                                getString(Res.string.canvas_provider_echomusic)
+                                                            } -> DataStoreManager.ECHOMUSIC_CANVAS
+                                                            runBlocking {
+                                                                getString(Res.string.canvas_provider_artistvideo)
+                                                            } -> DataStoreManager.ARTISTVIDEO_CANVAS
+                                                            else -> DataStoreManager.SPOTIFY
+                                                        },
+                                                    )
+                                                },
+                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.enable_artist_background_video),
+                                subtitle = stringResource(Res.string.artist_background_video_info),
+                                switch = (artistBackgroundVideo to { viewModel.setArtistBackgroundVideo(it) }),
+                            )
+                        }
+                    }
+                Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = accountItems)
+            }
         }
         item(key = "user_interface") {
             ExpandableSection(
@@ -781,29 +870,6 @@ fun SettingScreen(
                         DataStoreManager.THEME_MODE_DARK to stringResource(Res.string.theme_mode_dark),
                         DataStoreManager.THEME_MODE_LIGHT to stringResource(Res.string.theme_mode_light),
                     )
-                SettingItem(
-                    title = stringResource(Res.string.theme),
-                    subtitle = themeModeLabels.firstOrNull { it.first == themeMode }?.second ?: "",
-                    onClick = {
-                        viewModel.setAlertData(
-                            SettingAlertState(
-                                title = runBlocking { getString(Res.string.theme) },
-                                selectOne =
-                                    SettingAlertState.SelectData(
-                                        listSelect = themeModeLabels.map { (it.first == themeMode) to it.second },
-                                    ),
-                                confirm =
-                                    runBlocking { getString(Res.string.change) } to { state ->
-                                        val selected = state.selectOne?.getSelected()
-                                        themeModeLabels.firstOrNull { it.second == selected }?.first?.let {
-                                            sharedViewModel.setThemeMode(it)
-                                        }
-                                    },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
-                )
                 val colorSourceLabels =
                     buildList {
                         add(DataStoreManager.THEME_COLOR_DEFAULT to stringResource(Res.string.theme_color_default))
@@ -812,41 +878,6 @@ fun SettingScreen(
                         }
                         add(DataStoreManager.THEME_COLOR_CUSTOM to stringResource(Res.string.theme_color_custom))
                     }
-                SettingItem(
-                    title = stringResource(Res.string.theme_color),
-                    subtitle = colorSourceLabels.firstOrNull { it.first == themeColorSource }?.second ?: "",
-                    onClick = {
-                        viewModel.setAlertData(
-                            SettingAlertState(
-                                title = runBlocking { getString(Res.string.theme_color) },
-                                selectOne =
-                                    SettingAlertState.SelectData(
-                                        listSelect = colorSourceLabels.map { (it.first == themeColorSource) to it.second },
-                                    ),
-                                confirm =
-                                    runBlocking { getString(Res.string.change) } to { state ->
-                                        val selected = state.selectOne?.getSelected()
-                                        colorSourceLabels.firstOrNull { it.second == selected }?.first?.let {
-                                            sharedViewModel.setThemeColorSource(it)
-                                            if (it == DataStoreManager.THEME_COLOR_CUSTOM) {
-                                                showColorPickerDialog = true
-                                            }
-                                        }
-                                    },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
-                )
-                if (themeColorSource == DataStoreManager.THEME_COLOR_CUSTOM) {
-                    SettingItem(
-                        title = stringResource(Res.string.custom_color),
-                        subtitle = "#${customThemeColorHex.takeLast(6)}",
-                        smallSubtitle = true,
-                        onClick = { showColorPickerDialog = true },
-                    )
-                }
-
                 val interfaceModeLabels =
                     buildList {
                         add(DataStoreManager.INTERFACE_CLASSIC to stringResource(Res.string.interface_mode_classic))
@@ -855,32 +886,104 @@ fun SettingScreen(
                             add(DataStoreManager.INTERFACE_LIQUID_GLASS to stringResource(Res.string.interface_mode_liquid_glass))
                         }
                     }
-                SettingItem(
-                    title = stringResource(Res.string.interface_mode),
-                    subtitle =
-                        (interfaceModeLabels.firstOrNull { it.first == interfaceMode }?.second ?: interfaceModeLabels.first().second) +
-                            " — " + stringResource(Res.string.interface_mode_info),
-                    smallSubtitle = true,
-                    onClick = {
-                        viewModel.setAlertData(
-                            SettingAlertState(
-                                title = runBlocking { getString(Res.string.interface_mode) },
-                                selectOne =
-                                    SettingAlertState.SelectData(
-                                        listSelect = interfaceModeLabels.map { (it.first == interfaceMode) to it.second },
-                                    ),
-                                confirm =
-                                    runBlocking { getString(Res.string.change) } to { state ->
-                                        val selected = state.selectOne?.getSelected()
-                                        interfaceModeLabels.firstOrNull { it.second == selected }?.first?.let {
-                                            viewModel.setInterfaceMode(it)
-                                        }
-                                    },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
-                )
+                val userInterfaceItems =
+                    buildList<@Composable () -> Unit> {
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.theme),
+                                subtitle = themeModeLabels.firstOrNull { it.first == themeMode }?.second ?: "",
+                                onClick = {
+                                    viewModel.setAlertData(
+                                        SettingAlertState(
+                                            title = runBlocking { getString(Res.string.theme) },
+                                            selectOne =
+                                                SettingAlertState.SelectData(
+                                                    listSelect = themeModeLabels.map { (it.first == themeMode) to it.second },
+                                                ),
+                                            confirm =
+                                                runBlocking { getString(Res.string.change) } to { state ->
+                                                    val selected = state.selectOne?.getSelected()
+                                                    themeModeLabels.firstOrNull { it.second == selected }?.first?.let {
+                                                        sharedViewModel.setThemeMode(it)
+                                                    }
+                                                },
+                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.theme_color),
+                                subtitle = colorSourceLabels.firstOrNull { it.first == themeColorSource }?.second ?: "",
+                                onClick = {
+                                    viewModel.setAlertData(
+                                        SettingAlertState(
+                                            title = runBlocking { getString(Res.string.theme_color) },
+                                            selectOne =
+                                                SettingAlertState.SelectData(
+                                                    listSelect = colorSourceLabels.map { (it.first == themeColorSource) to it.second },
+                                                ),
+                                            confirm =
+                                                runBlocking { getString(Res.string.change) } to { state ->
+                                                    val selected = state.selectOne?.getSelected()
+                                                    colorSourceLabels.firstOrNull { it.second == selected }?.first?.let {
+                                                        sharedViewModel.setThemeColorSource(it)
+                                                        if (it == DataStoreManager.THEME_COLOR_CUSTOM) {
+                                                            showColorPickerDialog = true
+                                                        }
+                                                    }
+                                                },
+                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                        if (themeColorSource == DataStoreManager.THEME_COLOR_CUSTOM) {
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.custom_color),
+                                    subtitle = "#${customThemeColorHex.takeLast(6)}",
+                                    smallSubtitle = true,
+                                    onClick = { showColorPickerDialog = true },
+                                )
+                            }
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.interface_mode),
+                                subtitle =
+                                    (
+                                        interfaceModeLabels.firstOrNull { it.first == interfaceMode }?.second
+                                            ?: interfaceModeLabels.first().second
+                                    ) +
+                                        " — " + stringResource(Res.string.interface_mode_info),
+                                smallSubtitle = true,
+                                onClick = {
+                                    viewModel.setAlertData(
+                                        SettingAlertState(
+                                            title = runBlocking { getString(Res.string.interface_mode) },
+                                            selectOne =
+                                                SettingAlertState.SelectData(
+                                                    listSelect = interfaceModeLabels.map { (it.first == interfaceMode) to it.second },
+                                                ),
+                                            confirm =
+                                                runBlocking { getString(Res.string.change) } to { state ->
+                                                    val selected = state.selectOne?.getSelected()
+                                                    interfaceModeLabels.firstOrNull { it.second == selected }?.first?.let {
+                                                        viewModel.setInterfaceMode(it)
+                                                    }
+                                                },
+                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                    }
+                Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = userInterfaceItems)
             }
         }
         item(key = "content") {
@@ -891,247 +994,275 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
-                SettingItem(
-                    title = stringResource(Res.string.language),
-                    subtitle = SUPPORTED_LANGUAGE.getLanguageFromCode(language ?: "en-US"),
-                    onClick = {
-                        viewModel.setAlertData(
-                            SettingAlertState(
-                                title = runBlocking { getString(Res.string.language) },
-                                selectOne =
-                                    SettingAlertState.SelectData(
-                                        listSelect =
-                                            SUPPORTED_LANGUAGE.items.map {
-                                                (it.toString() == SUPPORTED_LANGUAGE.getLanguageFromCode(language ?: "en-US")) to it.toString()
-                                            },
+                val contentItems =
+                    buildList<@Composable () -> Unit> {
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.language),
+                                subtitle = SUPPORTED_LANGUAGE.getLanguageFromCode(language ?: "en-US"),
+                                onClick = {
+                                    viewModel.setAlertData(
+                                        SettingAlertState(
+                                            title = runBlocking { getString(Res.string.language) },
+                                            selectOne =
+                                                SettingAlertState.SelectData(
+                                                    listSelect =
+                                                        SUPPORTED_LANGUAGE.items.map {
+                                                            (it.toString() == SUPPORTED_LANGUAGE.getLanguageFromCode(
+                                                                language ?: "en-US",
+                                                            )) to it.toString()
+                                                        },
+                                                ),
+                                            confirm =
+                                                runBlocking { getString(Res.string.change) } to { state ->
+                                                    val code = SUPPORTED_LANGUAGE.getCodeFromLanguage(state.selectOne?.getSelected() ?: "English")
+                                                    viewModel.setBasicAlertData(
+                                                        SettingBasicAlertState(
+                                                            title = runBlocking { getString(Res.string.warning) },
+                                                            message = runBlocking { getString(Res.string.change_language_warning) },
+                                                            confirm =
+                                                                runBlocking { getString(Res.string.change) } to {
+                                                                    sharedViewModel.activityRecreate()
+                                                                    viewModel.setBasicAlertData(null)
+                                                                    viewModel.changeLanguage(code)
+                                                                },
+                                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                                        ),
+                                                    )
+                                                },
+                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.content_country),
+                                subtitle = location ?: "",
+                                onClick = {
+                                    viewModel.setAlertData(
+                                        SettingAlertState(
+                                            title = runBlocking { getString(Res.string.content_country) },
+                                            selectOne =
+                                                SettingAlertState.SelectData(
+                                                    listSelect =
+                                                        SUPPORTED_LOCATION.items.map { item ->
+                                                            (item.toString() == location) to item.toString()
+                                                        },
+                                                ),
+                                            confirm =
+                                                runBlocking { getString(Res.string.change) } to { state ->
+                                                    viewModel.changeLocation(
+                                                        state.selectOne?.getSelected() ?: "US",
+                                                    )
+                                                },
+                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.quality),
+                                subtitle = quality ?: "",
+                                smallSubtitle = true,
+                                onClick = {
+                                    viewModel.setAlertData(
+                                        SettingAlertState(
+                                            title = runBlocking { getString(Res.string.quality) },
+                                            selectOne =
+                                                SettingAlertState.SelectData(
+                                                    listSelect =
+                                                        QUALITY.items.map { item ->
+                                                            (item.toString() == quality) to item.toString()
+                                                        },
+                                                ),
+                                            confirm =
+                                                runBlocking { getString(Res.string.change) } to { state ->
+                                                    viewModel.changeQuality(state.selectOne?.getSelected())
+                                                },
+                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.download_quality),
+                                subtitle = downloadQuality ?: "",
+                                smallSubtitle = true,
+                                onClick = {
+                                    viewModel.setAlertData(
+                                        SettingAlertState(
+                                            title = runBlocking { getString(Res.string.download_quality) },
+                                            selectOne =
+                                                SettingAlertState.SelectData(
+                                                    listSelect =
+                                                        QUALITY.items.map { item ->
+                                                            (item.toString() == downloadQuality) to item.toString()
+                                                        },
+                                                ),
+                                            confirm =
+                                                runBlocking { getString(Res.string.change) } to { state ->
+                                                    state.selectOne?.getSelected()?.let { viewModel.setDownloadQuality(it) }
+                                                },
+                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.auto_download_liked_songs),
+                                subtitle = stringResource(Res.string.auto_download_liked_songs_description),
+                                smallSubtitle = true,
+                                switch = (autoDownloadLikedSongs to { viewModel.setAutoDownloadLikedSongs(it) }),
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.play_video_for_video_track_instead_of_audio_only),
+                                subtitle = stringResource(Res.string.such_as_music_video_lyrics_video_podcasts_and_more),
+                                smallSubtitle = true,
+                                switch = (playVideo to { viewModel.setPlayVideoInsteadOfAudio(it) }),
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.radio_audio_only),
+                                subtitle = stringResource(Res.string.radio_audio_only_description),
+                                smallSubtitle = true,
+                                switch = (radioAudioOnly to { viewModel.setRadioAudioOnly(it) }),
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.video_quality),
+                                subtitle = videoQuality ?: "",
+                                onClick = {
+                                    viewModel.setAlertData(
+                                        SettingAlertState(
+                                            title = runBlocking { getString(Res.string.video_quality) },
+                                            selectOne =
+                                                SettingAlertState.SelectData(
+                                                    listSelect =
+                                                        VIDEO_QUALITY.items.map { item ->
+                                                            (item.toString() == videoQuality) to item.toString()
+                                                        },
+                                                ),
+                                            confirm =
+                                                runBlocking { getString(Res.string.change) } to { state ->
+                                                    viewModel.changeVideoQuality(state.selectOne?.getSelected() ?: "")
+                                                },
+                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.video_download_quality),
+                                subtitle = videoDownloadQuality ?: "",
+                                onClick = {
+                                    viewModel.setAlertData(
+                                        SettingAlertState(
+                                            title = runBlocking { getString(Res.string.video_download_quality) },
+                                            selectOne =
+                                                SettingAlertState.SelectData(
+                                                    listSelect =
+                                                        VIDEO_QUALITY.items.map { item ->
+                                                            (item.toString() == videoDownloadQuality) to item.toString()
+                                                        },
+                                                ),
+                                            confirm =
+                                                runBlocking { getString(Res.string.change) } to { state ->
+                                                    viewModel.setVideoDownloadQuality(state.selectOne?.getSelected() ?: "")
+                                                },
+                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.send_back_listening_data_to_google),
+                                subtitle =
+                                    stringResource(
+                                        Res.string
+                                            .upload_your_listening_history_to_youtube_music_server_it_will_make_yt_music_recommendation_system_better_working_only_if_logged_in,
                                     ),
-                                confirm =
-                                    runBlocking { getString(Res.string.change) } to { state ->
-                                        val code = SUPPORTED_LANGUAGE.getCodeFromLanguage(state.selectOne?.getSelected() ?: "English")
-                                        viewModel.setBasicAlertData(
-                                            SettingBasicAlertState(
-                                                title = runBlocking { getString(Res.string.warning) },
-                                                message = runBlocking { getString(Res.string.change_language_warning) },
-                                                confirm =
-                                                    runBlocking { getString(Res.string.change) } to {
-                                                        sharedViewModel.activityRecreate()
-                                                        viewModel.setBasicAlertData(null)
-                                                        viewModel.changeLanguage(code)
-                                                    },
-                                                dismiss = runBlocking { getString(Res.string.cancel) },
-                                            ),
-                                        )
-                                    },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.content_country),
-                    subtitle = location ?: "",
-                    onClick = {
-                        viewModel.setAlertData(
-                            SettingAlertState(
-                                title = runBlocking { getString(Res.string.content_country) },
-                                selectOne =
-                                    SettingAlertState.SelectData(
-                                        listSelect =
-                                            SUPPORTED_LOCATION.items.map { item ->
-                                                (item.toString() == location) to item.toString()
-                                            },
-                                    ),
-                                confirm =
-                                    runBlocking { getString(Res.string.change) } to { state ->
-                                        viewModel.changeLocation(
-                                            state.selectOne?.getSelected() ?: "US",
-                                        )
-                                    },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.quality),
-                    subtitle = quality ?: "",
-                    smallSubtitle = true,
-                    onClick = {
-                        viewModel.setAlertData(
-                            SettingAlertState(
-                                title = runBlocking { getString(Res.string.quality) },
-                                selectOne =
-                                    SettingAlertState.SelectData(
-                                        listSelect =
-                                            QUALITY.items.map { item ->
-                                                (item.toString() == quality) to item.toString()
-                                            },
-                                    ),
-                                confirm =
-                                    runBlocking { getString(Res.string.change) } to { state ->
-                                        viewModel.changeQuality(state.selectOne?.getSelected())
-                                    },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.download_quality),
-                    subtitle = downloadQuality ?: "",
-                    smallSubtitle = true,
-                    onClick = {
-                        viewModel.setAlertData(
-                            SettingAlertState(
-                                title = runBlocking { getString(Res.string.download_quality) },
-                                selectOne =
-                                    SettingAlertState.SelectData(
-                                        listSelect =
-                                            QUALITY.items.map { item ->
-                                                (item.toString() == downloadQuality) to item.toString()
-                                            },
-                                    ),
-                                confirm =
-                                    runBlocking { getString(Res.string.change) } to { state ->
-                                        state.selectOne?.getSelected()?.let { viewModel.setDownloadQuality(it) }
-                                    },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.auto_download_liked_songs),
-                    subtitle = stringResource(Res.string.auto_download_liked_songs_description),
-                    smallSubtitle = true,
-                    switch = (autoDownloadLikedSongs to { viewModel.setAutoDownloadLikedSongs(it) }),
-                )
-                SettingItem(
-                    title = stringResource(Res.string.play_video_for_video_track_instead_of_audio_only),
-                    subtitle = stringResource(Res.string.such_as_music_video_lyrics_video_podcasts_and_more),
-                    smallSubtitle = true,
-                    switch = (playVideo to { viewModel.setPlayVideoInsteadOfAudio(it) }),
-                )
-                SettingItem(
-                    title = stringResource(Res.string.radio_audio_only),
-                    subtitle = stringResource(Res.string.radio_audio_only_description),
-                    smallSubtitle = true,
-                    switch = (radioAudioOnly to { viewModel.setRadioAudioOnly(it) }),
-                )
-                SettingItem(
-                    title = stringResource(Res.string.video_quality),
-                    subtitle = videoQuality ?: "",
-                    onClick = {
-                        viewModel.setAlertData(
-                            SettingAlertState(
-                                title = runBlocking { getString(Res.string.video_quality) },
-                                selectOne =
-                                    SettingAlertState.SelectData(
-                                        listSelect =
-                                            VIDEO_QUALITY.items.map { item ->
-                                                (item.toString() == videoQuality) to item.toString()
-                                            },
-                                    ),
-                                confirm =
-                                    runBlocking { getString(Res.string.change) } to { state ->
-                                        viewModel.changeVideoQuality(state.selectOne?.getSelected() ?: "")
-                                    },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.video_download_quality),
-                    subtitle = videoDownloadQuality ?: "",
-                    onClick = {
-                        viewModel.setAlertData(
-                            SettingAlertState(
-                                title = runBlocking { getString(Res.string.video_download_quality) },
-                                selectOne =
-                                    SettingAlertState.SelectData(
-                                        listSelect =
-                                            VIDEO_QUALITY.items.map { item ->
-                                                (item.toString() == videoDownloadQuality) to item.toString()
-                                            },
-                                    ),
-                                confirm =
-                                    runBlocking { getString(Res.string.change) } to { state ->
-                                        viewModel.setVideoDownloadQuality(state.selectOne?.getSelected() ?: "")
-                                    },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.send_back_listening_data_to_google),
-                    subtitle =
-                        stringResource(
-                            Res.string
-                                .upload_your_listening_history_to_youtube_music_server_it_will_make_yt_music_recommendation_system_better_working_only_if_logged_in,
-                        ),
-                    smallSubtitle = true,
-                    switch = (sendData to { viewModel.setSendBackToGoogle(it) }),
-                )
-                SettingItem(
-                    title = stringResource(Res.string.play_explicit_content),
-                    subtitle = stringResource(Res.string.play_explicit_content_description),
-                    switch = (explicitContentEnabled to { viewModel.setExplicitContentEnabled(it) }),
-                )
-                SettingItem(
-                    title = stringResource(Res.string.keep_your_youtube_playlist_offline),
-                    subtitle = stringResource(Res.string.keep_your_youtube_playlist_offline_description),
-                    switch = (keepYoutubePlaylistOffline to { viewModel.setKeepYouTubePlaylistOffline(it) }),
-                )
-                /*
-                SettingItem(
-                    title = stringResource(Res.string.combine_local_and_youtube_liked_songs),
-                    subtitle = stringResource(Res.string.combine_local_and_youtube_liked_songs_description),
-                    switch = (combineLocalAndYouTubeLiked to { viewModel.setCombineLocalAndYouTubeLiked(it) })
-                )
-                 */
-                SettingItem(
-                    title = stringResource(Res.string.scraper_backend),
-                    subtitle =
-                        when (scraperBackend) {
-                            DataStoreManager.INNERTUBE -> stringResource(Res.string.scraper_backend_innertube)
-                            else -> stringResource(Res.string.scraper_backend_kotlin)
-                        } + " — " + stringResource(Res.string.scraper_backend_info),
-                    smallSubtitle = true,
-                    onClick = {
-                        viewModel.setAlertData(
-                            SettingAlertState(
-                                title = runBlocking { getString(Res.string.scraper_backend) },
-                                selectOne =
-                                    SettingAlertState.SelectData(
-                                        listSelect =
-                                            listOf(
-                                                (scraperBackend == DataStoreManager.KOTLIN_SCRAPER || scraperBackend == null) to
-                                                    runBlocking { getString(Res.string.scraper_backend_kotlin) },
-                                                (scraperBackend == DataStoreManager.INNERTUBE) to
-                                                    runBlocking { getString(Res.string.scraper_backend_innertube) },
-                                            ),
-                                    ),
-                                confirm =
-                                    runBlocking { getString(Res.string.change) } to { state ->
-                                        viewModel.setScraperBackend(
-                                            when (state.selectOne?.getSelected()) {
-                                                runBlocking { getString(Res.string.scraper_backend_innertube) } -> DataStoreManager.INNERTUBE
-                                                else -> DataStoreManager.KOTLIN_SCRAPER
-                                            },
-                                        )
-                                    },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
-                )
-                SettingItem(
-                    title = stringResource(Res.string.proxy),
-                    subtitle = stringResource(Res.string.proxy_description),
-                    switch = (usingProxy to { viewModel.setUsingProxy(it) }),
-                )
+                                smallSubtitle = true,
+                                switch = (sendData to { viewModel.setSendBackToGoogle(it) }),
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.play_explicit_content),
+                                subtitle = stringResource(Res.string.play_explicit_content_description),
+                                switch = (explicitContentEnabled to { viewModel.setExplicitContentEnabled(it) }),
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.keep_your_youtube_playlist_offline),
+                                subtitle = stringResource(Res.string.keep_your_youtube_playlist_offline_description),
+                                switch = (keepYoutubePlaylistOffline to { viewModel.setKeepYouTubePlaylistOffline(it) }),
+                            )
+                        }
+                        // combine_local_and_youtube_liked_songs intentionally disabled upstream and here — kept out of the group.
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.scraper_backend),
+                                subtitle =
+                                    when (scraperBackend) {
+                                        DataStoreManager.INNERTUBE -> stringResource(Res.string.scraper_backend_innertube)
+                                        else -> stringResource(Res.string.scraper_backend_kotlin)
+                                    } + " — " + stringResource(Res.string.scraper_backend_info),
+                                smallSubtitle = true,
+                                onClick = {
+                                    viewModel.setAlertData(
+                                        SettingAlertState(
+                                            title = runBlocking { getString(Res.string.scraper_backend) },
+                                            selectOne =
+                                                SettingAlertState.SelectData(
+                                                    listSelect =
+                                                        listOf(
+                                                            (scraperBackend == DataStoreManager.KOTLIN_SCRAPER || scraperBackend == null) to
+                                                                runBlocking { getString(Res.string.scraper_backend_kotlin) },
+                                                            (scraperBackend == DataStoreManager.INNERTUBE) to
+                                                                runBlocking { getString(Res.string.scraper_backend_innertube) },
+                                                        ),
+                                                ),
+                                            confirm =
+                                                runBlocking { getString(Res.string.change) } to { state ->
+                                                    viewModel.setScraperBackend(
+                                                        when (state.selectOne?.getSelected()) {
+                                                            runBlocking { getString(Res.string.scraper_backend_innertube) } -> DataStoreManager.INNERTUBE
+                                                            else -> DataStoreManager.KOTLIN_SCRAPER
+                                                        },
+                                                    )
+                                                },
+                                            dismiss = runBlocking { getString(Res.string.cancel) },
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.proxy),
+                                subtitle = stringResource(Res.string.proxy_description),
+                                switch = (usingProxy to { viewModel.setUsingProxy(it) }),
+                            )
+                        }
+                    }
+                Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = contentItems)
             }
         }
         item(key = "proxy") {
@@ -1305,26 +1436,38 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
-                    SettingItem(
-                        title = stringResource(Res.string.normalize_volume),
-                        subtitle = stringResource(Res.string.balance_media_loudness),
-                        switch = (normalizeVolume to { viewModel.setNormalizeVolume(it) }),
-                    )
-                    SettingItem(
-                        title = stringResource(Res.string.skip_silent),
-                        subtitle = stringResource(Res.string.skip_no_music_part),
-                        switch = (skipSilent to { viewModel.setSkipSilent(it) }),
-                    )
-                    SettingItem(
-                        title = stringResource(Res.string.equalizer),
-                        subtitle = stringResource(Res.string.equalizer_description),
-                        smallSubtitle = true,
-                        onClick = { navController.navigate(echo.music.enhanced.ui.navigation.destination.home.EqualizerDestination) },
-                    )
-                    AudioBetaFeatureItems(
-                        viewModel = viewModel,
-                        spatialAudioEnabled = spatialAudioEnabled,
-                    )
+                    val audioItems =
+                        buildList<@Composable () -> Unit> {
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.normalize_volume),
+                                    subtitle = stringResource(Res.string.balance_media_loudness),
+                                    switch = (normalizeVolume to { viewModel.setNormalizeVolume(it) }),
+                                )
+                            }
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.skip_silent),
+                                    subtitle = stringResource(Res.string.skip_no_music_part),
+                                    switch = (skipSilent to { viewModel.setSkipSilent(it) }),
+                                )
+                            }
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.equalizer),
+                                    subtitle = stringResource(Res.string.equalizer_description),
+                                    smallSubtitle = true,
+                                    onClick = { navController.navigate(echo.music.enhanced.ui.navigation.destination.home.EqualizerDestination) },
+                                )
+                            }
+                            add {
+                                AudioBetaFeatureItems(
+                                    viewModel = viewModel,
+                                    spatialAudioEnabled = spatialAudioEnabled,
+                                )
+                            }
+                        }
+                    Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = audioItems)
                 }
             }
         }
@@ -1334,10 +1477,16 @@ fun SettingScreen(
                     currentSection = currentSection,
                     onSectionClick = { currentSection = it }
                 ) {
-                    DisplaySettingsItems(
-                        viewModel = viewModel,
-                        trueMotionEnabled = trueMotionEnabled,
-                        trueMotionTargetHz = trueMotionTargetHz,
+                    Material3SettingsGroup(
+                        interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO,
+                        items =
+                            listOf {
+                                DisplaySettingsItems(
+                                    viewModel = viewModel,
+                                    trueMotionEnabled = trueMotionEnabled,
+                                    trueMotionTargetHz = trueMotionTargetHz,
+                                )
+                            },
                     )
                 }
             }
@@ -1347,40 +1496,54 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
-                SettingItem(
-                    title = stringResource(Res.string.save_playback_state),
-                    subtitle = stringResource(Res.string.save_shuffle_and_repeat_mode),
-                    switch = (savePlaybackState to { viewModel.setSavedPlaybackState(it) }),
-                )
-                SettingItem(
-                    title = stringResource(Res.string.save_last_played),
-                    subtitle = stringResource(Res.string.save_last_played_track_and_queue),
-                    switch = (saveLastPlayed to { viewModel.setSaveLastPlayed(it) }),
-                )
-                if (getPlatform() == Platform.Android) {
-                    SettingItem(
-                        title = stringResource(Res.string.kill_service_on_exit),
-                        subtitle = stringResource(Res.string.kill_service_on_exit_description),
-                        switch = (killServiceOnExit to { viewModel.setKillServiceOnExit(it) }),
-                    )
-                    SettingItem(
-                        title = stringResource(Res.string.keep_service_alive),
-                        subtitle = stringResource(Res.string.keep_service_alive_description),
-                        switch = (keepServiceAlive to { viewModel.setKeepServiceAlive(it) }),
-                    )
-                }
-                SettingItem(
-                    title = stringResource(Res.string.crossfade),
-                    subtitle =
-                        if (castState.isRemote) {
-                            stringResource(Res.string.not_available_while_casting)
-                        } else {
-                            stringResource(Res.string.crossfade_description)
-                        },
-                    smallSubtitle = true,
-                    switch = (crossfadeEnabled to { viewModel.setCrossfadeEnabled(it) }),
-                    isEnable = !castState.isRemote,
-                )
+                val playbackItems =
+                    buildList<@Composable () -> Unit> {
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.save_playback_state),
+                                subtitle = stringResource(Res.string.save_shuffle_and_repeat_mode),
+                                switch = (savePlaybackState to { viewModel.setSavedPlaybackState(it) }),
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.save_last_played),
+                                subtitle = stringResource(Res.string.save_last_played_track_and_queue),
+                                switch = (saveLastPlayed to { viewModel.setSaveLastPlayed(it) }),
+                            )
+                        }
+                        if (getPlatform() == Platform.Android) {
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.kill_service_on_exit),
+                                    subtitle = stringResource(Res.string.kill_service_on_exit_description),
+                                    switch = (killServiceOnExit to { viewModel.setKillServiceOnExit(it) }),
+                                )
+                            }
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.keep_service_alive),
+                                    subtitle = stringResource(Res.string.keep_service_alive_description),
+                                    switch = (keepServiceAlive to { viewModel.setKeepServiceAlive(it) }),
+                                )
+                            }
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.crossfade),
+                                subtitle =
+                                    if (castState.isRemote) {
+                                        stringResource(Res.string.not_available_while_casting)
+                                    } else {
+                                        stringResource(Res.string.crossfade_description)
+                                    },
+                                smallSubtitle = true,
+                                switch = (crossfadeEnabled to { viewModel.setCrossfadeEnabled(it) }),
+                                isEnable = !castState.isRemote,
+                            )
+                        }
+                    }
+                Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = playbackItems)
                 AnimatedVisibility(visible = crossfadeEnabled) {
                     Column {
                         SettingItem(
@@ -1483,27 +1646,37 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
-                SettingItem(
-                    title = stringResource(Res.string.local_tracking_title),
-                    subtitle = stringResource(Res.string.local_tracking_description),
-                    switch = (localTrackingEnabled to { viewModel.setLocalTrackingEnabled(it) }),
-                )
-                SettingItem(
-                    title = stringResource(Res.string.clear_listening_history),
-                    subtitle = stringResource(Res.string.clear_listening_history_description),
-                    onClick = {
-                        viewModel.setBasicAlertData(
-                            SettingBasicAlertState(
-                                title = runBlocking { getString(Res.string.clear_listening_history) },
-                                message = runBlocking { getString(Res.string.clear_listening_history_confirm) },
-                                confirm =
-                                    runBlocking { getString(Res.string.clear) } to {
-                                        viewModel.clearListeningHistory()
+                Material3SettingsGroup(
+                    interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO,
+                    items =
+                        listOf<@Composable () -> Unit>(
+                            {
+                                SettingItem(
+                                    title = stringResource(Res.string.local_tracking_title),
+                                    subtitle = stringResource(Res.string.local_tracking_description),
+                                    switch = (localTrackingEnabled to { viewModel.setLocalTrackingEnabled(it) }),
+                                )
+                            },
+                            {
+                                SettingItem(
+                                    title = stringResource(Res.string.clear_listening_history),
+                                    subtitle = stringResource(Res.string.clear_listening_history_description),
+                                    onClick = {
+                                        viewModel.setBasicAlertData(
+                                            SettingBasicAlertState(
+                                                title = runBlocking { getString(Res.string.clear_listening_history) },
+                                                message = runBlocking { getString(Res.string.clear_listening_history_confirm) },
+                                                confirm =
+                                                    runBlocking { getString(Res.string.clear) } to {
+                                                        viewModel.clearListeningHistory()
+                                                    },
+                                                dismiss = runBlocking { getString(Res.string.cancel) },
+                                            ),
+                                        )
                                     },
-                                dismiss = runBlocking { getString(Res.string.cancel) },
-                            ),
-                        )
-                    },
+                                )
+                            },
+                        ),
                 )
             }
         }
@@ -1512,6 +1685,9 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
+                val lyricsItems =
+                    buildList<@Composable () -> Unit> {
+                        add {
                 SettingItem(
                     title = stringResource(Res.string.main_lyrics_provider),
                     subtitle =
@@ -1572,7 +1748,8 @@ fun SettingScreen(
                         )
                     },
                 )
-
+                        }
+                        add {
                 SettingItem(
                     title = stringResource(Res.string.translation_language),
                     subtitle = translationLanguage ?: "",
@@ -1600,6 +1777,8 @@ fun SettingScreen(
                     },
                     isEnable = true,
                 )
+                        }
+                        add {
                 SettingItem(
                     title = stringResource(Res.string.youtube_subtitle_language),
                     subtitle = youtubeSubtitleLanguage,
@@ -1626,6 +1805,9 @@ fun SettingScreen(
                         )
                     },
                 )
+                        }
+                    }
+                Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = lyricsItems)
             }
         }
         item(key = "AI") {
@@ -1633,6 +1815,8 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
+                val aiItems = buildList<@Composable () -> Unit> {
+                add {
                 SettingItem(
                     title = stringResource(Res.string.ai_provider),
                     subtitle =
@@ -1680,6 +1864,8 @@ fun SettingScreen(
                         )
                     },
                 )
+                }
+                add {
                 SettingItem(
                     title = stringResource(Res.string.ai_api_key),
                     subtitle = if (isHasApiKey) "XXXXXXXXXX" else "N/A",
@@ -1705,6 +1891,8 @@ fun SettingScreen(
                         )
                     },
                 )
+                }
+                add {
                 SettingItem(
                     title = stringResource(Res.string.custom_ai_model_id),
                     subtitle = customModelId.ifEmpty { stringResource(Res.string.default_models) },
@@ -1730,8 +1918,10 @@ fun SettingScreen(
                         )
                     },
                 )
+                }
                 // Custom OpenAI Base URL - only show when Custom OpenAI is selected
                 if (aiProvider == DataStoreManager.AI_PROVIDER_CUSTOM_OPENAI) {
+                add {
                     SettingItem(
                         title = "Custom Base URL",
                         subtitle = customOpenAIBaseUrl.ifEmpty { "https://api.openai.com/v1/" },
@@ -1757,6 +1947,8 @@ fun SettingScreen(
                             )
                         },
                     )
+                }
+                add {
                     SettingItem(
                         title = "Custom Headers",
                         subtitle = if (customOpenAIHeaders.isNotEmpty()) "Configured" else "Not set",
@@ -1793,6 +1985,8 @@ fun SettingScreen(
                         },
                     )
                 }
+                }
+                add {
                 SettingItem(
                     title = stringResource(Res.string.use_ai_translation),
                     subtitle = stringResource(Res.string.use_ai_translation_description),
@@ -1804,9 +1998,12 @@ fun SettingScreen(
                         }
                     },
                 )
+                }
+                }
+                Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = aiItems)
             }
         }
-        
+
         // Hidden entirely when the build carries no Last.fm credentials — a FOSS build, or a full
         // build whose local.properties has no key.
         if (viewModel.lastfmAvailable) {
@@ -1815,6 +2012,11 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
+                Material3SettingsGroup(
+                    interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO,
+                    items =
+                        listOf<@Composable () -> Unit>(
+                            {
                     SettingItem(
                         title =
                             if (lastfmLoggedIn) {
@@ -1838,6 +2040,8 @@ fun SettingScreen(
                             }
                         },
                     )
+                            },
+                            {
                     SettingItem(
                         title = stringResource(Res.string.enable_scrobbling),
                         subtitle = stringResource(Res.string.scrobbling_info),
@@ -1849,7 +2053,10 @@ fun SettingScreen(
                             }
                         },
                     )
-                }
+                            },
+                        ),
+                )
+            }
             }
         }
         item(key = "sponsor_block") {
@@ -1857,13 +2064,17 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
+                val listName =
+                    SponsorBlockType.toList().map { it.displayString() }
+                val sponsorBlockItems = buildList<@Composable () -> Unit> {
+                add {
                 SettingItem(
                     title = stringResource(Res.string.enable_sponsor_block),
                     subtitle = stringResource(Res.string.skip_sponsor_part_of_video),
                     switch = (enableSponsorBlock to { viewModel.setSponsorBlockEnabled(it) }),
                 )
-                val listName =
-                    SponsorBlockType.toList().map { it.displayString() }
+                }
+                add {
                 SettingItem(
                     title = stringResource(Res.string.categories_sponsor_block),
                     subtitle = stringResource(Res.string.what_segments_will_be_skipped),
@@ -1906,6 +2117,9 @@ fun SettingScreen(
                     },
                     isEnable = enableSponsorBlock,
                 )
+                }
+                }
+                Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = sponsorBlockItems)
                 val beforeUrl = stringResource(Res.string.sponsor_block_intro).substringBefore("https://sponsor.ajay.app/")
                 val afterUrl = stringResource(Res.string.sponsor_block_intro).substringAfter("https://sponsor.ajay.app/")
                 Text(
@@ -1932,6 +2146,8 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
+                val storageItems = buildList<@Composable () -> Unit> {
+                add {
                     SettingItem(
                         title = stringResource(Res.string.player_cache),
                         subtitle = "${playerCache.bytesToMB()} MB",
@@ -1949,6 +2165,8 @@ fun SettingScreen(
                             )
                         },
                     )
+                }
+                add {
                     SettingItem(
                         title = stringResource(Res.string.downloaded_cache),
                         subtitle = "${downloadedCache.bytesToMB()} MB",
@@ -1966,6 +2184,8 @@ fun SettingScreen(
                             )
                         },
                     )
+                }
+                add {
                     SettingItem(
                         title = stringResource(Res.string.thumbnail_cache),
                         subtitle = "${thumbnailCache.bytesToMB()} MB",
@@ -1983,6 +2203,8 @@ fun SettingScreen(
                             )
                         },
                     )
+                }
+                add {
                     SettingItem(
                         title = stringResource(Res.string.spotify_canvas_cache),
                         subtitle = "${canvasCache.bytesToMB()} MB",
@@ -2000,6 +2222,8 @@ fun SettingScreen(
                             )
                         },
                     )
+                }
+                add {
                     SettingItem(
                         title = stringResource(Res.string.limit_player_cache),
                         subtitle = LIMIT_CACHE_SIZE.getItemFromData(limitPlayerCache).toString(),
@@ -2025,6 +2249,9 @@ fun SettingScreen(
                             )
                         },
                     )
+                }
+                }
+                Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = storageItems)
                     Box(
                         Modifier.padding(
                             horizontal = 24.dp,
@@ -2240,18 +2467,27 @@ fun SettingScreen(
                 currentSection = currentSection,
                 onSectionClick = { currentSection = it }
             ) {
+                val backupItems = buildList<@Composable () -> Unit> {
+                add {
                 SettingItem(
                     title = stringResource(Res.string.backup_downloaded),
                     subtitle = stringResource(Res.string.backup_downloaded_description),
                     switch = (backupDownloaded to { viewModel.setBackupDownloaded(it) }),
                 )
+                }
                 // Auto Backup (Android only)
                 if (getPlatform() == Platform.Android) {
+                add {
                     SettingItem(
                         title = stringResource(Res.string.auto_backup),
                         subtitle = stringResource(Res.string.auto_backup_description),
                         switch = (autoBackupEnabled to { viewModel.setAutoBackupEnabled(it) }),
                     )
+                }
+                }
+                }
+                Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = backupItems)
+                if (getPlatform() == Platform.Android) {
                     AnimatedVisibility(visible = autoBackupEnabled) {
                         Column {
                             SettingItem(
@@ -2352,6 +2588,11 @@ fun SettingScreen(
                         }
                     }
                 }
+                Material3SettingsGroup(
+                    interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO,
+                    items =
+                        listOf<@Composable () -> Unit>(
+                            {
                 SettingItem(
                     title = stringResource(Res.string.backup),
                     subtitle = stringResource(Res.string.save_all_your_playlist_data),
@@ -2361,6 +2602,8 @@ fun SettingScreen(
                         }
                     },
                 )
+                            },
+                            {
                 SettingItem(
                     title = stringResource(Res.string.restore_your_data),
                     subtitle = stringResource(Res.string.restore_your_saved_data),
@@ -2370,6 +2613,8 @@ fun SettingScreen(
                         }
                     },
                 )
+                            },
+                            {
                 SettingItem(
                     title = stringResource(Res.string.import_data),
                     subtitle = stringResource(Res.string.import_playlists_from_other_apps),
@@ -2389,6 +2634,9 @@ fun SettingScreen(
                             }.padding(vertical = 4.dp)
                         )
                     }
+                )
+                            },
+                        ),
                 )
             }
         }
@@ -2461,7 +2709,7 @@ fun SettingScreen(
                             )
                         }
                     }
-                RowGroupCard(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = aboutItems)
+                Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = aboutItems)
             }
         }
         item(key = "end") {

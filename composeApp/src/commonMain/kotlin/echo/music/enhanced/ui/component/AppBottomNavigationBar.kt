@@ -128,7 +128,7 @@ fun AppBottomNavigationBar(
             }
         }
     }
-    // Better Echo: a floating rounded dock (same 24dp corner token as RowGroupCard) instead of
+    // Better Echo: a floating rounded dock (same 24dp corner token as Material3SettingsGroup) instead of
     // Classic's edge-to-edge flat bar — visually distinct from both Classic and the glass dock.
     if (isBetterEcho) {
         Box(modifier = Modifier.wrapContentSize().padding(horizontal = 16.dp, vertical = 4.dp)) {

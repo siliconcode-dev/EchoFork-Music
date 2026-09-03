@@ -1,5 +1,6 @@
 package echo.music.enhanced.ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,8 +9,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -17,6 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import echo.music.enhanced.extension.greyScale
 import echo.music.enhanced.ui.theme.typo
@@ -31,6 +39,12 @@ fun SettingItem(
     switch: Pair<Boolean, ((Boolean) -> Unit)>? = null,
     onDisable: (() -> Unit)? = null, // Callback when the item is disabled, switch off settings
     otherView: @Composable (() -> Unit)? = null,
+    // Icon-tint box + badge, ported from upstream Echo Music's Material3SettingsItemRow
+    // (fetched into upstream-latest/ for direct reference; see Material3SettingsGroup.kt).
+    // Null/false by default so every existing call site renders exactly as before.
+    icon: ImageVector? = null,
+    isHighlighted: Boolean = false,
+    showBadge: Boolean = false,
 ) {
     // Key on isEnable (not Unit) so the auto-disable fires whenever the gate flips to false mid-session
     // (e.g. the user logs out while Settings is open), not only on first composition. Without this, any
@@ -66,6 +80,36 @@ fun SettingItem(
                     ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            if (icon != null) {
+                Box(
+                    modifier =
+                        Modifier
+                            .size(40.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = if (isHighlighted) 0.15f else 0.1f)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    val iconContent: @Composable () -> Unit = {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            tint =
+                                when {
+                                    !isEnable -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                                    isHighlighted -> MaterialTheme.colorScheme.primary
+                                    else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.9f)
+                                },
+                            modifier = Modifier.size(24.dp),
+                        )
+                    }
+                    if (showBadge) {
+                        BadgedBox(badge = { Badge(containerColor = MaterialTheme.colorScheme.error) }) { iconContent() }
+                    } else {
+                        iconContent()
+                    }
+                }
+                Spacer(Modifier.width(16.dp))
+            }
             Column(
                 modifier = Modifier.weight(1f),
                 horizontalAlignment = Alignment.Start,

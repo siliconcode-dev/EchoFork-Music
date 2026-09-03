@@ -2,6 +2,12 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.9] — 2026-09-03
+
+### Changed
+- Better Echo's Settings screen now uses upstream Echo Music's actual current row component (fetched and ported directly from its live source, not approximated): every section renders as a proper "squircle stack" card group with icon-tint boxes and badge support, matching upstream pixel-for-pixel rather than last version's shape-only approximation.
+- Added a Settings search bar (Better Echo only) that jumps straight to the matching section instead of scrolling through the whole list.
+
 ## [0.1.8] — 2026-09-03
 
 ### Added
