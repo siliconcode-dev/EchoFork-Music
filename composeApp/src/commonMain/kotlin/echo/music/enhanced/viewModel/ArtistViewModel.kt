@@ -15,6 +15,7 @@ import echo.music.enhanced.domain.data.model.streams.YouTubeWatchEndpoint
 import echo.music.enhanced.domain.extension.now
 import echo.music.enhanced.domain.mediaservice.handler.PlaylistType
 import echo.music.enhanced.domain.mediaservice.handler.QueueData
+import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.repository.ArtistRepository
 import echo.music.enhanced.domain.repository.LyricsCanvasRepository
 import echo.music.enhanced.domain.repository.SongRepository
@@ -28,6 +29,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import echomusic.composeapp.generated.resources.Res
@@ -38,10 +40,15 @@ class ArtistViewModel(
     private val artistRepository: ArtistRepository,
     private val songRepository: SongRepository,
     private val lyricsCanvasRepository: LyricsCanvasRepository,
+    private val dataStoreManager: DataStoreManager,
 ) : BaseViewModel() {
     // It is dynamic and can be changed by the user, so separate it from the ArtistScreenData
     private var _canvasUrl: MutableStateFlow<Pair<String, SongEntity>?> = MutableStateFlow(null)
     var canvasUrl: StateFlow<Pair<String, SongEntity>?> = _canvasUrl
+
+    // Artist-level ambient backdrop video (not tied to the currently-playing song).
+    private var _artistBackgroundVideoUrl: MutableStateFlow<String?> = MutableStateFlow(null)
+    val artistBackgroundVideoUrl: StateFlow<String?> = _artistBackgroundVideoUrl
 
     // Artist name-logo image + accent color from the hidden catalog (immersive header).
     private val _artistLogo: MutableStateFlow<ArtistLogo?> = MutableStateFlow(null)
@@ -57,6 +64,7 @@ class ArtistViewModel(
         _artistScreenState.value = Loading
         _canvasUrl.value = null
         _artistLogo.value = null
+        _artistBackgroundVideoUrl.value = null
         _followed.value = false
         viewModelScope.launch {
             artistRepository.getArtistData(channelId).collect { browse ->
@@ -76,6 +84,7 @@ class ArtistViewModel(
                         }
                         _artistScreenState.value =
                             Success(data.toArtistScreenData())
+                        fetchArtistBackgroundVideo(data.name)
                         // Canvas comes ONLY from the single most-popular song: take the first
                         // popular result and use its canvas if it has one. If it doesn't,
                         // leave canvas null (already reset above) — no fallback to other songs.
@@ -95,6 +104,17 @@ class ArtistViewModel(
                     else -> {
                         _artistScreenState.value = Error("Error")
                     }
+                }
+            }
+        }
+    }
+
+    private fun fetchArtistBackgroundVideo(artistName: String) {
+        viewModelScope.launch {
+            if (dataStoreManager.artistBackgroundVideo.first() != DataStoreManager.TRUE) return@launch
+            lyricsCanvasRepository.getAppleArtistBackground(artistName).collectLatest { res ->
+                if (res is Resource.Success) {
+                    _artistBackgroundVideoUrl.value = res.data?.canvasUrl
                 }
             }
         }

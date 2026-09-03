@@ -38,6 +38,33 @@ interface LyricsCanvasRepository {
         duration: Int,
     ): Flow<Resource<CanvasResult>>
 
+    fun getTidalCanvas(
+        artist: String,
+        track: String,
+        album: String?,
+    ): Flow<Resource<CanvasResult>>
+
+    fun getAppleCanvas(
+        artist: String,
+        track: String,
+        album: String?,
+    ): Flow<Resource<CanvasResult>>
+
+    fun getEchoMusicCanvas(
+        artist: String,
+        track: String,
+    ): Flow<Resource<CanvasResult>>
+
+    fun getArtistVideoCanvas(
+        artist: String,
+        track: String,
+        album: String?,
+        duration: Int?,
+    ): Flow<Resource<CanvasResult>>
+
+    /** Artist-level backdrop video (not per-song) — shown on the artist page. */
+    fun getAppleArtistBackground(artistName: String): Flow<Resource<CanvasResult>>
+
     suspend fun updateCanvasUrl(
         videoId: String,
         canvasUrl: String,

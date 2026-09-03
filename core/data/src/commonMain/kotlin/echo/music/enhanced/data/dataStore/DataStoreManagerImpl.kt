@@ -22,6 +22,7 @@ import echo.music.enhanced.domain.manager.DataStoreManager.Values.REPEAT_ALL
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.REPEAT_MODE_OFF
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.REPEAT_ONE
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.SIMPMUSIC
+import echo.music.enhanced.domain.manager.DataStoreManager.Values.SPOTIFY
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.TRUE
 import echo.music.enhanced.logger.Logger
 import kotlinx.coroutines.Dispatchers
@@ -452,6 +453,32 @@ internal class DataStoreManagerImpl(
         withContext(Dispatchers.IO) {
             settingsDataStore.edit { settings ->
                 settings[LYRICS_PROVIDER] = provider
+            }
+        }
+    }
+
+    override val canvasProvider =
+        settingsDataStore.data.map { preferences ->
+            preferences[CANVAS_PROVIDER] ?: SPOTIFY
+        }
+
+    override suspend fun setCanvasProvider(provider: String) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[CANVAS_PROVIDER] = provider
+            }
+        }
+    }
+
+    override val artistBackgroundVideo: Flow<String> =
+        settingsDataStore.data.map { preferences ->
+            preferences[ARTIST_BACKGROUND_VIDEO] ?: FALSE
+        }
+
+    override suspend fun setArtistBackgroundVideo(enable: Boolean) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[ARTIST_BACKGROUND_VIDEO] = if (enable) TRUE else FALSE
             }
         }
     }
@@ -1708,6 +1735,8 @@ internal class DataStoreManagerImpl(
         val CROSSFADE_SKIP_ALBUM = stringPreferencesKey("crossfade_skip_album")
         val AUTO_DOWNLOAD_LIKED_SONGS = stringPreferencesKey("auto_download_liked_songs")
         val LYRICS_PROVIDER = stringPreferencesKey("lyrics_provider")
+        val CANVAS_PROVIDER = stringPreferencesKey("canvas_provider")
+        val ARTIST_BACKGROUND_VIDEO = stringPreferencesKey("artist_background_video")
         val TRANSLATION_LANGUAGE = stringPreferencesKey("translation_language")
         val USE_TRANSLATION_LANGUAGE = stringPreferencesKey("use_translation_language")
 

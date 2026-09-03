@@ -87,6 +87,13 @@ kotlin {
                 implementation(projects.paxsenixlyrics)
                 implementation(projects.kugou)
                 implementation(projects.unison)
+
+                // Android-only canvas providers, called via the expect/actual bridge in
+                // data/canvas/NewCanvasProviders — these modules have no commonMain/jvm target.
+                implementation(projects.canvas)
+                implementation(projects.applecanvas)
+                implementation(projects.echomusiccanvas)
+                implementation(projects.artistvideo)
             }
         }
 

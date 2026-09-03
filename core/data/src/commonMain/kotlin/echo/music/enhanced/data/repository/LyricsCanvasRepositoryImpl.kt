@@ -34,6 +34,11 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import echo.music.enhanced.aiservice.AiClient
+import echo.music.enhanced.data.canvas.fetchAppleArtistBackground
+import echo.music.enhanced.data.canvas.fetchAppleCanvas
+import echo.music.enhanced.data.canvas.fetchArtistVideoCanvas
+import echo.music.enhanced.data.canvas.fetchEchoMusicCanvas
+import echo.music.enhanced.data.canvas.fetchTidalCanvas
 import echo.music.enhanced.data.lyrics.fetchKuGouLyrics
 import echo.music.enhanced.data.lyrics.fetchPaxsenixLyrics
 import echo.music.enhanced.data.lyrics.fetchUnisonLyrics
@@ -246,6 +251,57 @@ internal class LyricsCanvasRepositoryImpl(
     ) = withContext(Dispatchers.IO) {
         localDataSource.updateCanvasThumbUrl(videoId, canvasThumbUrl)
     }
+
+    override fun getTidalCanvas(
+        artist: String,
+        track: String,
+        album: String?,
+    ): Flow<Resource<CanvasResult>> =
+        flow {
+            fetchTidalCanvas(track, artist, album)
+                ?.let { emit(Resource.Success(it.toCanvasResult())) }
+                ?: emit(Resource.Error<CanvasResult>("No Tidal canvas found"))
+        }.flowOn(Dispatchers.IO)
+
+    override fun getAppleCanvas(
+        artist: String,
+        track: String,
+        album: String?,
+    ): Flow<Resource<CanvasResult>> =
+        flow {
+            fetchAppleCanvas(track, artist, album)
+                ?.let { emit(Resource.Success(it.toCanvasResult())) }
+                ?: emit(Resource.Error<CanvasResult>("No Apple Music canvas found"))
+        }.flowOn(Dispatchers.IO)
+
+    override fun getEchoMusicCanvas(
+        artist: String,
+        track: String,
+    ): Flow<Resource<CanvasResult>> =
+        flow {
+            fetchEchoMusicCanvas(track, artist)
+                ?.let { emit(Resource.Success(it.toCanvasResult())) }
+                ?: emit(Resource.Error<CanvasResult>("No EchoMusicCanvas found"))
+        }.flowOn(Dispatchers.IO)
+
+    override fun getArtistVideoCanvas(
+        artist: String,
+        track: String,
+        album: String?,
+        duration: Int?,
+    ): Flow<Resource<CanvasResult>> =
+        flow {
+            fetchArtistVideoCanvas(track, artist, album, duration)
+                ?.let { emit(Resource.Success(it.toCanvasResult())) }
+                ?: emit(Resource.Error<CanvasResult>("No ArtistVideo canvas found"))
+        }.flowOn(Dispatchers.IO)
+
+    override fun getAppleArtistBackground(artistName: String): Flow<Resource<CanvasResult>> =
+        flow {
+            fetchAppleArtistBackground(artistName)
+                ?.let { emit(Resource.Success(it.toCanvasResult())) }
+                ?: emit(Resource.Error<CanvasResult>("No artist background video found"))
+        }.flowOn(Dispatchers.IO)
 
     override fun getSpotifyLyrics(
         dataStoreManager: DataStoreManager,

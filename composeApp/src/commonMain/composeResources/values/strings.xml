@@ -345,6 +345,14 @@
     <string name="spotify_lyrícs_info">More lyrics without translation</string>
     <string name="enable_canvas">Enable Canvas</string>
     <string name="canvas_info">Show Spotify Canvas in Enhanced Echo Music</string>
+    <string name="canvas_provider">Canvas Provider</string>
+    <string name="canvas_provider_spotify" translatable="false">Spotify</string>
+    <string name="canvas_provider_tidal" translatable="false">Tidal</string>
+    <string name="canvas_provider_apple" translatable="false">Apple Music</string>
+    <string name="canvas_provider_echomusic" translatable="false">EchoMusicCanvas (may be unavailable)</string>
+    <string name="canvas_provider_artistvideo" translatable="false">ArtistVideo</string>
+    <string name="enable_artist_background_video">Artist Background Video</string>
+    <string name="artist_background_video_info">Show an ambient background video on artist pages, when available</string>
     <string name="spotify_lyrics_provider">Lyrics provided by Spotify</string>
     <string name="offline_mode">Offline mode</string>
     <string name="added_to_youtube_liked">Added to YouTube Liked</string>

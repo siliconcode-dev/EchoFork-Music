@@ -153,6 +153,7 @@ fun ArtistScreen(
     val artistScreenState by viewModel.artistScreenState.collectAsStateWithLifecycle()
     val isFollowed by viewModel.followed.collectAsStateWithLifecycle()
     val canvasUrl by viewModel.canvasUrl.collectAsStateWithLifecycle()
+    val artistBackgroundVideoUrl by viewModel.artistBackgroundVideoUrl.collectAsStateWithLifecycle()
     val artistLogo by viewModel.artistLogo.collectAsStateWithLifecycle()
 
     val playingTrack by remember {
@@ -301,16 +302,21 @@ fun ArtistScreen(
                                                 modifier =
                                                     Modifier
                                                         .fillMaxSize()
-                                                        .alpha(if (canvasUrl != null) 0f else 1f),
+                                                        .alpha(
+                                                            if (canvasUrl != null || artistBackgroundVideoUrl != null) 0f else 1f,
+                                                        ),
                                             )
-                                            // Canvas (Spotify) plays AS the background when present;
+                                            // Canvas (Spotify/etc., tied to the currently-playing song)
+                                            // takes priority; falls back to the artist's own ambient
+                                            // background video when nothing of theirs is playing;
                                             // otherwise the static artwork above is the fallback.
-                                            canvasUrl?.let { canvas ->
-                                                // Canvas is a tall/portrait video. cropToBounds center
+                                            val backdropVideoUrl = canvasUrl?.first ?: artistBackgroundVideoUrl
+                                            backdropVideoUrl?.let { url ->
+                                                // Backdrop is a tall/portrait video. cropToBounds center
                                                 // scale-to-covers it into the header frame (ContentScale.Crop):
                                                 // true video aspect ratio, no stretch, overflow clipped.
                                                 MediaPlayerView(
-                                                    url = canvas.first,
+                                                    url = url,
                                                     modifier = Modifier.fillMaxSize(),
                                                     cropToBounds = true,
                                                 )

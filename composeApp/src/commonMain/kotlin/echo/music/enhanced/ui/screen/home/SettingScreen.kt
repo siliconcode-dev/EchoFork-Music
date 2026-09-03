@@ -186,6 +186,7 @@ import echomusic.composeapp.generated.resources.auto_download_liked_songs
 import echomusic.composeapp.generated.resources.auto_download_liked_songs_description
 import echomusic.composeapp.generated.resources.anonymous
 import echomusic.composeapp.generated.resources.app_name
+import echomusic.composeapp.generated.resources.artist_background_video_info
 import echomusic.composeapp.generated.resources.audio
 import echomusic.composeapp.generated.resources.auto_backup
 import echomusic.composeapp.generated.resources.auto_backup_description
@@ -204,6 +205,12 @@ import echomusic.composeapp.generated.resources.blog_notification_description
 import echomusic.composeapp.generated.resources.blog_notification_title
 import echomusic.composeapp.generated.resources.cancel
 import echomusic.composeapp.generated.resources.canvas_info
+import echomusic.composeapp.generated.resources.canvas_provider
+import echomusic.composeapp.generated.resources.canvas_provider_apple
+import echomusic.composeapp.generated.resources.canvas_provider_artistvideo
+import echomusic.composeapp.generated.resources.canvas_provider_echomusic
+import echomusic.composeapp.generated.resources.canvas_provider_spotify
+import echomusic.composeapp.generated.resources.canvas_provider_tidal
 import echomusic.composeapp.generated.resources.categories_sponsor_block
 import echomusic.composeapp.generated.resources.change
 import echomusic.composeapp.generated.resources.change_language_warning
@@ -240,6 +247,7 @@ import echomusic.composeapp.generated.resources.discord_integration
 import echomusic.composeapp.generated.resources.display
 import echomusic.composeapp.generated.resources.download_quality
 import echomusic.composeapp.generated.resources.downloaded_cache
+import echomusic.composeapp.generated.resources.enable_artist_background_video
 import echomusic.composeapp.generated.resources.enable_canvas
 import echomusic.composeapp.generated.resources.enable_liquid_glass_effect
 import echomusic.composeapp.generated.resources.enable_liquid_glass_effect_description
@@ -506,6 +514,8 @@ fun SettingScreen(
     val spotifyLoggedIn by viewModel.spotifyLogIn.collectAsStateWithLifecycle()
     val spotifyLyrics by viewModel.spotifyLyrics.collectAsStateWithLifecycle()
     val spotifyCanvas by viewModel.spotifyCanvas.collectAsStateWithLifecycle()
+    val canvasProvider by viewModel.canvasProvider.collectAsStateWithLifecycle()
+    val artistBackgroundVideo by viewModel.artistBackgroundVideo.collectAsStateWithLifecycle()
     val enableSponsorBlock by remember { viewModel.sponsorBlockEnabled.map { it == TRUE } }.collectAsStateWithLifecycle(initialValue = false)
     val skipSegments by viewModel.sponsorBlockCategories.collectAsStateWithLifecycle()
     val playerCache by viewModel.cacheSize.collectAsStateWithLifecycle()
@@ -665,12 +675,63 @@ fun SettingScreen(
                     title = stringResource(Res.string.enable_canvas),
                     subtitle = stringResource(Res.string.canvas_info),
                     switch = (spotifyCanvas to { viewModel.setSpotifyCanvas(it) }),
-                    isEnable = spotifyLoggedIn,
-                    onDisable = {
-                        if (spotifyCanvas) {
-                            viewModel.setSpotifyCanvas(false)
-                        }
+                )
+                SettingItem(
+                    title = stringResource(Res.string.canvas_provider),
+                    subtitle =
+                        when (canvasProvider) {
+                            DataStoreManager.TIDAL -> stringResource(Res.string.canvas_provider_tidal)
+                            DataStoreManager.APPLE_CANVAS -> stringResource(Res.string.canvas_provider_apple)
+                            DataStoreManager.ECHOMUSIC_CANVAS -> stringResource(Res.string.canvas_provider_echomusic)
+                            DataStoreManager.ARTISTVIDEO_CANVAS -> stringResource(Res.string.canvas_provider_artistvideo)
+                            else -> stringResource(Res.string.canvas_provider_spotify)
+                        },
+                    isEnable = spotifyCanvas,
+                    onClick = {
+                        viewModel.setAlertData(
+                            SettingAlertState(
+                                title = runBlocking { getString(Res.string.canvas_provider) },
+                                selectOne =
+                                    SettingAlertState.SelectData(
+                                        listSelect =
+                                            listOf(
+                                                (canvasProvider == DataStoreManager.SPOTIFY || canvasProvider == null) to
+                                                    runBlocking { getString(Res.string.canvas_provider_spotify) },
+                                                (canvasProvider == DataStoreManager.TIDAL) to
+                                                    runBlocking { getString(Res.string.canvas_provider_tidal) },
+                                                (canvasProvider == DataStoreManager.APPLE_CANVAS) to
+                                                    runBlocking { getString(Res.string.canvas_provider_apple) },
+                                                (canvasProvider == DataStoreManager.ECHOMUSIC_CANVAS) to
+                                                    runBlocking { getString(Res.string.canvas_provider_echomusic) },
+                                                (canvasProvider == DataStoreManager.ARTISTVIDEO_CANVAS) to
+                                                    runBlocking { getString(Res.string.canvas_provider_artistvideo) },
+                                            ),
+                                    ),
+                                confirm =
+                                    runBlocking { getString(Res.string.change) } to { state ->
+                                        viewModel.setCanvasProvider(
+                                            when (state.selectOne?.getSelected()) {
+                                                runBlocking { getString(Res.string.canvas_provider_tidal) } -> DataStoreManager.TIDAL
+                                                runBlocking { getString(Res.string.canvas_provider_apple) } -> DataStoreManager.APPLE_CANVAS
+                                                runBlocking {
+                                                    getString(Res.string.canvas_provider_echomusic)
+                                                } -> DataStoreManager.ECHOMUSIC_CANVAS
+                                                runBlocking {
+                                                    getString(Res.string.canvas_provider_artistvideo)
+                                                } -> DataStoreManager.ARTISTVIDEO_CANVAS
+                                                else -> DataStoreManager.SPOTIFY
+                                            },
+                                        )
+                                    },
+                                dismiss = runBlocking { getString(Res.string.cancel) },
+                            ),
+                        )
                     },
+                )
+                SettingItem(
+                    title = stringResource(Res.string.enable_artist_background_video),
+                    subtitle = stringResource(Res.string.artist_background_video_info),
+                    switch = (artistBackgroundVideo to { viewModel.setArtistBackgroundVideo(it) }),
                 )
                         }
         }

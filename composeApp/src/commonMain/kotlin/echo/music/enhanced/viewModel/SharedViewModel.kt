@@ -236,12 +236,12 @@ class SharedViewModel(
                             val nowPlaying = it.second
                             val timeline = it.first
                             if (timeline.total > 0 && nowPlaying.songEntity != null) {
-                                if (nowPlaying.mediaItem.isSong() && nowPlayingScreenData.value.canvasData == null) {
-                                    Logger.w(tag, "Duration is ${timeline.total}")
-                                    Logger.w(tag, "MediaId is ${nowPlaying.mediaItem.mediaId}")
-                                    getCanvas(nowPlaying.mediaItem.mediaId, (timeline.total / 1000).toInt())
-                                }
                                 nowPlaying.songEntity?.let { song ->
+                                    if (nowPlaying.mediaItem.isSong() && nowPlayingScreenData.value.canvasData == null) {
+                                        Logger.w(tag, "Duration is ${timeline.total}")
+                                        Logger.w(tag, "MediaId is ${nowPlaying.mediaItem.mediaId}")
+                                        getCanvas(song, (timeline.total / 1000).toInt())
+                                    }
                                     if (nowPlayingScreenData.value.lyricsData == null) {
                                         Logger.w(tag, "Get lyrics from format")
                                         getLyricsFromFormat(nowPlaying.mediaItem.isVideo(), song, (timeline.total / 1000).toInt())
@@ -520,14 +520,25 @@ class SharedViewModel(
     }
 
     private fun getCanvas(
-        videoId: String,
+        song: SongEntity,
         duration: Int,
     ) {
+        val videoId = song.videoId
         Logger.w(tag, "Start getCanvas: $videoId $duration")
 //        canvasJob?.cancel()
         viewModelScope.launch {
             if (dataStoreManager.spotifyCanvas.first() == TRUE) {
-                lyricsCanvasRepository.getCanvas(dataStoreManager, videoId, duration).cancellable().collect { response ->
+                val artist = song.artistName?.firstOrNull() ?: ""
+                val canvasFlow =
+                    when (dataStoreManager.canvasProvider.first()) {
+                        DataStoreManager.TIDAL -> lyricsCanvasRepository.getTidalCanvas(artist, song.title, null)
+                        DataStoreManager.APPLE_CANVAS -> lyricsCanvasRepository.getAppleCanvas(artist, song.title, null)
+                        DataStoreManager.ECHOMUSIC_CANVAS -> lyricsCanvasRepository.getEchoMusicCanvas(artist, song.title)
+                        DataStoreManager.ARTISTVIDEO_CANVAS ->
+                            lyricsCanvasRepository.getArtistVideoCanvas(artist, song.title, null, duration)
+                        else -> lyricsCanvasRepository.getCanvas(dataStoreManager, videoId, duration)
+                    }
+                canvasFlow.cancellable().collect { response ->
                     val data = response.data
                     when (response) {
                         is Resource.Success if (data != null && nowPlayingState.value?.mediaItem?.mediaId == videoId) -> {

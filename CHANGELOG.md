@@ -2,6 +2,12 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.5] — 2026-09-03
+
+### Added
+- New Canvas Provider picker in Settings: Tidal, Apple Music, EchoMusicCanvas, and ArtistVideo, alongside the existing Spotify canvas.
+- New "Artist Background Video" option: an ambient backdrop video on artist pages (Apple Music), independent of what's currently playing.
+
 ## [0.1.4] — 2026-09-03
 
 ### Added

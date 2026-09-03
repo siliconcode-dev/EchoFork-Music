@@ -126,6 +126,14 @@ interface DataStoreManager {
 
     suspend fun setLyricsProvider(provider: String)
 
+    val canvasProvider: Flow<String>
+
+    suspend fun setCanvasProvider(provider: String)
+
+    val artistBackgroundVideo: Flow<String>
+
+    suspend fun setArtistBackgroundVideo(enable: Boolean)
+
     val translationLanguage: Flow<String>
 
     suspend fun setTranslationLanguage(language: String)
@@ -523,6 +531,12 @@ interface DataStoreManager {
         const val PAXSENIX = "paxsenix"
         const val KUGOU = "kugou"
         const val UNISON = "unison"
+
+        const val SPOTIFY = "spotify"
+        const val TIDAL = "tidal"
+        const val APPLE_CANVAS = "apple_canvas"
+        const val ECHOMUSIC_CANVAS = "echomusic_canvas"
+        const val ARTISTVIDEO_CANVAS = "artistvideo_canvas"
 
         const val FDROID = "fdroid"
         const val GITHUB_FOSS_NIGHTLY = "github_foss_nightly"

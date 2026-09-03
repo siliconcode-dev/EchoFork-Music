@@ -99,6 +99,10 @@ class SettingsViewModel(
     val sendBackToGoogle: StateFlow<String?> = _sendBackToGoogle
     private var _mainLyricsProvider: MutableStateFlow<String?> = MutableStateFlow(null)
     val mainLyricsProvider: StateFlow<String?> = _mainLyricsProvider
+    private var _canvasProvider: MutableStateFlow<String?> = MutableStateFlow(null)
+    val canvasProvider: StateFlow<String?> = _canvasProvider
+    private var _artistBackgroundVideo: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val artistBackgroundVideo: StateFlow<Boolean> = _artistBackgroundVideo
 
     private var _translationLanguage: MutableStateFlow<String?> = MutableStateFlow(null)
     val translationLanguage: StateFlow<String?> = _translationLanguage
@@ -365,6 +369,8 @@ class SettingsViewModel(
         getTranslationLanguage()
         getYoutubeSubtitleLanguage()
         getLyricsProvider()
+        getCanvasProvider()
+        getArtistBackgroundVideo()
         getUseTranslation()
         getPlayVideoInsteadOfAudio()
         getRadioAudioOnly()
@@ -1185,6 +1191,36 @@ class SettingsViewModel(
         viewModelScope.launch {
             dataStoreManager.setLyricsProvider(provider)
             getLyricsProvider()
+        }
+    }
+
+    fun getCanvasProvider() {
+        viewModelScope.launch {
+            dataStoreManager.canvasProvider.collect { canvasProvider ->
+                _canvasProvider.emit(canvasProvider)
+            }
+        }
+    }
+
+    fun setCanvasProvider(provider: String) {
+        viewModelScope.launch {
+            dataStoreManager.setCanvasProvider(provider)
+            getCanvasProvider()
+        }
+    }
+
+    fun getArtistBackgroundVideo() {
+        viewModelScope.launch {
+            dataStoreManager.artistBackgroundVideo.collect {
+                _artistBackgroundVideo.emit(it == DataStoreManager.TRUE)
+            }
+        }
+    }
+
+    fun setArtistBackgroundVideo(enable: Boolean) {
+        viewModelScope.launch {
+            dataStoreManager.setArtistBackgroundVideo(enable)
+            getArtistBackgroundVideo()
         }
     }
 

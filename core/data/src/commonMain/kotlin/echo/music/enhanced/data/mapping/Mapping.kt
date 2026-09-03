@@ -2,6 +2,7 @@ package echo.music.enhanced.data.mapping
 
 import echo.music.enhanced.data.parser.toListThumbnail
 import echo.music.enhanced.domain.data.model.browse.album.Track
+import echo.music.enhanced.data.canvas.RawCanvasFetch
 import echo.music.enhanced.domain.data.model.canvas.CanvasResult
 import echo.music.enhanced.domain.data.model.mediaService.SponsorSkipSegments
 import echo.music.enhanced.domain.data.model.metadata.Line
@@ -446,6 +447,13 @@ internal fun CanvasResponse.toCanvasResult(): CanvasResult? {
         canvasThumbUrl = thumbUrl,
     )
 }
+
+internal fun RawCanvasFetch.toCanvasResult(): CanvasResult =
+    CanvasResult(
+        isVideo = isVideo,
+        canvasUrl = url,
+        canvasThumbUrl = thumbUrl,
+    )
 
 internal fun YouTubeWatchEndpoint.toWatchEndpoint(): WatchEndpoint =
     WatchEndpoint(
