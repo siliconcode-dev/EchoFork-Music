@@ -82,6 +82,10 @@
     <string name="add">Add</string>
     <string name="playlist_name">Playlist Name</string>
     <string name="create">Create</string>
+    <string name="create_playlist">Create Playlist</string>
+    <string name="create_playlist_normally">Normally</string>
+    <string name="create_playlist_with_ai">Create with AI</string>
+    <string name="create_playlist_with_ai_coming_soon">Coming soon</string>
     <string name="edit">Edit</string>
     <string name="edit_title">Edit title</string>
     <string name="edit_thumbnail">Edit thumbnail</string>

@@ -2,6 +2,11 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.10] — 2026-09-03
+
+### Changed
+- Better Echo's Library FAB now opens a menu instead of jumping straight into a playlist name field, matching upstream Echo Music's actual current flow: "Create Playlist" opens a two-tile chooser ("Normally" vs a preview of the upcoming AI-assisted option, shown as coming soon).
+
 ## [0.1.9] — 2026-09-03
 
 ### Changed

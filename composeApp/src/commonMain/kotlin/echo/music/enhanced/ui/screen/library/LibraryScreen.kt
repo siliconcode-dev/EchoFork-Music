@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,16 +24,21 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -75,6 +81,7 @@ import echo.music.enhanced.ui.component.LibraryItemType
 import echo.music.enhanced.ui.component.LibraryTilingBox
 import echo.music.enhanced.ui.icon.Add
 import echo.music.enhanced.ui.icon.PeopleAlt
+import echo.music.enhanced.ui.icon.Sparks
 import echo.music.enhanced.ui.icon.echoIcons
 import echo.music.enhanced.ui.theme.typo
 import echo.music.enhanced.viewModel.LibraryViewModel
@@ -94,6 +101,10 @@ import org.koin.compose.viewmodel.koinViewModel
 import echomusic.composeapp.generated.resources.Res
 import echomusic.composeapp.generated.resources.chart
 import echomusic.composeapp.generated.resources.create
+import echomusic.composeapp.generated.resources.create_playlist
+import echomusic.composeapp.generated.resources.create_playlist_normally
+import echomusic.composeapp.generated.resources.create_playlist_with_ai
+import echomusic.composeapp.generated.resources.create_playlist_with_ai_coming_soon
 import echomusic.composeapp.generated.resources.downloaded_playlists
 import echomusic.composeapp.generated.resources.favorite_playlists
 import echomusic.composeapp.generated.resources.favorite_podcasts
@@ -146,6 +157,13 @@ fun LibraryScreen(
         mutableStateOf(0.dp)
     }
     var showAddSheet by remember { mutableStateOf(false) }
+    // Better Echo: FAB opens a dropdown (upstream's real current FAB has 2 items, Create/Import —
+    // Import Playlist stays out of scope this slice, no URL-import mechanism exists in this fork),
+    // whose single "Create Playlist" item opens the two-tile chooser ported from upstream's
+    // LibraryScreen.kt (fetched into upstream-latest/). "Create with AI" is shown per upstream's
+    // exact tile treatment but disabled/coming-soon until AI Hub is actually ported.
+    var showFabMenu by remember { mutableStateOf(false) }
+    var showCreatePlaylistOptionsDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(nowPlaying) {
         Logger.w("LibraryScreen", "Check nowPlaying: $nowPlaying")
@@ -339,14 +357,118 @@ fun LibraryScreen(
                     .padding(innerPadding)
                     .padding(16.dp),
         ) {
-            FloatingActionButton(
-                onClick = { showAddSheet = true },
-                modifier = Modifier.align(Alignment.BottomEnd),
-                shape = CircleShape,
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                contentColor = MaterialTheme.colorScheme.onSurface,
+            Box(modifier = Modifier.align(Alignment.BottomEnd)) {
+                FloatingActionButton(
+                    onClick = { showFabMenu = true },
+                    shape = CircleShape,
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
+                ) {
+                    Icon(imageVector = echoIcons.Add, contentDescription = stringResource(Res.string.create))
+                }
+                DropdownMenu(
+                    expanded = showFabMenu,
+                    onDismissRequest = { showFabMenu = false },
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(Res.string.create_playlist)) },
+                        leadingIcon = { Icon(imageVector = echoIcons.Add, contentDescription = null) },
+                        onClick = {
+                            showFabMenu = false
+                            showCreatePlaylistOptionsDialog = true
+                        },
+                    )
+                }
+            }
+        }
+    }
+    if (showCreatePlaylistOptionsDialog) {
+        val coroutineScope2 = rememberCoroutineScope()
+        BasicAlertDialog(onDismissRequest = { showCreatePlaylistOptionsDialog = false }) {
+            Surface(
+                shape = RoundedCornerShape(28.dp),
+                color = MaterialTheme.colorScheme.surfaceContainer,
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Icon(imageVector = echoIcons.Add, contentDescription = stringResource(Res.string.create))
+                Column(modifier = Modifier.padding(24.dp)) {
+                    Text(text = stringResource(Res.string.create_playlist), style = typo().titleMedium)
+                    Spacer(Modifier.height(16.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier =
+                                Modifier
+                                    .weight(1f)
+                                    .padding(horizontal = 8.dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = MaterialTheme.colorScheme.outlineVariant,
+                                        shape = RoundedCornerShape(28.dp),
+                                    ).clip(RoundedCornerShape(28.dp))
+                                    .clickable {
+                                        showCreatePlaylistOptionsDialog = false
+                                        showAddSheet = true
+                                    }.padding(vertical = 20.dp, horizontal = 8.dp),
+                        ) {
+                            Surface(
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                modifier = Modifier.size(56.dp),
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(imageVector = echoIcons.Add, contentDescription = null, modifier = Modifier.size(28.dp))
+                                }
+                            }
+                            Spacer(Modifier.height(12.dp))
+                            Text(
+                                text = stringResource(Res.string.create_playlist_normally),
+                                style = typo().labelLarge,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            )
+                        }
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier =
+                                Modifier
+                                    .weight(1f)
+                                    .padding(horizontal = 8.dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                                        shape = RoundedCornerShape(28.dp),
+                                    ).clip(RoundedCornerShape(28.dp))
+                                    .clickable {
+                                        coroutineScope2.launch {
+                                            viewModel.makeToast(getString(Res.string.create_playlist_with_ai_coming_soon))
+                                        }
+                                    }.padding(vertical = 20.dp, horizontal = 8.dp),
+                        ) {
+                            Surface(
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                modifier = Modifier.size(56.dp),
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        imageVector = echoIcons.Sparks,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(28.dp),
+                                    )
+                                }
+                            }
+                            Spacer(Modifier.height(12.dp))
+                            Text(
+                                text = stringResource(Res.string.create_playlist_with_ai),
+                                style = typo().labelLarge,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            )
+                        }
+                    }
+                }
             }
         }
     }
