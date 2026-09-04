@@ -3,4 +3,6 @@ package echo.music.enhanced.ui.navigation.destination.home
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SettingsDestination
+data class SettingsDestination(
+    val highlightSection: String? = null,
+)

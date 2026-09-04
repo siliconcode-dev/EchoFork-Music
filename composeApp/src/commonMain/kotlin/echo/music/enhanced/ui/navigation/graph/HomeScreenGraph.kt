@@ -32,10 +32,12 @@ fun NavGraphBuilder.homeScreenGraph(
             innerPadding = innerPadding,
         )
     }
-    composable<SettingsDestination> {
+    composable<SettingsDestination> { entry ->
+        val args = entry.toRoute<SettingsDestination>()
         SettingScreen(
             navController = navController,
             innerPadding = innerPadding,
+            highlightSection = args.highlightSection,
         )
     }
     composable<echo.music.enhanced.ui.navigation.destination.home.EqualizerDestination> {

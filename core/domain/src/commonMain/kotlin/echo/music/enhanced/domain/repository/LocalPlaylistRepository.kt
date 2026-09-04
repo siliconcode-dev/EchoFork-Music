@@ -124,6 +124,18 @@ interface LocalPlaylistRepository {
         successMessage: String,
     ): Flow<LocalResource<String>>
 
+    /** Creates a new local playlist pre-populated with [tracks], in order. Emits the new playlist's real id. */
+    fun createLocalPlaylistWithTracks(
+        title: String,
+        tracks: List<SongEntity>,
+    ): Flow<LocalResource<Long>>
+
+    /** Replaces every song in an existing local playlist with [tracks], in order. */
+    fun replaceLocalPlaylistTracks(
+        id: Long,
+        tracks: List<SongEntity>,
+    ): Flow<LocalResource<String>>
+
     fun deleteLocalPlaylist(
         id: Long,
         successMessage: String,

@@ -201,6 +201,40 @@ internal class LocalPlaylistRepositoryImpl(
             localDataSource.insertLocalPlaylist(localPlaylist)
         }
 
+    override fun createLocalPlaylistWithTracks(
+        title: String,
+        tracks: List<SongEntity>,
+    ): Flow<LocalResource<Long>> =
+        wrapDataResource {
+            tracks.forEach { song -> localDataSource.insertSong(song) }
+            localDataSource.insertLocalPlaylistWithTracks(
+                LocalPlaylistEntity(title = title),
+                tracks.map { it.videoId },
+            )
+        }
+
+    override fun replaceLocalPlaylistTracks(
+        id: Long,
+        tracks: List<SongEntity>,
+    ): Flow<LocalResource<String>> =
+        wrapMessageResource(
+            successMessage = "",
+        ) {
+            localDataSource.deleteAllPairSongLocalPlaylist(id)
+            val addedAt = now()
+            tracks.forEachIndexed { index, song ->
+                localDataSource.insertSong(song)
+                localDataSource.insertPairSongLocalPlaylist(
+                    PairSongLocalPlaylist(
+                        playlistId = id,
+                        songId = song.videoId,
+                        position = index,
+                        inPlaylist = addedAt,
+                    ),
+                )
+            }
+        }
+
     override fun deleteLocalPlaylist(
         id: Long,
         successMessage: String,

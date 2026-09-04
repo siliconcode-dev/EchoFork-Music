@@ -870,6 +870,9 @@ interface DatabaseDao {
         videoId: String,
     )
 
+    @Query("DELETE FROM pair_song_local_playlist WHERE playlistId = :playlistId")
+    suspend fun deleteAllPairSongLocalPlaylist(playlistId: Long)
+
     // GoogleAccountEntity
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertGoogleAccount(googleAccountEntity: GoogleAccountEntity): Long

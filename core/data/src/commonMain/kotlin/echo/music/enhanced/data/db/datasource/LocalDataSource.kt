@@ -467,6 +467,8 @@ internal class LocalDataSource(
     suspend fun insertPairSongLocalPlaylist(pairSongLocalPlaylist: PairSongLocalPlaylist) =
         databaseDao.insertPairSongLocalPlaylist(pairSongLocalPlaylist)
 
+    suspend fun deleteAllPairSongLocalPlaylist(playlistId: Long) = databaseDao.deleteAllPairSongLocalPlaylist(playlistId)
+
     suspend fun unsyncLocalPlaylist(id: Long) = databaseDao.unsyncLocalPlaylist(id)
 
     suspend fun getPlaylistPairOfSong(

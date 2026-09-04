@@ -157,6 +157,7 @@ import echo.music.enhanced.ui.icon.PeopleAlt
 import echo.music.enhanced.ui.icon.PlayCircle
 import echo.music.enhanced.ui.icon.PlaylistAdd
 import echo.music.enhanced.ui.icon.QueueMusic
+import echo.music.enhanced.ui.icon.Sparks
 import echo.music.enhanced.ui.icon.Remove
 import echo.music.enhanced.ui.icon.Sensors
 import echo.music.enhanced.ui.icon.Share
@@ -191,6 +192,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import echomusic.composeapp.generated.resources.Res
 import echomusic.composeapp.generated.resources.add_to_a_playlist
 import echomusic.composeapp.generated.resources.add_to_queue
+import echomusic.composeapp.generated.resources.modify_playlist_with_ai
 import echomusic.composeapp.generated.resources.album
 import echomusic.composeapp.generated.resources.artists
 import echomusic.composeapp.generated.resources.baseline_downloaded
@@ -2988,6 +2990,8 @@ fun LocalPlaylistBottomSheet(
     onSync: () -> Unit,
     onUpdatePlaylist: () -> Unit,
     onDelete: () -> Unit,
+    interfaceMode: String = DataStoreManager.INTERFACE_CLASSIC,
+    onModifyWithAi: () -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     var showEditTitle by remember { mutableStateOf(false) }
@@ -3095,6 +3099,12 @@ fun LocalPlaylistBottomSheet(
                     }
                     ActionButton(icon = echoIcons.QueueMusic, text = Res.string.add_to_queue) {
                         onAddToQueue()
+                    }
+                    if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                        ActionButton(icon = echoIcons.Sparks, text = Res.string.modify_playlist_with_ai) {
+                            hideModalBottomSheet()
+                            onModifyWithAi()
+                        }
                     }
                     ActionButton(
                         icon =

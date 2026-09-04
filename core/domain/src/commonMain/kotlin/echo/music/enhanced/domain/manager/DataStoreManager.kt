@@ -356,6 +356,15 @@ interface DataStoreManager {
 
     suspend fun setCustomOpenAIHeaders(headers: String)
 
+    /** The local playlist id of the auto-generated "Recommended by AI" playlist, or `0` if none yet. */
+    val aiRecommendationsPlaylistId: Flow<Long>
+
+    suspend fun setAiRecommendationsPlaylistId(id: Long)
+
+    val enableAiRecommendations: Flow<Boolean>
+
+    suspend fun setEnableAiRecommendations(enabled: Boolean)
+
     val localPlaylistFilter: Flow<String>
 
     suspend fun setLocalPlaylistFilter(filter: String)
@@ -625,6 +634,7 @@ interface DataStoreManager {
         const val AI_PROVIDER_GEMINI = "gemini"
         const val AI_PROVIDER_OPENAI = "openai"
         const val AI_PROVIDER_CUSTOM_OPENAI = "custom_openai"
+        const val AI_PROVIDER_OPENROUTER = "openrouter"
 
         const val LOCAL_PLAYLIST_FILTER_OLDER_FIRST = "older_first"
         const val LOCAL_PLAYLIST_FILTER_NEWER_FIRST = "newer_first"

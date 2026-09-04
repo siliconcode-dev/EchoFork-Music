@@ -54,6 +54,17 @@ class AiService(
                     )
                 OpenAI(config)
             }
+
+            AIHost.OPENROUTER -> {
+                val baseUrl = customBaseUrl ?: "https://openrouter.ai/api/v1/"
+                val config =
+                    OpenAIConfig(
+                        token = apiKey,
+                        host = OpenAIHost(baseUrl = baseUrl),
+                        headers = customHeaders ?: emptyMap(),
+                    )
+                OpenAI(config)
+            }
         }
     }
 
@@ -65,6 +76,7 @@ class AiService(
                 AIHost.GEMINI -> ModelId("gemini-2.0-flash")
                 AIHost.OPENAI -> ModelId("gpt-4o")
                 AIHost.CUSTOM_OPENAI -> ModelId("gpt-4o")
+                AIHost.OPENROUTER -> ModelId("google/gemini-2.5-flash-lite")
             }
         }
     }
@@ -169,6 +181,122 @@ class AiService(
         )
     }
 
+    private fun extractJsonContent(completion: ChatCompletion): String {
+        val jsonContent =
+            completion.choices
+                .firstOrNull()
+                ?.message
+                ?.content ?: throw IllegalStateException("No response from AI")
+        val jsonData =
+            Regex(
+                "```json\\s*([\\s\\S]*?)```",
+            ).find(jsonContent)
+                ?.groups
+                ?.firstOrNull()
+                ?.value ?: jsonContent
+        return jsonData.replace("```json", "").replace("```", "")
+    }
+
+    suspend fun generatePlaylist(
+        prompt: String,
+        songCount: Int,
+    ): AiPlaylistSuggestionResponse {
+        val request =
+            chatCompletionRequest {
+                this.model = this@AiService.model
+                responseFormat = ChatResponseFormat.jsonSchema(playlistSuggestionJsonSchema)
+                messages {
+                    system {
+                        content =
+                            "You are a music playlist generation assistant.\n" +
+                            "\n" +
+                            "TASK:\n" +
+                            "- The user will describe a playlist they want.\n" +
+                            "- Generate EXACTLY $songCount real songs that match the request.\n" +
+                            "- Verify each song's release year, movie/album, and artist are accurate before including it — do not guess.\n" +
+                            "- If the request mentions a decade, era, or specific artist, match it literally, not loosely.\n" +
+                            "\n" +
+                            "OUTPUT:\n" +
+                            "- A JSON object with a \"name\" field (a short, fitting playlist name) and a \"songs\" " +
+                            "field: a list of exactly $songCount objects, each with \"title\" and \"artist\"."
+                    }
+                    user {
+                        content { text(prompt) }
+                    }
+                }
+            }
+        val completion: ChatCompletion = openAI.chatCompletion(request)
+        return json.decodeFromString<AiPlaylistSuggestionResponse>(extractJsonContent(completion))
+    }
+
+    suspend fun modifyPlaylist(
+        existingSongs: List<Pair<String, String>>,
+        prompt: String,
+    ): AiPlaylistModificationResponse {
+        val songsList = existingSongs.joinToString("\n") { (id, label) -> "- $id: $label" }
+        val request =
+            chatCompletionRequest {
+                this.model = this@AiService.model
+                responseFormat = ChatResponseFormat.jsonSchema(playlistModificationJsonSchema)
+                messages {
+                    system {
+                        content =
+                            "You are a music playlist editing assistant.\n" +
+                            "\n" +
+                            "TASK:\n" +
+                            "- You will receive the current songs in a playlist (id: \"title by artist\") and a " +
+                            "user instruction describing how to change it.\n" +
+                            "- Decide which existing songs to remove (by id) and which new real songs to add.\n" +
+                            "- Only remove songs the instruction actually implies should go; only add songs that " +
+                            "genuinely fit.\n" +
+                            "\n" +
+                            "OUTPUT:\n" +
+                            "- A JSON object with \"removeIds\" (a list of ids to remove, may be empty) and " +
+                            "\"additions\" (a list of objects with \"title\" and \"artist\" to add, may be empty)."
+                    }
+                    user {
+                        content { text("Current playlist:\n$songsList") }
+                        content { text("Instruction: $prompt") }
+                    }
+                }
+            }
+        val completion: ChatCompletion = openAI.chatCompletion(request)
+        return json.decodeFromString<AiPlaylistModificationResponse>(extractJsonContent(completion))
+    }
+
+    suspend fun generateRecommendations(
+        librarySongs: List<String>,
+        songCount: Int,
+    ): AiPlaylistSuggestionResponse {
+        val libraryList = librarySongs.joinToString("\n") { "- $it" }
+        val request =
+            chatCompletionRequest {
+                this.model = this@AiService.model
+                responseFormat = ChatResponseFormat.jsonSchema(playlistSuggestionJsonSchema)
+                messages {
+                    system {
+                        content =
+                            "You are a music recommendation assistant.\n" +
+                            "\n" +
+                            "TASK:\n" +
+                            "- You will receive a list of songs from the user's library.\n" +
+                            "- Recommend EXACTLY $songCount real songs the user would likely enjoy, based on the " +
+                            "styles/artists/genres in their library.\n" +
+                            "- Do NOT recommend songs already in the list.\n" +
+                            "\n" +
+                            "OUTPUT:\n" +
+                            "- A JSON object with a \"name\" field (always \"Recommended by AI\") and a \"songs\" " +
+                            "field: a list of exactly $songCount objects, each with \"title\" and \"artist\"."
+                    }
+                    user {
+                        content { text("Library:\n$libraryList") }
+                    }
+                }
+            }
+        val completion: ChatCompletion = openAI.chatCompletion(request)
+        return json.decodeFromString<AiPlaylistSuggestionResponse>(extractJsonContent(completion))
+    }
+
     companion object {
         private val translationJsonSchema: JsonObject =
             buildJsonObject {
@@ -191,6 +319,64 @@ class AiService(
                 schema = translationJsonSchema,
                 strict = false,
             )
+
+        private val playlistSongSchema: JsonObject =
+            buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+                    putJsonObject("title") { put("type", "string") }
+                    putJsonObject("artist") { put("type", "string") }
+                }
+                putJsonArray("required") {
+                    add("title")
+                    add("artist")
+                }
+            }
+        private val playlistSuggestionSchema: JsonObject =
+            buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+                    putJsonObject("name") { put("type", "string") }
+                    putJsonObject("songs") {
+                        put("type", "array")
+                        put("items", playlistSongSchema)
+                    }
+                }
+                putJsonArray("required") {
+                    add("name")
+                    add("songs")
+                }
+            }
+        private val playlistSuggestionJsonSchema =
+            JsonSchema(
+                name = "ai_playlist_suggestion_schema",
+                schema = playlistSuggestionSchema,
+                strict = false,
+            )
+        private val playlistModificationSchema: JsonObject =
+            buildJsonObject {
+                put("type", "object")
+                putJsonObject("properties") {
+                    putJsonObject("removeIds") {
+                        put("type", "array")
+                        putJsonObject("items") { put("type", "string") }
+                    }
+                    putJsonObject("additions") {
+                        put("type", "array")
+                        put("items", playlistSongSchema)
+                    }
+                }
+                putJsonArray("required") {
+                    add("removeIds")
+                    add("additions")
+                }
+            }
+        private val playlistModificationJsonSchema =
+            JsonSchema(
+                name = "ai_playlist_modification_schema",
+                schema = playlistModificationSchema,
+                strict = false,
+            )
     }
 }
 
@@ -203,4 +389,23 @@ enum class AIHost {
     GEMINI,
     OPENAI,
     CUSTOM_OPENAI,
+    OPENROUTER,
 }
+
+@kotlinx.serialization.Serializable
+data class AiPlaylistSongSuggestion(
+    val title: String,
+    val artist: String,
+)
+
+@kotlinx.serialization.Serializable
+data class AiPlaylistSuggestionResponse(
+    val name: String,
+    val songs: List<AiPlaylistSongSuggestion> = emptyList(),
+)
+
+@kotlinx.serialization.Serializable
+data class AiPlaylistModificationResponse(
+    val removeIds: List<String> = emptyList(),
+    val additions: List<AiPlaylistSongSuggestion> = emptyList(),
+)

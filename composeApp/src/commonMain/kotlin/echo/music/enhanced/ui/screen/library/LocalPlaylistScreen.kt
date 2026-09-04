@@ -106,6 +106,7 @@ import echo.music.enhanced.domain.data.entities.LocalPlaylistEntity
 import echo.music.enhanced.domain.data.entities.PairSongLocalPlaylist
 import echo.music.enhanced.domain.data.entities.SongEntity
 import echo.music.enhanced.domain.utils.FilterState
+import echo.music.enhanced.domain.utils.LocalResource
 import echo.music.enhanced.domain.utils.toTrack
 import echo.music.enhanced.logger.Logger
 import echo.music.enhanced.Platform
@@ -125,6 +126,7 @@ import echo.music.enhanced.ui.component.EndOfPage
 import echo.music.enhanced.ui.component.LiquidGlassIconButton
 import echo.music.enhanced.ui.component.LoadingDialog
 import echo.music.enhanced.ui.component.LocalPlaylistBottomSheet
+import echo.music.enhanced.ui.component.ModifyPlaylistWithAiDialog
 import echo.music.enhanced.ui.component.NowPlayingBottomSheet
 import echo.music.enhanced.ui.component.RippleIconButton
 import echo.music.enhanced.ui.component.SongFullWidthItems
@@ -178,6 +180,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import echomusic.composeapp.generated.resources.Res
+import echomusic.composeapp.generated.resources.ai_playlist_needs_openrouter
 import echomusic.composeapp.generated.resources.album_length
 import echomusic.composeapp.generated.resources.baseline_downloaded
 import echomusic.composeapp.generated.resources.cancel
@@ -294,6 +297,27 @@ fun LocalPlaylistScreen(
     }
     var playlistBottomSheetShow by remember {
         mutableStateOf(false)
+    }
+    var showModifyWithAiDialog by remember { mutableStateOf(false) }
+    val aiProvider by viewModel.aiProvider.collectAsStateWithLifecycle(initialValue = "")
+    val aiModifyState by viewModel.aiModifyState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(aiModifyState) {
+        if (aiModifyState is LocalResource.Success) {
+            showModifyWithAiDialog = false
+            viewModel.resetAiModifyState()
+        }
+    }
+
+    if (showModifyWithAiDialog) {
+        ModifyPlaylistWithAiDialog(
+            state = aiModifyState,
+            onModify = { prompt -> viewModel.modifyPlaylistWithAi(uiState.id, prompt) },
+            onDismiss = {
+                showModifyWithAiDialog = false
+                viewModel.resetAiModifyState()
+            },
+        )
     }
 
     var sortBottomSheetShow by remember {
@@ -1525,6 +1549,16 @@ fun LocalPlaylistScreen(
             onDelete = {
                 viewModel.deletePlaylist(uiState.id)
                 navController.navigateUp()
+            },
+            interfaceMode = interfaceMode,
+            onModifyWithAi = {
+                if (aiProvider == echo.music.enhanced.domain.manager.DataStoreManager.AI_PROVIDER_OPENROUTER) {
+                    showModifyWithAiDialog = true
+                } else {
+                    coroutineScope.launch {
+                        viewModel.makeToast(getString(Res.string.ai_playlist_needs_openrouter))
+                    }
+                }
             },
         )
     }

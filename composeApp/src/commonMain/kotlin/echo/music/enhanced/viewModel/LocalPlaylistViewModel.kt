@@ -28,9 +28,11 @@ import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.mediaservice.handler.DownloadHandler
 import echo.music.enhanced.domain.mediaservice.handler.PlaylistType
 import echo.music.enhanced.domain.mediaservice.handler.QueueData
+import echo.music.enhanced.domain.repository.AiPlaylistRepository
 import echo.music.enhanced.domain.repository.LocalPlaylistRepository
 import echo.music.enhanced.domain.repository.SongRepository
 import echo.music.enhanced.domain.utils.FilterState
+import echo.music.enhanced.domain.utils.LocalResource
 import echo.music.enhanced.domain.utils.collectLatestResource
 import echo.music.enhanced.domain.utils.collectResource
 import echo.music.enhanced.domain.utils.toArrayListTrack
@@ -44,6 +46,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -81,9 +84,30 @@ class LocalPlaylistViewModel(
     private val dataStoreManager: DataStoreManager,
     private val songRepository: SongRepository,
     private val localPlaylistRepository: LocalPlaylistRepository,
+    private val aiPlaylistRepository: AiPlaylistRepository,
 ) : BaseViewModel() {
     private val converter = Converters()
     private val downloadUtils: DownloadHandler by inject<DownloadHandler>()
+
+    val aiProvider = dataStoreManager.aiProvider
+
+    private val _aiModifyState: MutableStateFlow<LocalResource<String>?> = MutableStateFlow(null)
+    val aiModifyState: StateFlow<LocalResource<String>?> get() = _aiModifyState.asStateFlow()
+
+    fun modifyPlaylistWithAi(
+        playlistId: Long,
+        prompt: String,
+    ) {
+        viewModelScope.launch {
+            aiPlaylistRepository.modifyPlaylist(playlistId, prompt).collectLatest { result ->
+                _aiModifyState.value = result
+            }
+        }
+    }
+
+    fun resetAiModifyState() {
+        _aiModifyState.value = null
+    }
 
     private var _offset: MutableStateFlow<Int> = MutableStateFlow(0)
     val offset: StateFlow<Int> = _offset

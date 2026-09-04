@@ -47,6 +47,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.StrokeCap
@@ -179,19 +181,34 @@ fun NewMiniPlayer(
                 contentAlignment = Alignment.Center,
             ) {
                 Canvas(modifier = Modifier.fillMaxSize()) {
+                    val strokeWidthPx = 3.dp.toPx()
+                    // Force a perfect circle regardless of the Canvas's actual (width, height):
+                    // drawArc's implicit bounds default to the full draw-scope rect, which draws
+                    // an ellipse whenever that rect isn't exactly square.
+                    val diameter = minOf(size.width, size.height) - strokeWidthPx
+                    val arcSize = Size(diameter, diameter)
+                    val arcTopLeft =
+                        Offset(
+                            (size.width - diameter) / 2f,
+                            (size.height - diameter) / 2f,
+                        )
                     drawArc(
                         color = textColor.copy(alpha = 0.2f),
                         startAngle = -90f,
                         sweepAngle = 360f,
                         useCenter = false,
-                        style = Stroke(width = 3.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round),
+                        topLeft = arcTopLeft,
+                        size = arcSize,
+                        style = Stroke(width = strokeWidthPx, cap = androidx.compose.ui.graphics.StrokeCap.Round),
                     )
                     drawArc(
                         color = textColor,
                         startAngle = -90f,
                         sweepAngle = 360f * animatedProgress,
                         useCenter = false,
-                        style = Stroke(width = 3.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round),
+                        topLeft = arcTopLeft,
+                        size = arcSize,
+                        style = Stroke(width = strokeWidthPx, cap = androidx.compose.ui.graphics.StrokeCap.Round),
                     )
                 }
                 AsyncImage(

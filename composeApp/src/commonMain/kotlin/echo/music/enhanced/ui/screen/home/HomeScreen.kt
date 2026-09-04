@@ -1002,7 +1002,7 @@ fun HomeTopAppBar(navController: NavController, accountInfo: Pair<String?, Strin
             ),
         navigationIcon = {
             androidx.compose.material3.IconButton(
-                onClick = { navController.navigate(SettingsDestination) }
+                onClick = { navController.navigate(SettingsDestination()) }
             ) {
                 if (!accountInfo?.second.isNullOrEmpty()) {
                     coil3.compose.AsyncImage(
@@ -1139,6 +1139,7 @@ fun QuickPicks(
         Text(
             text = stringResource(Res.string.let_s_start_with_a_radio),
             style = typo().bodySmall,
+            modifier = Modifier.padding(bottom = 3.dp),
         )
         Text(
             text = stringResource(Res.string.quick_picks),
@@ -1201,6 +1202,7 @@ fun MoodMomentAndGenre(
         Text(
             text = stringResource(Res.string.let_s_pick_a_playlist_for_you),
             style = typo().bodyMedium,
+            modifier = Modifier.padding(bottom = 3.dp),
         )
         // One block per section YouTube returned, headed by ITS OWN title. Hard-coding
         // "Moods & moment" / "Genre" here (and reading mood.moodsMoments / mood.genres by
@@ -1249,6 +1251,7 @@ fun ChartTitle() {
         Text(
             text = stringResource(Res.string.what_is_best_choice_today),
             style = typo().bodyMedium,
+            modifier = Modifier.padding(bottom = 3.dp),
         )
         Text(
             text = stringResource(Res.string.chart),

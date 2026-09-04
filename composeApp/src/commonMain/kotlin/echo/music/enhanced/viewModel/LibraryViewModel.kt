@@ -12,6 +12,7 @@ import echo.music.enhanced.domain.data.type.ChartItem
 import echo.music.enhanced.domain.data.type.PlaylistType
 import echo.music.enhanced.domain.data.type.RecentlyType
 import echo.music.enhanced.domain.manager.DataStoreManager
+import echo.music.enhanced.domain.repository.AiPlaylistRepository
 import echo.music.enhanced.domain.repository.AlbumRepository
 import echo.music.enhanced.domain.repository.CommonRepository
 import echo.music.enhanced.domain.repository.LocalPlaylistRepository
@@ -48,7 +49,28 @@ class LibraryViewModel(
     private val localPlaylistRepository: LocalPlaylistRepository,
     private val albumRepository: AlbumRepository,
     private val podcastRepository: PodcastRepository,
+    private val aiPlaylistRepository: AiPlaylistRepository,
 ) : BaseViewModel() {
+    private val _aiPlaylistState: MutableStateFlow<LocalResource<Long>?> = MutableStateFlow(null)
+    val aiPlaylistState: StateFlow<LocalResource<Long>?> get() = _aiPlaylistState.asStateFlow()
+
+    val aiProvider = dataStoreManager.aiProvider
+
+    fun createPlaylistWithAi(
+        prompt: String,
+        songCount: Int,
+    ) {
+        viewModelScope.launch {
+            aiPlaylistRepository.generatePlaylist(prompt, songCount).collectLatest { result ->
+                _aiPlaylistState.value = result
+            }
+        }
+    }
+
+    fun resetAiPlaylistState() {
+        _aiPlaylistState.value = null
+    }
+
     private val _currentScreen: MutableStateFlow<LibraryChipType> = MutableStateFlow(LibraryChipType.YOUR_LIBRARY)
     val currentScreen: StateFlow<LibraryChipType> get() = _currentScreen.asStateFlow()
     private val _recentlyAdded: MutableStateFlow<LocalResource<List<RecentlyType>>> =

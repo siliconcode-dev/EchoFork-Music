@@ -67,4 +67,31 @@ class AiClient {
 
             result
         }
+
+    suspend fun generatePlaylist(
+        prompt: String,
+        songCount: Int,
+    ): Result<AiPlaylistSuggestionResponse> =
+        runCatching {
+            aiService?.generatePlaylist(prompt, songCount)
+                ?: throw IllegalStateException("AI service is not initialized. Please set host and apiKey.")
+        }
+
+    suspend fun modifyPlaylist(
+        existingSongs: List<Pair<String, String>>,
+        prompt: String,
+    ): Result<AiPlaylistModificationResponse> =
+        runCatching {
+            aiService?.modifyPlaylist(existingSongs, prompt)
+                ?: throw IllegalStateException("AI service is not initialized. Please set host and apiKey.")
+        }
+
+    suspend fun generateRecommendations(
+        librarySongs: List<String>,
+        songCount: Int,
+    ): Result<AiPlaylistSuggestionResponse> =
+        runCatching {
+            aiService?.generateRecommendations(librarySongs, songCount)
+                ?: throw IllegalStateException("AI service is not initialized. Please set host and apiKey.")
+        }
 }

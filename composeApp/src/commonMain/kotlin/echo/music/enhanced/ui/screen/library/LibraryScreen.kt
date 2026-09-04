@@ -69,10 +69,12 @@ import coil3.request.crossfade
 import echo.music.enhanced.common.LibraryChipType
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.utils.LocalResource
+import echo.music.enhanced.ui.navigation.destination.list.LocalPlaylistDestination
 import echo.music.enhanced.logger.Logger
 import echo.music.enhanced.extension.copy
 import echo.music.enhanced.extension.isScrollingUp
 import echo.music.enhanced.ui.component.Chip
+import echo.music.enhanced.ui.component.CreateAiPlaylistDialog
 import echo.music.enhanced.ui.component.EndOfPage
 import echo.music.enhanced.ui.component.GridLibraryPlaylist
 import echo.music.enhanced.ui.component.LibraryItem
@@ -99,12 +101,12 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import echomusic.composeapp.generated.resources.Res
+import echomusic.composeapp.generated.resources.ai_playlist_needs_openrouter
 import echomusic.composeapp.generated.resources.chart
 import echomusic.composeapp.generated.resources.create
 import echomusic.composeapp.generated.resources.create_playlist
 import echomusic.composeapp.generated.resources.create_playlist_normally
 import echomusic.composeapp.generated.resources.create_playlist_with_ai
-import echomusic.composeapp.generated.resources.create_playlist_with_ai_coming_soon
 import echomusic.composeapp.generated.resources.downloaded_playlists
 import echomusic.composeapp.generated.resources.favorite_playlists
 import echomusic.composeapp.generated.resources.favorite_podcasts
@@ -164,6 +166,29 @@ fun LibraryScreen(
     // exact tile treatment but disabled/coming-soon until AI Hub is actually ported.
     var showFabMenu by remember { mutableStateOf(false) }
     var showCreatePlaylistOptionsDialog by remember { mutableStateOf(false) }
+    var showCreateWithAiDialog by remember { mutableStateOf(false) }
+    val aiProvider by viewModel.aiProvider.collectAsStateWithLifecycle(initialValue = "")
+    val aiPlaylistState by viewModel.aiPlaylistState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(aiPlaylistState) {
+        val state = aiPlaylistState
+        if (state is LocalResource.Success) {
+            showCreateWithAiDialog = false
+            viewModel.resetAiPlaylistState()
+            state.data?.let { navController.navigate(LocalPlaylistDestination(it)) }
+        }
+    }
+
+    if (showCreateWithAiDialog) {
+        CreateAiPlaylistDialog(
+            state = aiPlaylistState,
+            onGenerate = { prompt, songCount -> viewModel.createPlaylistWithAi(prompt, songCount) },
+            onDismiss = {
+                showCreateWithAiDialog = false
+                viewModel.resetAiPlaylistState()
+            },
+        )
+    }
 
     LaunchedEffect(nowPlaying) {
         Logger.w("LibraryScreen", "Check nowPlaying: $nowPlaying")
@@ -441,8 +466,13 @@ fun LibraryScreen(
                                         shape = RoundedCornerShape(28.dp),
                                     ).clip(RoundedCornerShape(28.dp))
                                     .clickable {
-                                        coroutineScope2.launch {
-                                            viewModel.makeToast(getString(Res.string.create_playlist_with_ai_coming_soon))
+                                        if (aiProvider == DataStoreManager.AI_PROVIDER_OPENROUTER) {
+                                            showCreatePlaylistOptionsDialog = false
+                                            showCreateWithAiDialog = true
+                                        } else {
+                                            coroutineScope2.launch {
+                                                viewModel.makeToast(getString(Res.string.ai_playlist_needs_openrouter))
+                                            }
                                         }
                                     }.padding(vertical = 20.dp, horizontal = 8.dp),
                         ) {

@@ -3,6 +3,7 @@ package echo.music.enhanced.data.di
 import echo.music.enhanced.common.Config.SERVICE_SCOPE
 import echo.music.enhanced.data.io.fileDir
 import echo.music.enhanced.data.repository.AccountRepositoryImpl
+import echo.music.enhanced.data.repository.AiPlaylistRepositoryImpl
 import echo.music.enhanced.data.repository.AlbumRepositoryImpl
 import echo.music.enhanced.data.repository.AnalyticsRepositoryImpl
 import echo.music.enhanced.data.repository.ArtistRepositoryImpl
@@ -19,6 +20,7 @@ import echo.music.enhanced.data.repository.SongRepositoryImpl
 import echo.music.enhanced.data.repository.StreamRepositoryImpl
 import echo.music.enhanced.data.repository.UpdateRepositoryImpl
 import echo.music.enhanced.domain.repository.AccountRepository
+import echo.music.enhanced.domain.repository.AiPlaylistRepository
 import echo.music.enhanced.domain.repository.AlbumRepository
 import echo.music.enhanced.domain.repository.AnalyticsRepository
 import echo.music.enhanced.domain.repository.ArtistRepository
@@ -41,6 +43,10 @@ val repositoryModule =
     module {
         single<AccountRepository>(createdAtStart = true) {
             AccountRepositoryImpl(get(), get())
+        }
+
+        single<AiPlaylistRepository>(createdAtStart = true) {
+            AiPlaylistRepositoryImpl(get(), get(), get(), get(), get())
         }
 
         single<AlbumRepository>(createdAtStart = true) {

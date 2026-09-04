@@ -2,6 +2,22 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.14] — 2026-09-04
+
+### Added (AI Hub)
+- **Create playlists with AI**: describe what you want in the Library "Create with AI" tile, and a real OpenRouter-backed AI builds a playlist from your actual search results — no more "coming soon."
+- **Modify playlists with AI**: any local playlist's "more options" now has a "Modify with AI" action — describe the change, AI adds or removes songs for you.
+- **AI Recommendations**: a new Settings > AI toggle that creates (and lets you refresh) a "Recommended by AI" playlist built from your most-played songs.
+- OpenRouter is now a selectable AI provider in Settings > AI, alongside the existing Gemini/OpenAI/Custom-OpenAI options — required for the three AI Hub features above, since they share the same provider/key as lyrics translation.
+- The nav overflow's "AI Hub" row now actually scrolls to and expands the AI settings section, instead of landing on plain Settings.
+
+### Fixed (Better Echo, from earlier versions)
+- Several Home section headers (Quick Picks, Speed Dial-adjacent "Moods & moments"/"Chart" blocks, and Classic's own Quick Picks) had their small caption text overlapping the bold title beneath it — fixed with proper spacing.
+- Better Echo's ring-progress mini-player: the progress circle around the track art wasn't a perfect circle — fixed.
+
+### Unaffected
+- Classic and Liquid Glass are completely unchanged. Existing AI translation (Gemini/OpenAI/Custom-OpenAI) continues to work exactly as before.
+
 ## [0.1.13] — 2026-09-04
 
 ### Added (Better Echo)

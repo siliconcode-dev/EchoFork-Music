@@ -1256,6 +1256,32 @@ internal class DataStoreManagerImpl(
         }
     }
 
+    override val aiRecommendationsPlaylistId: Flow<Long> =
+        settingsDataStore.data.map { preferences ->
+            preferences[AI_RECOMMENDATIONS_PLAYLIST_ID] ?: 0L
+        }
+
+    override suspend fun setAiRecommendationsPlaylistId(id: Long) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[AI_RECOMMENDATIONS_PLAYLIST_ID] = id
+            }
+        }
+    }
+
+    override val enableAiRecommendations: Flow<Boolean> =
+        settingsDataStore.data.map { preferences ->
+            preferences[ENABLE_AI_RECOMMENDATIONS] ?: false
+        }
+
+    override suspend fun setEnableAiRecommendations(enabled: Boolean) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[ENABLE_AI_RECOMMENDATIONS] = enabled
+            }
+        }
+    }
+
     override val localPlaylistFilter: Flow<String> =
         settingsDataStore.data.map { preferences ->
             preferences[LOCAL_PLAYLIST_FILTER] ?: LOCAL_PLAYLIST_FILTER_OLDER_FIRST
@@ -1867,6 +1893,8 @@ internal class DataStoreManagerImpl(
         val CUSTOM_MODEL_ID = stringPreferencesKey("custom_model_id")
         val CUSTOM_OPENAI_BASE_URL = stringPreferencesKey("custom_openai_base_url")
         val CUSTOM_OPENAI_HEADERS = stringPreferencesKey("custom_openai_headers")
+        val AI_RECOMMENDATIONS_PLAYLIST_ID = longPreferencesKey("ai_recommendations_playlist_id")
+        val ENABLE_AI_RECOMMENDATIONS = booleanPreferencesKey("enable_ai_recommendations")
 
         val USE_AI_TRANSLATION = stringPreferencesKey("use_ai_translation")
 

@@ -441,7 +441,7 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
                                         showAnalyticsTab = showAnalyticsTab,
                                         shuffleEnabled = controllerState.isShuffle,
                                         onShuffleClick = { viewModel.onUIEvent(UIEvent.Shuffle) },
-                                        onAiHubClick = { navController.navigate(SettingsDestination) },
+                                        onAiHubClick = { navController.navigate(SettingsDestination(highlightSection = "AI")) },
                                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                                     ) { klass ->
                                         viewModel.reloadDestination(klass)

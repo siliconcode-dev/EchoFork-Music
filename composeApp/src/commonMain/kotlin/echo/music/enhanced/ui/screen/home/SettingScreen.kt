@@ -191,6 +191,9 @@ import echomusic.composeapp.generated.resources.add_an_account
 import echomusic.composeapp.generated.resources.ai
 import echomusic.composeapp.generated.resources.ai_api_key
 import echomusic.composeapp.generated.resources.ai_provider
+import echomusic.composeapp.generated.resources.ai_recommendations
+import echomusic.composeapp.generated.resources.ai_recommendations_description
+import echomusic.composeapp.generated.resources.ai_recommendations_refresh
 import echomusic.composeapp.generated.resources.auto_download_liked_songs
 import echomusic.composeapp.generated.resources.auto_download_liked_songs_description
 import echomusic.composeapp.generated.resources.anonymous
@@ -347,6 +350,7 @@ import echomusic.composeapp.generated.resources.equalizer
 import echomusic.composeapp.generated.resources.equalizer_description
 import echomusic.composeapp.generated.resources.openai
 import echomusic.composeapp.generated.resources.openai_api_compatible
+import echomusic.composeapp.generated.resources.openrouter
 import echomusic.composeapp.generated.resources.other_app
 import echomusic.composeapp.generated.resources.paxsenix_lyrics
 import echomusic.composeapp.generated.resources.play_explicit_content
@@ -457,6 +461,7 @@ import java.time.format.DateTimeFormatter
 fun SettingScreen(
     innerPadding: PaddingValues,
     navController: NavController,
+    highlightSection: String? = null,
     viewModel: SettingsViewModel = koinViewModel(),
     sharedViewModel: SharedViewModel = koinInject(),
 ) {
@@ -565,6 +570,7 @@ fun SettingScreen(
     val aiProvider by viewModel.aiProvider.collectAsStateWithLifecycle()
     val isHasApiKey by viewModel.isHasApiKey.collectAsStateWithLifecycle()
     val useAITranslation by viewModel.useAITranslation.collectAsStateWithLifecycle()
+    val enableAiRecommendations by viewModel.enableAiRecommendations.collectAsStateWithLifecycle(initialValue = false)
     val translationLanguage by viewModel.translationLanguage.collectAsStateWithLifecycle()
     val customModelId by viewModel.customModelId.collectAsStateWithLifecycle()
     val customOpenAIBaseUrl by viewModel.customOpenAIBaseUrl.collectAsStateWithLifecycle()
@@ -668,6 +674,19 @@ fun SettingScreen(
     // leading spacer/search-bar item, 1 is "account", then +1 per subsequent item(key=...) in the
     // exact order they're emitted below (mirrors the same Android/lastfmAvailable conditionals).
     val searchableSectionIndex = searchableSectionTitles.mapIndexed { index, pair -> pair.first to (index + 1) }.toMap()
+
+    // Jumps straight to a section when navigated here with one requested (e.g. the nav overflow's
+    // "AI Hub" row) — reuses the exact same currentSection/scroll mechanism the search box above
+    // already drives, just triggered by a nav arg instead of typed input.
+    LaunchedEffect(highlightSection) {
+        val match = searchableSectionTitles.firstOrNull { it.first == highlightSection }
+        if (match != null) {
+            currentSection = match.second
+            searchableSectionIndex[match.first]?.let { targetIndex ->
+                settingsListState.animateScrollToItem(targetIndex)
+            }
+        }
+    }
 
     LaunchedEffect(true) {
         viewModel.getAllGoogleAccount()
@@ -1918,6 +1937,7 @@ fun SettingScreen(
                             DataStoreManager.AI_PROVIDER_OPENAI -> stringResource(Res.string.openai)
                             DataStoreManager.AI_PROVIDER_GEMINI -> stringResource(Res.string.gemini)
                             DataStoreManager.AI_PROVIDER_CUSTOM_OPENAI -> stringResource(Res.string.openai_api_compatible)
+                            DataStoreManager.AI_PROVIDER_OPENROUTER -> stringResource(Res.string.openrouter)
                             else -> stringResource(Res.string.unknown)
                         },
                     onClick = {
@@ -1928,12 +1948,14 @@ fun SettingScreen(
                                     SettingAlertState.SelectData(
                                         listSelect =
                                             listOf(
-                                                (mainLyricsProvider == DataStoreManager.AI_PROVIDER_OPENAI) to
+                                                (aiProvider == DataStoreManager.AI_PROVIDER_OPENAI) to
                                                     runBlocking { getString(Res.string.openai) },
-                                                (mainLyricsProvider == DataStoreManager.AI_PROVIDER_GEMINI) to
+                                                (aiProvider == DataStoreManager.AI_PROVIDER_GEMINI) to
                                                     runBlocking { getString(Res.string.gemini) },
-                                                (mainLyricsProvider == DataStoreManager.AI_PROVIDER_CUSTOM_OPENAI) to
+                                                (aiProvider == DataStoreManager.AI_PROVIDER_CUSTOM_OPENAI) to
                                                     runBlocking { getString(Res.string.openai_api_compatible) },
+                                                (aiProvider == DataStoreManager.AI_PROVIDER_OPENROUTER) to
+                                                    runBlocking { getString(Res.string.openrouter) },
                                             ),
                                     ),
                                 confirm =
@@ -1948,6 +1970,8 @@ fun SettingScreen(
                                                     )
                                                 },
                                                 -> DataStoreManager.AI_PROVIDER_CUSTOM_OPENAI
+
+                                                runBlocking { getString(Res.string.openrouter) } -> DataStoreManager.AI_PROVIDER_OPENROUTER
 
                                                 else -> DataStoreManager.AI_PROVIDER_OPENAI
                                             },
@@ -2092,6 +2116,23 @@ fun SettingScreen(
                         }
                     },
                 )
+                }
+                add {
+                SettingItem(
+                    title = stringResource(Res.string.ai_recommendations),
+                    subtitle = stringResource(Res.string.ai_recommendations_description),
+                    switch = (enableAiRecommendations to { viewModel.setEnableAiRecommendations(it) }),
+                    isEnable = aiProvider == DataStoreManager.AI_PROVIDER_OPENROUTER,
+                )
+                }
+                if (enableAiRecommendations) {
+                    add {
+                    SettingItem(
+                        title = stringResource(Res.string.ai_recommendations_refresh),
+                        subtitle = "",
+                        onClick = { viewModel.refreshAiRecommendations() },
+                    )
+                    }
                 }
                 }
                 Material3SettingsGroup(interfaceMode = interfaceMode ?: DataStoreManager.INTERFACE_BETTER_ECHO, items = aiItems)

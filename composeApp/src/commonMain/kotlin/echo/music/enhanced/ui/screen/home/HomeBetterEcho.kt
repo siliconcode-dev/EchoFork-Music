@@ -89,7 +89,11 @@ fun QuickPicksHero(
     val items = homeItem.contents.filterNotNull()
     if (items.isEmpty()) return
     Column(Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
-        Text(text = stringResource(Res.string.let_s_start_with_a_radio), style = typo().bodySmall)
+        Text(
+            text = stringResource(Res.string.let_s_start_with_a_radio),
+            style = typo().bodySmall,
+            modifier = Modifier.padding(bottom = 3.dp),
+        )
         Text(
             text = stringResource(Res.string.quick_picks),
             style = typo().headlineMedium,

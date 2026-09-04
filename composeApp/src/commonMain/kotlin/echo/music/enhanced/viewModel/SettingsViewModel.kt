@@ -16,6 +16,7 @@ import echo.music.enhanced.domain.extension.toNetScapeString
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.mediaservice.handler.DownloadHandler
 import echo.music.enhanced.domain.repository.AccountRepository
+import echo.music.enhanced.domain.repository.AiPlaylistRepository
 import echo.music.enhanced.domain.repository.CacheRepository
 import echo.music.enhanced.domain.repository.CommonRepository
 import echo.music.enhanced.domain.repository.SongRepository
@@ -68,9 +69,29 @@ class SettingsViewModel(
     private val songRepository: SongRepository,
     private val accountRepository: AccountRepository,
     private val cacheRepository: CacheRepository,
+    private val aiPlaylistRepository: AiPlaylistRepository,
 ) : BaseViewModel() {
     private val databasePath: String? = commonRepository.getDatabasePath()
     private val downloadUtils: DownloadHandler by inject()
+
+    val enableAiRecommendations = dataStoreManager.enableAiRecommendations
+
+    fun setEnableAiRecommendations(enabled: Boolean) {
+        viewModelScope.launch {
+            dataStoreManager.setEnableAiRecommendations(enabled)
+            if (enabled) refreshAiRecommendations()
+        }
+    }
+
+    fun refreshAiRecommendations() {
+        viewModelScope.launch {
+            aiPlaylistRepository.generateRecommendations(20).collectLatest { result ->
+                if (result is LocalResource.Error) {
+                    makeToast(result.message)
+                }
+            }
+        }
+    }
 
     val castState: StateFlow<GenericCastState> get() = mediaPlayerHandler.castState
 
