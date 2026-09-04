@@ -55,6 +55,10 @@
     <string name="good_evening">Good Evening</string>
     <string name="good_night">Good Night</string>
     <string name="quick_picks">Quick picks</string>
+    <string name="speed_dial">Speed Dial</string>
+    <string name="keep_listening">Keep Listening</string>
+    <string name="randomize_home_order">Randomize Home Order</string>
+    <string name="randomize_home_order_description">Better Echo: reshuffle Home sections each time you pull to refresh</string>
     <string name="this_song_is_not_available">This song is not available</string>
     <string name="in_charts">in Charts</string>
     <string name="playlist_name_cannot_be_empty">Playlist name cannot be empty</string>

@@ -7,10 +7,14 @@ import echo.music.enhanced.domain.data.entities.SongEntity
 import echo.music.enhanced.domain.data.model.home.HomeDataCombine
 import echo.music.enhanced.domain.data.model.home.HomeItem
 import echo.music.enhanced.domain.data.model.home.chart.Chart
+import echo.music.enhanced.domain.data.entities.analytics.PlaybackEventEntity
 import echo.music.enhanced.domain.data.model.mood.Mood
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.TRUE
+import echo.music.enhanced.domain.repository.AnalyticsRepository
 import echo.music.enhanced.domain.repository.HomeRepository
+import echo.music.enhanced.domain.repository.SongRepository
+import echo.music.enhanced.domain.utils.LocalResource
 import echo.music.enhanced.domain.utils.Resource
 import echo.music.enhanced.logger.Logger
 import echo.music.enhanced.viewModel.base.BaseViewModel
@@ -24,6 +28,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -37,6 +42,8 @@ import echomusic.composeapp.generated.resources.view_count
 class HomeViewModel(
     private val dataStoreManager: DataStoreManager,
     private val homeRepository: HomeRepository,
+    private val songRepository: SongRepository,
+    private val analyticsRepository: AnalyticsRepository,
 ) : BaseViewModel() {
     private val _homeItemList: MutableStateFlow<List<HomeItem>> =
         MutableStateFlow(arrayListOf())
@@ -86,6 +93,15 @@ class HomeViewModel(
     private val _mainHomeThumbnail: MutableStateFlow<String?> = MutableStateFlow(null)
     val mainHomeThumbnail: StateFlow<String?> = _mainHomeThumbnail
 
+    // Better Echo only: Home's Speed Dial section (most-played songs, no pinning backend exists).
+    private val _speedDialItems: MutableStateFlow<List<SongEntity>> = MutableStateFlow(emptyList())
+    val speedDialItems: StateFlow<List<SongEntity>> = _speedDialItems
+
+    // Better Echo only: Home's Keep Listening section, same query AnalyticsViewModel.getRecentlyRecord() uses.
+    private val _keepListening: MutableStateFlow<LocalResource<List<Pair<PlaybackEventEntity, SongEntity>>>> =
+        MutableStateFlow(LocalResource.Success(emptyList()))
+    val keepListening: StateFlow<LocalResource<List<Pair<PlaybackEventEntity, SongEntity>>>> = _keepListening
+
     init {
         if (runBlocking { dataStoreManager.cookie.first() }.isEmpty() &&
             runBlocking {
@@ -95,6 +111,21 @@ class HomeViewModel(
             _showLogInAlert.update { true }
         }
         homeJob = Job()
+        viewModelScope.launch {
+            songRepository.getMostPlayedSongs().collectLatest { songs ->
+                _speedDialItems.value = songs.sortedByDescending { it.totalPlayTime }.take(SPEED_DIAL_TARGET_SIZE)
+            }
+        }
+        viewModelScope.launch {
+            analyticsRepository.getPlaybackEventsByOffset(offset = 0, limit = KEEP_LISTENING_LIMIT).collect { events ->
+                val records =
+                    events.mapNotNull { event ->
+                        val song = songRepository.getSongById(event.videoId).lastOrNull() ?: return@mapNotNull null
+                        event to song
+                    }
+                _keepListening.value = LocalResource.Success(records)
+            }
+        }
         viewModelScope.launch {
             regionCodeChart.value = dataStoreManager.chartKey.first()
             exploreChart(regionCodeChart.value ?: "ZZ")
@@ -373,5 +404,9 @@ class HomeViewModel(
         const val HOME_PARAMS_PARTY = "ggM8SgQIBxABSgQIBRABSgQICRABSgQIChABSgQIDRABSgQICBABSgQIBBABSgQIDhADSgQIAxABSgQIBhAB"
         const val HOME_PARAMS_COMMUTE = "ggM8SgQIBxABSgQIBRABSgQICRABSgQIChABSgQIDRABSgQICBABSgQIBBABSgQIDhABSgQIAxADSgQIBhAB"
         const val HOME_PARAMS_FOCUS = "ggM8SgQIBxABSgQIBRABSgQICRABSgQIChABSgQIDRABSgQICBABSgQIBBABSgQIDhABSgQIAxABSgQIBhAD"
+
+        // Better Echo Home sections
+        const val SPEED_DIAL_TARGET_SIZE = 24
+        const val KEEP_LISTENING_LIMIT = 20
     }
 }

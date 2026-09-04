@@ -365,6 +365,8 @@ import echomusic.composeapp.generated.resources.proxy_username_message
 import echomusic.composeapp.generated.resources.quality
 import echomusic.composeapp.generated.resources.radio_audio_only
 import echomusic.composeapp.generated.resources.radio_audio_only_description
+import echomusic.composeapp.generated.resources.randomize_home_order
+import echomusic.composeapp.generated.resources.randomize_home_order_description
 import echomusic.composeapp.generated.resources.refresh_rate_format
 import echomusic.composeapp.generated.resources.restore_your_data
 import echomusic.composeapp.generated.resources.restore_your_saved_data
@@ -574,6 +576,7 @@ fun SettingScreen(
     val updateChannel by viewModel.updateChannel.collectAsStateWithLifecycle()
     val interfaceMode by viewModel.interfaceMode.collectAsStateWithLifecycle()
     val betterEchoNavStyle by viewModel.betterEchoNavStyle.collectAsStateWithLifecycle()
+    val randomizeHomeOrder by sharedViewModel.getRandomizeHomeOrder().collectAsStateWithLifecycle(false)
     val themeMode by sharedViewModel.getThemeMode().collectAsStateWithLifecycle(DataStoreManager.THEME_MODE_DARK)
     val themeColorSource by sharedViewModel.getThemeColorSource().collectAsStateWithLifecycle(DataStoreManager.THEME_COLOR_WALLPAPER)
     val customThemeColorHex by sharedViewModel.getCustomThemeColor().collectAsStateWithLifecycle(DataStoreManager.DEFAULT_THEME_COLOR_HEX)
@@ -1036,6 +1039,16 @@ fun SettingScreen(
             ) {
                 val contentItems =
                     buildList<@Composable () -> Unit> {
+                        if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.randomize_home_order),
+                                    subtitle = stringResource(Res.string.randomize_home_order_description),
+                                    smallSubtitle = true,
+                                    switch = (randomizeHomeOrder to { sharedViewModel.setRandomizeHomeOrder(it) }),
+                                )
+                            }
+                        }
                         add {
                             SettingItem(
                                 title = stringResource(Res.string.language),

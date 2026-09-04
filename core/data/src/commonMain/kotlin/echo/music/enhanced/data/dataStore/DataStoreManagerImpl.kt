@@ -1563,6 +1563,19 @@ internal class DataStoreManagerImpl(
         }
     }
 
+    override val randomizeHomeOrder: Flow<Boolean> =
+        settingsDataStore.data.map { preferences ->
+            preferences[RANDOMIZE_HOME_ORDER] ?: false
+        }
+
+    override suspend fun setRandomizeHomeOrder(enabled: Boolean) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[RANDOMIZE_HOME_ORDER] = enabled
+            }
+        }
+    }
+
     override val ringPlayerEnabled: Flow<String> =
         settingsDataStore.data.map { preferences ->
             preferences[RING_PLAYER_ENABLED] ?: FALSE
@@ -1766,6 +1779,7 @@ internal class DataStoreManagerImpl(
         val FROM_SAVED_PLAYLIST = stringPreferencesKey("from_saved_playlist")
 
         val ARMED_IOS_PILL_NAV = booleanPreferencesKey("armed_ios_pill_nav")
+        val RANDOMIZE_HOME_ORDER = booleanPreferencesKey("randomize_home_order")
         val KILL_SERVICE_ON_EXIT = stringPreferencesKey("kill_service_on_exit")
         val KEEP_SERVICE_ALIVE = stringPreferencesKey("keep_service_alive")
         val CROSSFADE_ENABLED = stringPreferencesKey("crossfade_enabled")

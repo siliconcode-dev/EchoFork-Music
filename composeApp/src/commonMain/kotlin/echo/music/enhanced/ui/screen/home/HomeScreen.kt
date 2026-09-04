@@ -88,16 +88,20 @@ import com.kmpalette.loader.rememberNetworkLoader
 import com.kmpalette.rememberDominantColorState
 import echo.music.enhanced.common.CHART_SUPPORTED_COUNTRY
 import echo.music.enhanced.common.Config
+import echo.music.enhanced.domain.data.entities.analytics.PlaybackEventEntity
 import echo.music.enhanced.domain.data.model.browse.album.Track
 import echo.music.enhanced.domain.data.model.home.HomeItem
 import echo.music.enhanced.domain.data.model.home.chart.Chart
 import echo.music.enhanced.domain.data.model.mood.Mood
 import echo.music.enhanced.domain.extension.now
+import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.mediaservice.handler.PlaylistType
 import echo.music.enhanced.domain.mediaservice.handler.QueueData
+import echo.music.enhanced.domain.utils.LocalResource
 import echo.music.enhanced.domain.utils.toSongEntity
 import echo.music.enhanced.domain.utils.toTrack
 import echo.music.enhanced.logger.Logger
+import echo.music.enhanced.ui.component.Material3SettingsGroup
 import echo.music.enhanced.ui.component.rememberHolderPainter
 import echo.music.enhanced.extension.angledGradientBackground
 import echo.music.enhanced.extension.artworkScrimBrush
@@ -247,6 +251,12 @@ fun HomeScreen(
     val homeListState by viewModel.homeListState.collectAsStateWithLifecycle()
     val continuation by viewModel.continuation.collectAsStateWithLifecycle()
 
+    val interfaceMode by sharedViewModel.getInterfaceMode().collectAsStateWithLifecycle(DataStoreManager.INTERFACE_BETTER_ECHO)
+    val speedDialItems by viewModel.speedDialItems.collectAsStateWithLifecycle()
+    val keepListening by viewModel.keepListening.collectAsStateWithLifecycle()
+    val randomizeHomeOrder by sharedViewModel.getRandomizeHomeOrder().collectAsStateWithLifecycle(false)
+    var homeRandomSeed by remember { mutableStateOf(0L) }
+
     val shouldShowLogInAlert by viewModel.showLogInAlert.collectAsStateWithLifecycle()
 
     val openAppTime by sharedViewModel.openAppTime.collectAsStateWithLifecycle()
@@ -312,6 +322,9 @@ fun HomeScreen(
         isRefreshing = true
         viewModel.getHomeItemList(params)
         Logger.w("HomeScreen", "onRefresh")
+    }
+    LaunchedEffect(isRefreshing) {
+        if (isRefreshing) homeRandomSeed = kotlin.random.Random.nextLong()
     }
     LaunchedEffect(key1 = reloadDestination) {
         if (reloadDestination == HomeDestination::class) {
@@ -428,6 +441,242 @@ fun HomeScreen(
                         )
                         return@Crossfade
                     }
+                    if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                        val quickPicksTitle = stringResource(Res.string.quick_picks)
+                        val firstHomeItem = homeData.firstOrNull()
+                        val restHomeItems = homeData.drop(1).filterNot { it.title == quickPicksTitle }
+                        val keepListeningRecords = (keepListening as? LocalResource.Success)?.data ?: emptyList()
+                        val frontOrder =
+                            remember(randomizeHomeOrder, homeRandomSeed) {
+                                if (randomizeHomeOrder) {
+                                    listOf("speed_dial" to 500, "keep_listening" to 300)
+                                        .map { (key, base) ->
+                                            val rnd = kotlin.random.Random(homeRandomSeed + key.hashCode())
+                                            key to (base + rnd.nextInt(-100, 100))
+                                        }.sortedByDescending { it.second }
+                                        .map { it.first }
+                                } else {
+                                    listOf("speed_dial", "keep_listening")
+                                }
+                            }
+                        val tailOrder =
+                            remember(randomizeHomeOrder, homeRandomSeed) {
+                                if (randomizeHomeOrder) {
+                                    listOf("new_release" to 100, "mood_genre" to 100, "chart" to 100)
+                                        .map { (key, base) ->
+                                            val rnd = kotlin.random.Random(homeRandomSeed + key.hashCode())
+                                            key to (base + rnd.nextInt(-50, 50))
+                                        }.sortedByDescending { it.second }
+                                        .map { it.first }
+                                } else {
+                                    listOf("new_release", "mood_genre", "chart")
+                                }
+                            }
+                        LazyColumn(
+                            state = scrollState,
+                            verticalArrangement = Arrangement.spacedBy(2.dp),
+                        ) {
+                            item(key = "be_home_header") {
+                                Box {
+                                    Box(
+                                        modifier =
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .height(300.dp)
+                                                .angledGradientBackground(listOf(animatedColor, backgroundColor), 25f),
+                                    ) {
+                                        Box(
+                                            modifier =
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .height(180.dp)
+                                                    .align(Alignment.BottomCenter)
+                                                    .background(artworkScrimBrush(backgroundColor)),
+                                        )
+                                    }
+                                    Column(
+                                        modifier = Modifier.padding(horizontal = 15.dp),
+                                    ) {
+                                        Spacer(
+                                            Modifier.height(
+                                                with(LocalDensity.current) { topAppBarHeightPx.toDp() },
+                                            ),
+                                        )
+                                        if (accountInfo != null && accountShow) {
+                                            AccountLayout(
+                                                accountName = accountInfo?.first ?: "",
+                                                url = accountInfo?.second ?: "",
+                                            )
+                                            Spacer(Modifier.height(8.dp))
+                                        }
+                                        firstHomeItem?.let { item ->
+                                            if (item.title == quickPicksTitle) {
+                                                Material3SettingsGroup(
+                                                    interfaceMode = interfaceMode,
+                                                    items =
+                                                        listOf {
+                                                            QuickPicksHero(
+                                                                homeItem = item,
+                                                                navController = navController,
+                                                                viewModel = viewModel,
+                                                            )
+                                                        },
+                                                )
+                                            } else {
+                                                HomeItem(navController = navController, data = item)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            items(frontOrder, key = { it }) { key ->
+                                Box(modifier = Modifier.padding(horizontal = 15.dp)) {
+                                    when (key) {
+                                        "speed_dial" ->
+                                            if (speedDialItems.isNotEmpty()) {
+                                                Material3SettingsGroup(
+                                                    interfaceMode = interfaceMode,
+                                                    items =
+                                                        listOf {
+                                                            SpeedDialSection(
+                                                                items = speedDialItems,
+                                                                navController = navController,
+                                                                viewModel = viewModel,
+                                                            )
+                                                        },
+                                                )
+                                            }
+
+                                        "keep_listening" ->
+                                            if (keepListeningRecords.isNotEmpty()) {
+                                                Material3SettingsGroup(
+                                                    interfaceMode = interfaceMode,
+                                                    items =
+                                                        listOf {
+                                                            KeepListeningSection(
+                                                                records = keepListeningRecords,
+                                                                navController = navController,
+                                                                viewModel = viewModel,
+                                                            )
+                                                        },
+                                                )
+                                            }
+                                    }
+                                }
+                            }
+                            itemsIndexed(
+                                restHomeItems,
+                                key = { _, item -> item.hashCode().toString() + (mainHomeThumbnail ?: "nothumb") },
+                            ) { _, item ->
+                                Box(modifier = Modifier.padding(horizontal = 15.dp)) {
+                                    HomeItem(navController = navController, data = item)
+                                }
+                            }
+                            item {
+                                AnimatedVisibility(
+                                    homeListState == ListState.PAGINATING,
+                                    enter = expandVertically() + expandVertically(),
+                                    exit = fadeOut() + shrinkVertically(),
+                                ) {
+                                    CenterLoadingBox(
+                                        modifier =
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .height(200.dp),
+                                    )
+                                }
+                            }
+                            if (homeListState == ListState.PAGINATION_EXHAUST) {
+                                items(tailOrder, key = { it }) { key ->
+                                    Box(modifier = Modifier.padding(horizontal = 15.dp)) {
+                                        when (key) {
+                                            "new_release" ->
+                                                if (newRelease.isNotEmpty()) {
+                                                    Material3SettingsGroup(
+                                                        interfaceMode = interfaceMode,
+                                                        items =
+                                                            listOf {
+                                                                Column {
+                                                                    newRelease.forEach {
+                                                                        HomeItem(navController = navController, data = it)
+                                                                    }
+                                                                }
+                                                            },
+                                                    )
+                                                }
+
+                                            "mood_genre" ->
+                                                moodMomentAndGenre?.let { mood ->
+                                                    Material3SettingsGroup(
+                                                        interfaceMode = interfaceMode,
+                                                        items =
+                                                            listOf {
+                                                                MoodMomentAndGenre(mood = mood, navController = navController)
+                                                            },
+                                                    )
+                                                }
+
+                                            "chart" ->
+                                                Material3SettingsGroup(
+                                                    interfaceMode = interfaceMode,
+                                                    items =
+                                                        listOf {
+                                                            Column(
+                                                                Modifier.padding(vertical = 10.dp),
+                                                                verticalArrangement = Arrangement.SpaceBetween,
+                                                            ) {
+                                                                ChartTitle()
+                                                                Spacer(modifier = Modifier.height(5.dp))
+                                                                Crossfade(targetState = regionChart) {
+                                                                    if (it != null) {
+                                                                        DropdownButton(
+                                                                            items = CHART_SUPPORTED_COUNTRY.itemsData.toList(),
+                                                                            defaultSelected =
+                                                                                CHART_SUPPORTED_COUNTRY.itemsData.getOrNull(
+                                                                                    CHART_SUPPORTED_COUNTRY.items.indexOf(it),
+                                                                                )
+                                                                                    ?: CHART_SUPPORTED_COUNTRY.itemsData[1],
+                                                                        ) {
+                                                                            viewModel.exploreChart(
+                                                                                CHART_SUPPORTED_COUNTRY.items[
+                                                                                    CHART_SUPPORTED_COUNTRY.itemsData.indexOf(
+                                                                                        it,
+                                                                                    ),
+                                                                                ],
+                                                                            )
+                                                                        }
+                                                                    }
+                                                                }
+                                                                Spacer(modifier = Modifier.height(5.dp))
+                                                                Crossfade(
+                                                                    targetState = chartLoading,
+                                                                    label = "Chart",
+                                                                ) { loadingChartState ->
+                                                                    if (!loadingChartState) {
+                                                                        chart?.let {
+                                                                            ChartData(chart = it, navController = navController)
+                                                                        }
+                                                                    } else {
+                                                                        CenterLoadingBox(
+                                                                            modifier =
+                                                                                Modifier
+                                                                                    .fillMaxWidth()
+                                                                                    .height(400.dp),
+                                                                        )
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                )
+                                        }
+                                    }
+                                }
+                            }
+                            item {
+                                EndOfPage()
+                            }
+                        }
+                    } else {
                     LazyColumn(
                         state = scrollState,
                         verticalArrangement = Arrangement.spacedBy(2.dp),
@@ -520,7 +769,7 @@ fun HomeScreen(
                                             data = item,
                                         )
                                     }
-                                    
+
                                 }
                             }
                         }
@@ -631,6 +880,7 @@ fun HomeScreen(
                         item {
                             EndOfPage()
                         }
+                    }
                     }
                 } else {
                     Column {

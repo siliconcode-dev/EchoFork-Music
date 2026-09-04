@@ -2,6 +2,17 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.12] — 2026-09-04
+
+### Added (Better Echo)
+- Home's "Quick Picks" is now a hero carousel (ported from upstream Echo Music's real current design) instead of a small grid — full-bleed artwork, swipe through your radio-ready picks.
+- Two new Home sections, both Better-Echo-only: **Speed Dial** (your most-played songs, in a paged grid you can swipe through) and **Keep Listening** (a real recently-played row, driven by your actual play history).
+- A new "Randomize Home Order" toggle (Settings > Content, off by default) that reshuffles Home's sections each time you pull to refresh.
+- Every top-level Home section now renders in the same rounded squircle-card style already used across Better Echo's Settings.
+
+### Unaffected
+- Classic and Liquid Glass Home are completely unchanged.
+
 ## [0.1.11.2] — 2026-09-04
 
 ### Fixed

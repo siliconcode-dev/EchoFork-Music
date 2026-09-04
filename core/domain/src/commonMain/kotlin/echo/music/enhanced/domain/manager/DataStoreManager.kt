@@ -462,6 +462,15 @@ interface DataStoreManager {
 
     suspend fun setArmedIosPillNav(armed: Boolean)
 
+    /**
+     * Better Echo only: whether Home's Speed Dial / Keep Listening / New Release / Mood-Genre /
+     * Chart card block reshuffles order on pull-to-refresh (Quick Picks always stays first).
+     * Defaults to false.
+     */
+    val randomizeHomeOrder: Flow<Boolean>
+
+    suspend fun setRandomizeHomeOrder(enabled: Boolean)
+
     /** Whether the player should use the ring/vinyl UI instead of the normal layout. */
     val ringPlayerEnabled: Flow<String>
 

@@ -1939,6 +1939,12 @@ class SharedViewModel(
         viewModelScope.launch { dataStoreManager.setArmedIosPillNav(armed) }
     }
 
+    fun getRandomizeHomeOrder() = dataStoreManager.randomizeHomeOrder
+
+    fun setRandomizeHomeOrder(enabled: Boolean) {
+        viewModelScope.launch { dataStoreManager.setRandomizeHomeOrder(enabled) }
+    }
+
     fun getTrueMotionEnabled() = dataStoreManager.trueMotionEnabled
 
     fun getTrueMotionTargetHz() = dataStoreManager.trueMotionTargetHz
