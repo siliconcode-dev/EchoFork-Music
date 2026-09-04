@@ -164,6 +164,7 @@ fun MiniPlayer(
     onClick: () -> Unit,
 ) {
     val interfaceMode by sharedViewModel.getInterfaceMode().collectAsStateWithLifecycle(DataStoreManager.INTERFACE_BETTER_ECHO)
+    val betterEchoMiniPlayerStyle by sharedViewModel.getBetterEchoMiniPlayerStyle().collectAsStateWithLifecycle(DataStoreManager.BETTER_ECHO_MINI_PLAYER_STYLE_NEW)
     val isLiquidGlassEnabled = if (interfaceMode == DataStoreManager.INTERFACE_LIQUID_GLASS) DataStoreManager.TRUE else DataStoreManager.FALSE
     val controllerState by sharedViewModel.controllerState.collectAsStateWithLifecycle()
     val timelineState by sharedViewModel.timeline.collectAsStateWithLifecycle()
@@ -320,6 +321,42 @@ fun MiniPlayer(
     }
 
     if (getPlatform() == Platform.Android) {
+        if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+            if (betterEchoMiniPlayerStyle == DataStoreManager.BETTER_ECHO_MINI_PLAYER_STYLE_LEGACY) {
+                LegacyMiniPlayer(
+                    modifier = modifier,
+                    songEntity = songEntity,
+                    liked = liked,
+                    isPlaying = isPlaying,
+                    loading = loading,
+                    animatedProgress = animatedProgress,
+                    offsetX = offsetX,
+                    offsetY = offsetY,
+                    coroutineScope = coroutineScope,
+                    sharedViewModel = sharedViewModel,
+                    onClick = onClick,
+                    onClose = onClose,
+                    onBitmapCaptured = { bitmap = it },
+                )
+            } else {
+                NewMiniPlayer(
+                    modifier = modifier,
+                    songEntity = songEntity,
+                    liked = liked,
+                    isPlaying = isPlaying,
+                    loading = loading,
+                    animatedProgress = animatedProgress,
+                    offsetX = offsetX,
+                    offsetY = offsetY,
+                    paletteColor = background.value,
+                    coroutineScope = coroutineScope,
+                    sharedViewModel = sharedViewModel,
+                    onClick = onClick,
+                    onClose = onClose,
+                    onBitmapCaptured = { bitmap = it },
+                )
+            }
+        } else {
         Card(
             shape = if (isLiquidGlassEnabled == DataStoreManager.TRUE) CircleShape else RoundedCornerShape(12.dp),
             colors =
@@ -582,6 +619,7 @@ fun MiniPlayer(
                     )
                 }
             }
+        }
         }
     } else {
         // Desktop bottom bar surface follows the theme (haze over content), so text and controls

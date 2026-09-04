@@ -2220,18 +2220,36 @@ fun NowPlayingScreenContent(
                                             }
                                             Spacer(modifier = Modifier.width(8.dp))
                                         }
-                                        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
-                                            TextButton(
-                                                onClick = {
-                                                    showFullscreenLyrics = true
-                                                },
-                                                contentPadding = PaddingValues(0.dp),
-                                                modifier =
-                                                    Modifier
-                                                        .height(20.dp)
-                                                        .wrapContentWidth(),
-                                            ) {
-                                                Text(text = stringResource(Res.string.show), color = Color.White)
+                                        if (interfaceMode == echo.music.enhanced.domain.manager.DataStoreManager.INTERFACE_BETTER_ECHO) {
+                                            CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
+                                                IconButton(
+                                                    onClick = {
+                                                        showFullscreenLyrics = true
+                                                    },
+                                                    modifier = Modifier.size(20.dp),
+                                                ) {
+                                                    Icon(
+                                                        imageVector = echoIcons.Fullscreen,
+                                                        contentDescription = stringResource(Res.string.show),
+                                                        tint = Color.White,
+                                                        modifier = Modifier.size(16.dp),
+                                                    )
+                                                }
+                                            }
+                                        } else {
+                                            CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
+                                                TextButton(
+                                                    onClick = {
+                                                        showFullscreenLyrics = true
+                                                    },
+                                                    contentPadding = PaddingValues(0.dp),
+                                                    modifier =
+                                                        Modifier
+                                                            .height(20.dp)
+                                                            .wrapContentWidth(),
+                                                ) {
+                                                    Text(text = stringResource(Res.string.show), color = Color.White)
+                                                }
                                             }
                                         }
                                     }

@@ -1,8 +1,8 @@
 package echo.music.enhanced.ui.screen.home
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -88,7 +88,7 @@ fun QuickPicksHero(
     }
     val items = homeItem.contents.filterNotNull()
     if (items.isEmpty()) return
-    Column(Modifier.padding(vertical = 8.dp)) {
+    Column(Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
         Text(text = stringResource(Res.string.let_s_start_with_a_radio), style = typo().bodySmall)
         Text(
             text = stringResource(Res.string.quick_picks),
@@ -104,12 +104,13 @@ fun QuickPicksHero(
             modifier = Modifier.fillMaxWidth().height(290.dp),
         ) { index ->
             val content = items[index]
+            val itemShape = MaterialTheme.shapes.extraLarge
             Box(
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.extraLarge)
+                        .maskClip(itemShape)
+                        .maskBorder(BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant), itemShape)
                         .combinedClickable(
                             onClick = {
                                 val firstQueue = content.toTrack()
@@ -244,17 +245,20 @@ fun SpeedDialSection(
         NowPlayingBottomSheet(onDismiss = { bottomSheetShow = false }, song = selectedSong, navController = navController)
     }
     val speedDialTitle = stringResource(Res.string.speed_dial)
-    Column(Modifier.padding(vertical = 8.dp)) {
+    Column(Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
         Text(
             text = speedDialTitle,
-            style = typo().headlineSmall,
+            style = typo().headlineMedium,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(bottom = 8.dp),
         )
         BoxWithConstraints(Modifier.fillMaxWidth()) {
             val targetItemSize = 100.dp
             val columns = (maxWidth / targetItemSize).toInt().coerceAtLeast(3)
-            val rows = if (columns >= 6) 1 else if (columns >= 4) 2 else 3
+            val maxRowsForColumns = if (columns >= 6) 1 else if (columns >= 4) 2 else 3
+            // Cap rows to what the actual item count needs — reserving a full 3x3 grid when
+            // there are only 1-2 most-played songs left the card mostly blank space below them.
+            val rows = maxRowsForColumns.coerceAtMost((items.size + columns - 1) / columns).coerceAtLeast(1)
             val itemsPerPage = columns * rows
             val itemWidth = maxWidth / columns
             val pageCount = (items.size + itemsPerPage - 1) / itemsPerPage
@@ -353,10 +357,10 @@ fun KeepListeningSection(
     }
     val keepListeningTitle = stringResource(Res.string.keep_listening)
     val rows = if (distinctSongs.size > 6) 2 else 1
-    Column(Modifier.padding(vertical = 8.dp)) {
+    Column(Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
         Text(
             text = keepListeningTitle,
-            style = typo().headlineSmall,
+            style = typo().headlineMedium,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(bottom = 8.dp),
         )

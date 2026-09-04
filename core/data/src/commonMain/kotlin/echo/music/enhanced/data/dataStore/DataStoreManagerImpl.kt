@@ -14,6 +14,7 @@ import echo.music.enhanced.common.SponsorBlockType
 import echo.music.enhanced.domain.data.model.network.ProxyConfiguration
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.AI_PROVIDER_GEMINI
+import echo.music.enhanced.domain.manager.DataStoreManager.Values.BETTER_ECHO_MINI_PLAYER_STYLE_NEW
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.BETTER_ECHO_NAV_STYLE_FLOATING_TOOLBAR
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.FALSE
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.GITHUB
@@ -1576,6 +1577,19 @@ internal class DataStoreManagerImpl(
         }
     }
 
+    override val betterEchoMiniPlayerStyle: Flow<String> =
+        settingsDataStore.data.map { preferences ->
+            preferences[BETTER_ECHO_MINI_PLAYER_STYLE] ?: BETTER_ECHO_MINI_PLAYER_STYLE_NEW
+        }
+
+    override suspend fun setBetterEchoMiniPlayerStyle(style: String) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[BETTER_ECHO_MINI_PLAYER_STYLE] = style
+            }
+        }
+    }
+
     override val ringPlayerEnabled: Flow<String> =
         settingsDataStore.data.map { preferences ->
             preferences[RING_PLAYER_ENABLED] ?: FALSE
@@ -1780,6 +1794,7 @@ internal class DataStoreManagerImpl(
 
         val ARMED_IOS_PILL_NAV = booleanPreferencesKey("armed_ios_pill_nav")
         val RANDOMIZE_HOME_ORDER = booleanPreferencesKey("randomize_home_order")
+        val BETTER_ECHO_MINI_PLAYER_STYLE = stringPreferencesKey("better_echo_mini_player_style")
         val KILL_SERVICE_ON_EXIT = stringPreferencesKey("kill_service_on_exit")
         val KEEP_SERVICE_ALIVE = stringPreferencesKey("keep_service_alive")
         val CROSSFADE_ENABLED = stringPreferencesKey("crossfade_enabled")

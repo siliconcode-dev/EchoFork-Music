@@ -43,22 +43,22 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import echo.music.enhanced.ui.icon.Search
-import echo.music.enhanced.ui.icon.Sparks
-import echo.music.enhanced.ui.icon.TipsAndUpdates
+import echo.music.enhanced.ui.icon.Home
+import echo.music.enhanced.ui.icon.LibraryMusic
+import echo.music.enhanced.ui.icon.PlayCircle
 import echo.music.enhanced.ui.icon.Tune
 import echo.music.enhanced.ui.icon.echoIcons
 import echo.music.enhanced.ui.theme.typo
 import echomusic.composeapp.generated.resources.Res
+import echomusic.composeapp.generated.resources.whats_new_about_flip_description
+import echomusic.composeapp.generated.resources.whats_new_about_flip_title
 import echomusic.composeapp.generated.resources.whats_new_dismiss
-import echomusic.composeapp.generated.resources.whats_new_library_fab_description
-import echomusic.composeapp.generated.resources.whats_new_library_fab_title
-import echomusic.composeapp.generated.resources.whats_new_nav_bar_description
-import echomusic.composeapp.generated.resources.whats_new_nav_bar_title
-import echomusic.composeapp.generated.resources.whats_new_reliability_description
-import echomusic.composeapp.generated.resources.whats_new_reliability_title
-import echomusic.composeapp.generated.resources.whats_new_settings_refresh_description
-import echomusic.composeapp.generated.resources.whats_new_settings_refresh_title
+import echomusic.composeapp.generated.resources.whats_new_home_hero_description
+import echomusic.composeapp.generated.resources.whats_new_home_hero_title
+import echomusic.composeapp.generated.resources.whats_new_mini_player_description
+import echomusic.composeapp.generated.resources.whats_new_mini_player_title
+import echomusic.composeapp.generated.resources.whats_new_squircle_polish_description
+import echomusic.composeapp.generated.resources.whats_new_squircle_polish_title
 import echomusic.composeapp.generated.resources.whats_new_title
 import echomusic.composeapp.generated.resources.whats_new_version_format
 import kotlinx.coroutines.delay
@@ -73,13 +73,13 @@ private data class WhatsNewEntry(
 
 private val whatsNewEntries =
     listOf(
-        WhatsNewEntry(echoIcons.Tune, Res.string.whats_new_nav_bar_title, Res.string.whats_new_nav_bar_description),
-        WhatsNewEntry(echoIcons.Search, Res.string.whats_new_settings_refresh_title, Res.string.whats_new_settings_refresh_description),
-        WhatsNewEntry(echoIcons.Sparks, Res.string.whats_new_library_fab_title, Res.string.whats_new_library_fab_description),
+        WhatsNewEntry(echoIcons.Home, Res.string.whats_new_home_hero_title, Res.string.whats_new_home_hero_description),
+        WhatsNewEntry(echoIcons.PlayCircle, Res.string.whats_new_mini_player_title, Res.string.whats_new_mini_player_description),
+        WhatsNewEntry(echoIcons.LibraryMusic, Res.string.whats_new_about_flip_title, Res.string.whats_new_about_flip_description),
         WhatsNewEntry(
-            echoIcons.TipsAndUpdates,
-            Res.string.whats_new_reliability_title,
-            Res.string.whats_new_reliability_description,
+            echoIcons.Tune,
+            Res.string.whats_new_squircle_polish_title,
+            Res.string.whats_new_squircle_polish_description,
         ),
     )
 

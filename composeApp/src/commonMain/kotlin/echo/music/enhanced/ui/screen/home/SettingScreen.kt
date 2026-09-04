@@ -269,6 +269,9 @@ import echomusic.composeapp.generated.resources.interface_mode_info
 import echomusic.composeapp.generated.resources.interface_mode_liquid_glass
 import echomusic.composeapp.generated.resources.better_echo_nav_style
 import echomusic.composeapp.generated.resources.better_echo_nav_style_floating_toolbar
+import echomusic.composeapp.generated.resources.better_echo_mini_player_style
+import echomusic.composeapp.generated.resources.better_echo_mini_player_style_legacy
+import echomusic.composeapp.generated.resources.better_echo_mini_player_style_new
 import echomusic.composeapp.generated.resources.better_echo_nav_style_ios_pill
 import echomusic.composeapp.generated.resources.enable_rich_presence
 import echomusic.composeapp.generated.resources.enable_sponsor_block
@@ -576,6 +579,7 @@ fun SettingScreen(
     val updateChannel by viewModel.updateChannel.collectAsStateWithLifecycle()
     val interfaceMode by viewModel.interfaceMode.collectAsStateWithLifecycle()
     val betterEchoNavStyle by viewModel.betterEchoNavStyle.collectAsStateWithLifecycle()
+    val betterEchoMiniPlayerStyle by sharedViewModel.getBetterEchoMiniPlayerStyle().collectAsStateWithLifecycle(DataStoreManager.BETTER_ECHO_MINI_PLAYER_STYLE_NEW)
     val randomizeHomeOrder by sharedViewModel.getRandomizeHomeOrder().collectAsStateWithLifecycle(false)
     val themeMode by sharedViewModel.getThemeMode().collectAsStateWithLifecycle(DataStoreManager.THEME_MODE_DARK)
     val themeColorSource by sharedViewModel.getThemeColorSource().collectAsStateWithLifecycle(DataStoreManager.THEME_COLOR_WALLPAPER)
@@ -1016,6 +1020,43 @@ fun SettingScreen(
                                                         val selected = state.selectOne?.getSelected()
                                                         navStyleLabels.firstOrNull { it.second == selected }?.first?.let {
                                                             viewModel.setBetterEchoNavStyle(it)
+                                                        }
+                                                    },
+                                                dismiss = runBlocking { getString(Res.string.cancel) },
+                                            ),
+                                        )
+                                    },
+                                )
+                            }
+                            val miniPlayerStyleLabels =
+                                listOf(
+                                    DataStoreManager.BETTER_ECHO_MINI_PLAYER_STYLE_NEW to
+                                        stringResource(Res.string.better_echo_mini_player_style_new),
+                                    DataStoreManager.BETTER_ECHO_MINI_PLAYER_STYLE_LEGACY to
+                                        stringResource(Res.string.better_echo_mini_player_style_legacy),
+                                )
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.better_echo_mini_player_style),
+                                    subtitle =
+                                        miniPlayerStyleLabels.firstOrNull { it.first == betterEchoMiniPlayerStyle }?.second
+                                            ?: miniPlayerStyleLabels.first().second,
+                                    onClick = {
+                                        viewModel.setAlertData(
+                                            SettingAlertState(
+                                                title = runBlocking { getString(Res.string.better_echo_mini_player_style) },
+                                                selectOne =
+                                                    SettingAlertState.SelectData(
+                                                        listSelect =
+                                                            miniPlayerStyleLabels.map {
+                                                                (it.first == betterEchoMiniPlayerStyle) to it.second
+                                                            },
+                                                    ),
+                                                confirm =
+                                                    runBlocking { getString(Res.string.change) } to { state ->
+                                                        val selected = state.selectOne?.getSelected()
+                                                        miniPlayerStyleLabels.firstOrNull { it.second == selected }?.first?.let {
+                                                            sharedViewModel.setBetterEchoMiniPlayerStyle(it)
                                                         }
                                                     },
                                                 dismiss = runBlocking { getString(Res.string.cancel) },

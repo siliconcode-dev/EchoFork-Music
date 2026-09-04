@@ -1945,6 +1945,12 @@ class SharedViewModel(
         viewModelScope.launch { dataStoreManager.setRandomizeHomeOrder(enabled) }
     }
 
+    fun getBetterEchoMiniPlayerStyle() = dataStoreManager.betterEchoMiniPlayerStyle
+
+    fun setBetterEchoMiniPlayerStyle(style: String) {
+        viewModelScope.launch { dataStoreManager.setBetterEchoMiniPlayerStyle(style) }
+    }
+
     fun getTrueMotionEnabled() = dataStoreManager.trueMotionEnabled
 
     fun getTrueMotionTargetHz() = dataStoreManager.trueMotionTargetHz

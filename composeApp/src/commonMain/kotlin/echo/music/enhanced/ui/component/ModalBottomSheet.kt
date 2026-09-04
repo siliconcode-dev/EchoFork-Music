@@ -1419,6 +1419,7 @@ fun NowPlayingBottomSheet(
     var isBottomSheetVisible by rememberSaveable { mutableStateOf(false) }
     var changePlaybackSpeedPitch by remember { mutableStateOf(false) }
     val crossfadeEnabled by dataStoreManager.crossfadeEnabled.collectAsState(DataStoreManager.FALSE)
+    val interfaceMode by dataStoreManager.interfaceMode.collectAsState(DataStoreManager.INTERFACE_BETTER_ECHO)
 
     LaunchedEffect(uiState) {
         if (uiState.songUIState.videoId.isNotEmpty() && !isBottomSheetVisible) {
@@ -1688,14 +1689,19 @@ fun NowPlayingBottomSheet(
                     Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
+                shape =
+                    if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                        RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+                    } else {
+                        RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
+                    },
                 colors = CardDefaults.cardColors().copy(containerColor = rememberSurfaceDarkColors().container),
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                 ) {
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) 10.dp else 5.dp))
                     Card(
                         modifier =
                             Modifier

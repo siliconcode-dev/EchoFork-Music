@@ -1,7 +1,12 @@
 package echo.music.enhanced.ui.screen.home
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +33,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
@@ -35,7 +41,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -56,6 +65,7 @@ import echo.music.enhanced.ui.theme.typo
 import echo.music.enhanced.utils.VersionManager
 import echomusic.composeapp.generated.resources.Res
 import echomusic.composeapp.generated.resources.about_community_info
+import echomusic.composeapp.generated.resources.about_flip_developed_by
 import echomusic.composeapp.generated.resources.about_developer
 import echomusic.composeapp.generated.resources.about_license
 import echomusic.composeapp.generated.resources.about_license_description
@@ -121,24 +131,73 @@ fun AboutScreen(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
+                        var isEasterEggActive by remember { mutableStateOf(false) }
+                        val flipRotation by animateFloatAsState(
+                            targetValue = if (isEasterEggActive) 180f else 0f,
+                            animationSpec =
+                                spring(
+                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                                    stiffness = Spring.StiffnessLow,
+                                ),
+                            label = "aboutAvatarFlip",
+                        )
+                        val flipInteractionSource = remember { MutableInteractionSource() }
+                        val isFlipPressed by flipInteractionSource.collectIsPressedAsState()
+                        val flipPressScale by animateFloatAsState(
+                            targetValue = if (isFlipPressed) 0.85f else 1f,
+                            animationSpec =
+                                spring(
+                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                                    stiffness = Spring.StiffnessMedium,
+                                ),
+                            label = "aboutAvatarPressScale",
+                        )
+                        val density = LocalDensity.current
                         Box(
                             modifier =
                                 Modifier
                                     .size(96.dp)
-                                    .clip(ScallopedShape())
-                                    .background(MaterialTheme.colorScheme.primaryContainer),
+                                    .graphicsLayer {
+                                        rotationY = flipRotation
+                                        scaleX = flipPressScale
+                                        scaleY = flipPressScale
+                                        cameraDistance = 12f * density.density
+                                    }.clip(ScallopedShape())
+                                    .background(MaterialTheme.colorScheme.primaryContainer)
+                                    .clickable(
+                                        interactionSource = flipInteractionSource,
+                                        indication = null,
+                                        onClick = { isEasterEggActive = !isEasterEggActive },
+                                    ),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Icon(
-                                imageVector = echoIcons.LibraryMusic,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                modifier = Modifier.size(40.dp),
-                            )
+                            if (flipRotation <= 90f) {
+                                Icon(
+                                    imageVector = echoIcons.LibraryMusic,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    modifier = Modifier.size(40.dp),
+                                )
+                            } else {
+                                AsyncImage(
+                                    model = "https://github.com/$DEVELOPER_GITHUB.png",
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop,
+                                    modifier =
+                                        Modifier
+                                            .fillMaxSize()
+                                            .graphicsLayer { rotationY = 180f },
+                                )
+                            }
                         }
                         Spacer(Modifier.height(16.dp))
                         Text(
-                            text = stringResource(Res.string.app_name),
+                            text =
+                                if (flipRotation <= 90f) {
+                                    stringResource(Res.string.app_name)
+                                } else {
+                                    stringResource(Res.string.about_flip_developed_by, DEVELOPER_GITHUB)
+                                },
                             style = typo().headlineSmall.copy(fontWeight = FontWeight.Black),
                         )
                         Spacer(Modifier.height(8.dp))

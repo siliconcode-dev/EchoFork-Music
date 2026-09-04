@@ -471,6 +471,15 @@ interface DataStoreManager {
 
     suspend fun setRandomizeHomeOrder(enabled: Boolean)
 
+    /**
+     * Better Echo only: one of [BETTER_ECHO_MINI_PLAYER_STYLE_NEW],
+     * [BETTER_ECHO_MINI_PLAYER_STYLE_LEGACY] — which of upstream's two real mini-player
+     * implementations to use. Defaults to New (matches upstream's own default).
+     */
+    val betterEchoMiniPlayerStyle: Flow<String>
+
+    suspend fun setBetterEchoMiniPlayerStyle(style: String)
+
     /** Whether the player should use the ring/vinyl UI instead of the normal layout. */
     val ringPlayerEnabled: Flow<String>
 
@@ -583,6 +592,8 @@ interface DataStoreManager {
 
         const val BETTER_ECHO_NAV_STYLE_FLOATING_TOOLBAR = "floating_toolbar"
         const val BETTER_ECHO_NAV_STYLE_IOS_PILL = "ios_pill"
+        const val BETTER_ECHO_MINI_PLAYER_STYLE_NEW = "new"
+        const val BETTER_ECHO_MINI_PLAYER_STYLE_LEGACY = "legacy"
 
         const val FDROID = "fdroid"
         const val GITHUB_FOSS_NIGHTLY = "github_foss_nightly"

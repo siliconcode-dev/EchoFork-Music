@@ -2,6 +2,23 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.13] — 2026-09-04
+
+### Added (Better Echo)
+- Two real mini-player styles to choose from (Settings > Interface): a new ring-progress pill player, or the classic full-width bar — both ported from upstream Echo Music's real designs.
+- A flip-card easter egg on the About screen — tap the app avatar.
+- The Player's "more options" sheet now gets the same squircle-card treatment as the rest of Better Echo.
+- The lyrics card's "Show" button is now an icon-only fullscreen button, matching upstream's visual language (still opens the same fullscreen lyrics view).
+
+### Fixed (Better Echo Home, from v0.1.12)
+- Quick Picks' hero carousel: side (peeking) items now render properly rounded and at the correct scale, instead of appearing square and downscaled — the carousel's own mask/clip modifiers are used instead of a plain corner clip, so items track its built-in scale animation correctly.
+- The "Let's start with a radio" / "Quick picks" header text no longer gets cut off against the squircle card's rounded corner.
+- Speed Dial no longer reserves a full grid's worth of blank space when you have only a few most-played songs — the grid now sizes itself to what you actually have.
+- Home section titles (Speed Dial, Keep Listening) now match the rest of the app's heading style.
+
+### Unaffected
+- Classic and Liquid Glass are completely unchanged.
+
 ## [0.1.12] — 2026-09-04
 
 ### Added (Better Echo)
