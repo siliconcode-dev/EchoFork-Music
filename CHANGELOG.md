@@ -2,6 +2,16 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.11.2] — 2026-09-04
+
+### Fixed
+- **The "iOS 26 style" nav is back, for real this time**: v0.1.11.1 only disabled it after it crashed on launch — this release properly fixes the root cause instead. The nav bar's underlying library was published as a compiled binary built against an old Compose version, which no longer matched what this app actually runs; it's now compiled directly from source (the same fix upstream Echo Music itself already shipped for this exact bug), so it can't drift out of sync again.
+- **New safety net**: if an experimental nav style crashes on your device for any other reason, the app now automatically switches back to the reliable default nav bar on your next launch — no need to dig into Settings, since you might not have been able to reach them.
+
+### Changed
+- Refreshed the "What's New" dialog to reflect what's actually shipped recently: the real nav bar port, Settings' squircle-row redesign and search, the smarter Create Playlist flow, and this release's reliability work.
+- Fixed a text-contrast issue on the What's New dialog's "Got It" button.
+
 ## [0.1.11.1] — 2026-09-03
 
 ### Fixed

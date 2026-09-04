@@ -2,6 +2,7 @@ package echo.music.enhanced.data.dataStore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -1549,6 +1550,19 @@ internal class DataStoreManagerImpl(
         }
     }
 
+    override val armedIosPillNav: Flow<Boolean> =
+        settingsDataStore.data.map { preferences ->
+            preferences[ARMED_IOS_PILL_NAV] ?: false
+        }
+
+    override suspend fun setArmedIosPillNav(armed: Boolean) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[ARMED_IOS_PILL_NAV] = armed
+            }
+        }
+    }
+
     override val ringPlayerEnabled: Flow<String> =
         settingsDataStore.data.map { preferences ->
             preferences[RING_PLAYER_ENABLED] ?: FALSE
@@ -1751,6 +1765,7 @@ internal class DataStoreManagerImpl(
         val SEND_BACK_TO_GOOGLE = stringPreferencesKey("send_back_to_google")
         val FROM_SAVED_PLAYLIST = stringPreferencesKey("from_saved_playlist")
 
+        val ARMED_IOS_PILL_NAV = booleanPreferencesKey("armed_ios_pill_nav")
         val KILL_SERVICE_ON_EXIT = stringPreferencesKey("kill_service_on_exit")
         val KEEP_SERVICE_ALIVE = stringPreferencesKey("keep_service_alive")
         val CROSSFADE_ENABLED = stringPreferencesKey("crossfade_enabled")

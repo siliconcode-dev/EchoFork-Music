@@ -37,26 +37,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import echo.music.enhanced.ui.icon.CheckCircle
-import echo.music.enhanced.ui.icon.Info
-import echo.music.enhanced.ui.icon.Sensors
+import echo.music.enhanced.ui.icon.Search
+import echo.music.enhanced.ui.icon.Sparks
+import echo.music.enhanced.ui.icon.TipsAndUpdates
 import echo.music.enhanced.ui.icon.Tune
 import echo.music.enhanced.ui.icon.echoIcons
 import echo.music.enhanced.ui.theme.typo
 import echomusic.composeapp.generated.resources.Res
-import echomusic.composeapp.generated.resources.whats_new_about_page_description
-import echomusic.composeapp.generated.resources.whats_new_about_page_title
-import echomusic.composeapp.generated.resources.whats_new_better_echo_look_description
-import echomusic.composeapp.generated.resources.whats_new_better_echo_look_title
 import echomusic.composeapp.generated.resources.whats_new_dismiss
-import echomusic.composeapp.generated.resources.whats_new_liquid_glass_expansion_description
-import echomusic.composeapp.generated.resources.whats_new_liquid_glass_expansion_title
-import echomusic.composeapp.generated.resources.whats_new_multiselect_description
-import echomusic.composeapp.generated.resources.whats_new_multiselect_title
+import echomusic.composeapp.generated.resources.whats_new_library_fab_description
+import echomusic.composeapp.generated.resources.whats_new_library_fab_title
+import echomusic.composeapp.generated.resources.whats_new_nav_bar_description
+import echomusic.composeapp.generated.resources.whats_new_nav_bar_title
+import echomusic.composeapp.generated.resources.whats_new_reliability_description
+import echomusic.composeapp.generated.resources.whats_new_reliability_title
+import echomusic.composeapp.generated.resources.whats_new_settings_refresh_description
+import echomusic.composeapp.generated.resources.whats_new_settings_refresh_title
 import echomusic.composeapp.generated.resources.whats_new_title
 import echomusic.composeapp.generated.resources.whats_new_version_format
 import kotlinx.coroutines.delay
@@ -71,13 +73,13 @@ private data class WhatsNewEntry(
 
 private val whatsNewEntries =
     listOf(
-        WhatsNewEntry(echoIcons.Tune, Res.string.whats_new_better_echo_look_title, Res.string.whats_new_better_echo_look_description),
-        WhatsNewEntry(echoIcons.CheckCircle, Res.string.whats_new_multiselect_title, Res.string.whats_new_multiselect_description),
-        WhatsNewEntry(echoIcons.Info, Res.string.whats_new_about_page_title, Res.string.whats_new_about_page_description),
+        WhatsNewEntry(echoIcons.Tune, Res.string.whats_new_nav_bar_title, Res.string.whats_new_nav_bar_description),
+        WhatsNewEntry(echoIcons.Search, Res.string.whats_new_settings_refresh_title, Res.string.whats_new_settings_refresh_description),
+        WhatsNewEntry(echoIcons.Sparks, Res.string.whats_new_library_fab_title, Res.string.whats_new_library_fab_description),
         WhatsNewEntry(
-            echoIcons.Sensors,
-            Res.string.whats_new_liquid_glass_expansion_title,
-            Res.string.whats_new_liquid_glass_expansion_description,
+            echoIcons.TipsAndUpdates,
+            Res.string.whats_new_reliability_title,
+            Res.string.whats_new_reliability_description,
         ),
     )
 
@@ -166,11 +168,20 @@ fun WhatsNewDialog(
                             }
                         }
                         Spacer(Modifier.height(16.dp))
+                        val dismissContainerColor = MaterialTheme.colorScheme.primary
+                        // Explicit, luminance-checked content color rather than relying on
+                        // ButtonDefaults' derived default — this app's dynamically-generated
+                        // theme can produce a primary/onPrimary pair with poor contrast.
+                        val dismissContentColor = if (dismissContainerColor.luminance() > 0.5f) Color.Black else Color.White
                         Button(
                             onClick = onDismiss,
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(20.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                            colors =
+                                ButtonDefaults.buttonColors(
+                                    containerColor = dismissContainerColor,
+                                    contentColor = dismissContentColor,
+                                ),
                         ) {
                             Text(stringResource(Res.string.whats_new_dismiss))
                         }

@@ -138,14 +138,14 @@
     <string name="about_view_repository_description">Browse the source on GitHub</string>
     <string name="about_license">GNU General Public License v3.0</string>
     <string name="about_license_description">Free, open-source software. You may use, study, share, and improve it.</string>
-    <string name="whats_new_better_echo_look_title">Better Echo, actually different now</string>
-    <string name="whats_new_better_echo_look_description">A real shape language across Home, Library, Now Playing, Settings, and the nav bar — not just a name.</string>
-    <string name="whats_new_multiselect_title">Multi-select in your playlists</string>
-    <string name="whats_new_multiselect_description">Select multiple songs at once to remove them in one go, in Better Echo mode.</string>
-    <string name="whats_new_about_page_title">A real About page</string>
-    <string name="whats_new_about_page_description">App identity, credits, and community links, redesigned as its own screen.</string>
-    <string name="whats_new_liquid_glass_expansion_title">Liquid Glass, further</string>
-    <string name="whats_new_liquid_glass_expansion_description">The glass-material look now reaches Settings too, alongside its existing screens.</string>
+    <string name="whats_new_nav_bar_title">Better Echo's real nav bar</string>
+    <string name="whats_new_nav_bar_description">A floating toolbar with a sliding selection pill by default, or switch to an alternate floating pill nav (iOS style) from Settings — both ported directly from Echo Music's current design.</string>
+    <string name="whats_new_settings_refresh_title">Refreshed Settings</string>
+    <string name="whats_new_settings_refresh_description">Every section now uses Echo Music's real squircle-stack row design, plus a search bar that jumps straight to what you're looking for.</string>
+    <string name="whats_new_library_fab_title">Smarter playlist creation</string>
+    <string name="whats_new_library_fab_description">The Library's Create Playlist flow now matches Echo Music's real two-tile chooser, with an AI-assisted option on the way.</string>
+    <string name="whats_new_reliability_title">Reliability fixes</string>
+    <string name="whats_new_reliability_description">Fixed two nav-bar crashes reported by testers, and added a safety net: if an experimental nav style ever misbehaves, the app now automatically falls back to the reliable default on your next launch.</string>
     <string name="title">Title</string>
     <string name="custom_order">Custom order</string>
     <string name="album">Album</string>
@@ -570,6 +570,7 @@
     <string name="better_echo_nav_style">Better Echo Nav Style</string>
     <string name="better_echo_nav_style_floating_toolbar">Floating Toolbar</string>
     <string name="better_echo_nav_style_ios_pill">Floating Pill (iOS style)</string>
+    <string name="nav_style_reverted_after_crash">Switched back to the default nav style after detecting a crash. You can re-enable the iOS-style pill from Settings.</string>
     <string name="interface_mode_classic" translatable="false">Classic</string>
     <string name="interface_mode_better_echo" translatable="false">Better Echo</string>
     <string name="interface_mode_liquid_glass" translatable="false">Liquid Glass</string>

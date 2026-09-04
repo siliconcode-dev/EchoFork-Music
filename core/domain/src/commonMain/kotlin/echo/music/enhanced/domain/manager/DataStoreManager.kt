@@ -449,6 +449,19 @@ interface DataStoreManager {
 
     suspend fun setBetterEchoNavStyle(style: String)
 
+    /**
+     * Crash-safe auto-fallback for the iOS-pill nav style (v0.1.11.2): set true right as that
+     * nav bar starts rendering, cleared after a short grace period with no crash. If the app
+     * crashes while this is true, a raw-SharedPreferences hook (not this DataStore-backed flag —
+     * see `NavCrashRecovery` in `androidApp`) forces the *next* launch onto the reliable default
+     * nav, then clears itself. This flag is just the (non-crash-safe, but KMP-commonMain-safe)
+     * signal of "is the risky nav currently on screen" — the actual crash-survival write happens
+     * synchronously in raw SharedPreferences, not here.
+     */
+    val armedIosPillNav: Flow<Boolean>
+
+    suspend fun setArmedIosPillNav(armed: Boolean)
+
     /** Whether the player should use the ring/vinyl UI instead of the normal layout. */
     val ringPlayerEnabled: Flow<String>
 

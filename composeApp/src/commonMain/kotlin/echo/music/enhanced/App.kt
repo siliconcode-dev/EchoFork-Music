@@ -70,6 +70,7 @@ import echo.music.enhanced.expect.ui.layerBackdrop
 import echo.music.enhanced.expect.ui.rememberBackdrop
 import echo.music.enhanced.extension.copy
 import echo.music.enhanced.ui.component.AppBottomNavigationBar
+import echo.music.enhanced.ui.component.AppFloatingNavBar
 import echo.music.enhanced.ui.component.AppNavigationRail
 import echo.music.enhanced.ui.component.FloatingNavigationToolbar
 import echo.music.enhanced.ui.component.LiquidGlassAppBottomNavigationBar
@@ -119,6 +120,7 @@ import echomusic.composeapp.generated.resources.good_night
 import echomusic.composeapp.generated.resources.notification
 import echomusic.composeapp.generated.resources.sleep_timer_off
 import echomusic.composeapp.generated.resources.this_app_needs_to_access_your_notification
+import echomusic.composeapp.generated.resources.nav_style_reverted_after_crash
 import echomusic.composeapp.generated.resources.this_link_is_not_supported
 import echomusic.composeapp.generated.resources.unknown
 import echomusic.composeapp.generated.resources.update_available
@@ -128,7 +130,7 @@ import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class, ExperimentalFoundationApi::class)
 @Composable
-fun App(viewModel: SharedViewModel = koinInject()) {
+fun App(viewModel: SharedViewModel = koinInject(), forceSafeNav: Boolean = false) {
     val windowSize = currentWindowAdaptiveInfo().windowSizeClass
     val navController = rememberNavController()
 
@@ -142,6 +144,17 @@ fun App(viewModel: SharedViewModel = koinInject()) {
 
     val interfaceMode by viewModel.getInterfaceMode().collectAsStateWithLifecycle(DataStoreManager.INTERFACE_BETTER_ECHO)
     val isLiquidGlassEnabled = if (interfaceMode == DataStoreManager.INTERFACE_LIQUID_GLASS) TRUE else DataStoreManager.FALSE
+    val savedBetterEchoNavStyle by
+        viewModel.getBetterEchoNavStyle().collectAsStateWithLifecycle(DataStoreManager.BETTER_ECHO_NAV_STYLE_FLOATING_TOOLBAR)
+    // Crash-safe auto-fallback (v0.1.11.2): forced for this one launch when NavCrashRecovery
+    // detected a crash while the iOS-pill nav was on screen — the saved preference itself is
+    // left untouched, so the style resumes working normally starting the next launch.
+    val betterEchoNavStyle = if (forceSafeNav) DataStoreManager.BETTER_ECHO_NAV_STYLE_FLOATING_TOOLBAR else savedBetterEchoNavStyle
+    LaunchedEffect(forceSafeNav) {
+        if (forceSafeNav) {
+            viewModel.makeToast(getString(Res.string.nav_style_reverted_after_crash))
+        }
+    }
     val controllerState by viewModel.controllerState.collectAsStateWithLifecycle()
     val trueMotionEnabled by viewModel.getTrueMotionEnabled().collectAsStateWithLifecycle(DataStoreManager.FALSE)
     val trueMotionTargetHz by viewModel.getTrueMotionTargetHz().collectAsStateWithLifecycle(0)
@@ -414,20 +427,25 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
                                     viewModel.reloadDestination(klass)
                                 }
                             } else if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
-                                // v0.1.11.1 hotfix: AppFloatingNavBar (io.github.elyesmansour:floatingTabBar)
-                                // throws NoSuchMethodError on SharedTransitionScope.sharedElement$default on
-                                // real devices (confirmed crash reports). Forced onto FloatingNavigationToolbar
-                                // regardless of the saved betterEchoNavStyle preference until the library's
-                                // compose-animation version conflict is root-caused.
-                                FloatingNavigationToolbar(
-                                    navController = navController,
-                                    showAnalyticsTab = showAnalyticsTab,
-                                    shuffleEnabled = controllerState.isShuffle,
-                                    onShuffleClick = { viewModel.onUIEvent(UIEvent.Shuffle) },
-                                    onAiHubClick = { navController.navigate(SettingsDestination) },
-                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                                ) { klass ->
-                                    viewModel.reloadDestination(klass)
+                                if (betterEchoNavStyle == DataStoreManager.BETTER_ECHO_NAV_STYLE_IOS_PILL) {
+                                    AppFloatingNavBar(
+                                        navController = navController,
+                                        showAnalyticsTab = showAnalyticsTab,
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                                    ) { klass ->
+                                        viewModel.reloadDestination(klass)
+                                    }
+                                } else {
+                                    FloatingNavigationToolbar(
+                                        navController = navController,
+                                        showAnalyticsTab = showAnalyticsTab,
+                                        shuffleEnabled = controllerState.isShuffle,
+                                        onShuffleClick = { viewModel.onUIEvent(UIEvent.Shuffle) },
+                                        onAiHubClick = { navController.navigate(SettingsDestination) },
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                                    ) { klass ->
+                                        viewModel.reloadDestination(klass)
+                                    }
                                 }
                             } else {
                                 Box(

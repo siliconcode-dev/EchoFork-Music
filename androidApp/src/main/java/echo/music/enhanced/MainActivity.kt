@@ -31,6 +31,7 @@ import androidx.lifecycle.repeatOnLifecycle
 
 import com.eygraber.uri.toKmpUriOrNull
 import echo.music.enhanced.common.FIRST_TIME_MIGRATION
+import echo.music.enhanced.crashrecovery.NavCrashRecovery
 import echo.music.enhanced.common.SELECTED_LANGUAGE
 import echo.music.enhanced.common.STATUS_DONE
 import echo.music.enhanced.common.SUPPORTED_LANGUAGE
@@ -237,8 +238,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
+        val forceSafeNav = NavCrashRecovery.consumeForceSafeNavFlag(this)
+
         setContent {
-            App(viewModel)
+            App(viewModel, forceSafeNav = forceSafeNav)
         }
     }
 

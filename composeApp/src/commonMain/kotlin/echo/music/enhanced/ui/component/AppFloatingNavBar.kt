@@ -7,6 +7,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -25,17 +26,25 @@ import echo.music.enhanced.ui.navigation.destination.home.AnalyticsDestination
 import echo.music.enhanced.ui.navigation.destination.home.HomeDestination
 import echo.music.enhanced.ui.navigation.destination.library.LibraryDestination
 import echo.music.enhanced.ui.navigation.destination.search.SearchDestination
-import io.github.elyesmansour.floatingTabBar.FloatingTabBar
+import echo.music.enhanced.ui.component.floatingtabbar.FloatingTabBar
+import echo.music.enhanced.viewModel.SharedViewModel
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import kotlin.reflect.KClass
 
 /**
  * Better Echo's alternative "iOS 26 style" nav bar, ported from upstream Echo Music's own
- * `AppFloatingNavBar.kt` (fetched into `upstream-latest/` for direct reference), which itself
- * wraps a real vendored third-party library — `io.github.elyesmansour:floatingTabBar:1.1.0`
- * (Maven Central) — rather than hand-rolling the shared-transition/scroll-collapse mechanics.
- * This fork adds the same dependency directly (see `build.gradle.kts`) instead of re-implementing
- * it, and ports only upstream's own thin usage layer.
+ * `AppFloatingNavBar.kt` (fetched into `upstream-latest/` for direct reference), which calls a
+ * `FloatingTabBar` composable wrapping the "compose-floating-tab-bar" library by Elyes Mansour.
+ *
+ * v0.1.11.2: switched from the published `io.github.elyesmansour:floatingTabBar:1.0.1` Maven
+ * binary to a vendored copy of its source (`ui/component/floatingtabbar/FloatingTabBar.kt`) —
+ * the binary AAR was compiled against an old `androidx.compose.animation` and threw
+ * `NoSuchMethodError` on `SharedTransitionScope.sharedElement` under this project's actual
+ * resolved Compose version. Upstream hit and fixed the exact same issue the exact same way
+ * (confirmed via its own vendored copy's header comment) — compiling the source directly keeps
+ * it binary-compatible with whatever Compose/animation version this project resolves, rather than
+ * chasing a moving version-alignment target against a stale prebuilt artifact.
  *
  * Simplification vs. upstream, both disclosed and documented rather than silent: (1) this port
  * renders the bar always in its expanded state rather than wiring a scroll-collapse connection
@@ -52,8 +61,17 @@ fun AppFloatingNavBar(
     navController: NavController,
     showAnalyticsTab: Boolean = false,
     modifier: Modifier = Modifier,
+    viewModel: SharedViewModel = koinInject(),
     reloadDestinationIfNeeded: (KClass<*>) -> Unit = { _ -> },
 ) {
+    // Crash-safe auto-fallback (v0.1.11.2): armed for as long as this composable is on screen,
+    // so a crash anywhere while the iOS-pill nav is visible forces the next launch onto the
+    // reliable default nav instead — see NavCrashRecovery (androidApp) for the actual mechanism.
+    DisposableEffect(Unit) {
+        viewModel.setArmedIosPillNav(true)
+        onDispose { viewModel.setArmedIosPillNav(false) }
+    }
+
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val bottomNavScreens =
         listOfNotNull(

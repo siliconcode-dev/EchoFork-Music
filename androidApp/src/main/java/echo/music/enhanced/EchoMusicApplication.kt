@@ -37,6 +37,8 @@ import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import echo.music.enhanced.crashlytics.configCrashlytics
+import echo.music.enhanced.crashrecovery.NavCrashEventListener
+import echo.music.enhanced.crashrecovery.NavCrashRecovery
 import echo.music.enhanced.lastfm.configLastfm
 import echo.music.enhanced.paxsenixlyrics.Paxsenix
 import java.lang.reflect.Field
@@ -52,6 +54,7 @@ class EchoMusicApplication :
 
     override fun onCreate() {
         super.onCreate()
+        NavCrashRecovery.init(this)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         configCrashlytics(this, "")
         configLastfm(BuildKonfig.lastfmApiKey, BuildKonfig.lastfmSecret)
@@ -78,6 +81,12 @@ class EchoMusicApplication :
             autoBackupScheduler.observeAndSchedule()
         }
 
+        // Mirrors the iOS-pill-nav "currently rendering" signal into an in-memory flag
+        // NavCrashRecovery can check synchronously if the app crashes — see its own doc comment.
+        applicationScope.launch {
+            dataStoreManager.armedIosPillNav.collect { NavCrashRecovery.setArmedInMemory(it) }
+        }
+
         CaocConfig.Builder
             .create()
             .backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT) // default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
@@ -89,6 +98,7 @@ class EchoMusicApplication :
             .trackActivities(true) // default: false
             .minTimeBetweenCrashesMs(2000) // default: 3000 //default: bug image
             .restartActivity(MainActivity::class.java) // default: null (your app's launch activity)
+            .eventListener(NavCrashEventListener())
             .apply()
 
         @SuppressLint("DiscouragedPrivateApi")

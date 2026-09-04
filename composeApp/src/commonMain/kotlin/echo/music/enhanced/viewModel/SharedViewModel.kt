@@ -1933,6 +1933,12 @@ class SharedViewModel(
 
     fun getBetterEchoNavStyle() = dataStoreManager.betterEchoNavStyle
 
+    fun getArmedIosPillNav() = dataStoreManager.armedIosPillNav
+
+    fun setArmedIosPillNav(armed: Boolean) {
+        viewModelScope.launch { dataStoreManager.setArmedIosPillNav(armed) }
+    }
+
     fun getTrueMotionEnabled() = dataStoreManager.trueMotionEnabled
 
     fun getTrueMotionTargetHz() = dataStoreManager.trueMotionTargetHz

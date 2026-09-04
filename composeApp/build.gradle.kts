@@ -154,9 +154,9 @@ kotlin {
             implementation(libs.liquid.glass)
             implementation(libs.liquid.glass.shape)
 
-            // Better Echo iOS-26-style floating nav bar (upstream itself vendors this same library
-            // rather than hand-rolling it — see FloatingNavBar.kt's port for the real reasoning).
-            implementation(libs.floating.tab.bar)
+            // Better Echo iOS-26-style floating nav bar: vendored source in
+            // ui/component/floatingtabbar/FloatingTabBar.kt (v0.1.11.2 — no longer a Maven
+            // dependency, see that file's header comment for why).
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
