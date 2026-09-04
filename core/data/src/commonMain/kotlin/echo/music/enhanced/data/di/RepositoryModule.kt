@@ -17,6 +17,7 @@ import echo.music.enhanced.data.repository.PlaylistRepositoryImpl
 import echo.music.enhanced.data.repository.PodcastRepositoryImpl
 import echo.music.enhanced.data.repository.SearchRepositoryImpl
 import echo.music.enhanced.data.repository.SongRepositoryImpl
+import echo.music.enhanced.data.repository.SpotifyImportRepositoryImpl
 import echo.music.enhanced.data.repository.StreamRepositoryImpl
 import echo.music.enhanced.data.repository.UpdateRepositoryImpl
 import echo.music.enhanced.domain.repository.AccountRepository
@@ -34,6 +35,7 @@ import echo.music.enhanced.domain.repository.PlaylistRepository
 import echo.music.enhanced.domain.repository.PodcastRepository
 import echo.music.enhanced.domain.repository.SearchRepository
 import echo.music.enhanced.domain.repository.SongRepository
+import echo.music.enhanced.domain.repository.SpotifyImportRepository
 import echo.music.enhanced.domain.repository.StreamRepository
 import echo.music.enhanced.domain.repository.UpdateRepository
 import org.koin.core.qualifier.named
@@ -98,6 +100,10 @@ val repositoryModule =
 
         single<SongRepository>(createdAtStart = true) {
             SongRepositoryImpl(get(), get(), get())
+        }
+
+        single<SpotifyImportRepository>(createdAtStart = true) {
+            SpotifyImportRepositoryImpl(get(), get(), get(), get())
         }
 
         single<StreamRepository>(createdAtStart = true) {

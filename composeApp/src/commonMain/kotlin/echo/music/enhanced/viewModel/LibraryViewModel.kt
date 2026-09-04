@@ -19,6 +19,8 @@ import echo.music.enhanced.domain.repository.LocalPlaylistRepository
 import echo.music.enhanced.domain.repository.PlaylistRepository
 import echo.music.enhanced.domain.repository.PodcastRepository
 import echo.music.enhanced.domain.repository.SongRepository
+import echo.music.enhanced.domain.repository.SpotifyImportRepository
+import echo.music.enhanced.domain.repository.SpotifyImportState
 import echo.music.enhanced.domain.utils.LocalResource
 import echo.music.enhanced.domain.utils.Resource
 import echo.music.enhanced.domain.utils.isRadioPlaylistId
@@ -50,6 +52,7 @@ class LibraryViewModel(
     private val albumRepository: AlbumRepository,
     private val podcastRepository: PodcastRepository,
     private val aiPlaylistRepository: AiPlaylistRepository,
+    private val spotifyImportRepository: SpotifyImportRepository,
 ) : BaseViewModel() {
     private val _aiPlaylistState: MutableStateFlow<LocalResource<Long>?> = MutableStateFlow(null)
     val aiPlaylistState: StateFlow<LocalResource<Long>?> get() = _aiPlaylistState.asStateFlow()
@@ -69,6 +72,27 @@ class LibraryViewModel(
 
     fun resetAiPlaylistState() {
         _aiPlaylistState.value = null
+    }
+
+    private val _spotifyImportState: MutableStateFlow<SpotifyImportState?> = MutableStateFlow(null)
+    val spotifyImportState: StateFlow<SpotifyImportState?> get() = _spotifyImportState.asStateFlow()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val spotifyLoggedIn = dataStoreManager.spdc.mapLatest { it.isNotEmpty() }
+
+    fun importFromSpotify() {
+        viewModelScope.launch {
+            spotifyImportRepository.importAllPlaylists().collectLatest { state ->
+                _spotifyImportState.value = state
+                if (state is SpotifyImportState.Done) {
+                    getLocalPlaylist()
+                }
+            }
+        }
+    }
+
+    fun resetSpotifyImportState() {
+        _spotifyImportState.value = null
     }
 
     private val _currentScreen: MutableStateFlow<LibraryChipType> = MutableStateFlow(LibraryChipType.YOUR_LIBRARY)

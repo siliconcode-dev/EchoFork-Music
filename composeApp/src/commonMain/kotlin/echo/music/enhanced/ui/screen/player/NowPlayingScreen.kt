@@ -1796,7 +1796,8 @@ fun NowPlayingScreenContent(
                                         )
                                         // Control Button Layout
                                         PlayerControlLayout(
-                                            controllerState,
+                                            controllerState = controllerState,
+                                            interfaceMode = interfaceMode,
                                         ) {
                                             sharedViewModel.onUIEvent(it)
                                         }

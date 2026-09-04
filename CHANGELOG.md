@@ -2,6 +2,21 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.15] — 2026-09-04
+
+### Added (Better Echo — Now Playing)
+- The play/pause button is now a rotating "cookie" shape that spins while playing and settles into a plain circle when paused, with a spring press-scale — matching upstream's latest transport control design.
+- Previous/next buttons now sit inside translucent circle backgrounds, and shuffle/repeat moved into their own small row below the main transport controls.
+
+### Added (Import from Spotify)
+- Library's Import menu now has a real "Import from Spotify" action: brings in every playlist you own or follow, plus your Liked Songs, as local playlists.
+- Each Spotify track is matched to a real YouTube Music song using a title/artist/duration match scorer, with a live progress dialog and a summary of what couldn't be found.
+- Reuses your existing Spotify session (the same one used for Canvas/Lyrics) — routes to the Spotify login screen first if you're not already connected.
+- Re-running the import refreshes previously-imported playlists in place instead of creating duplicates.
+
+### Unaffected
+- Classic and Liquid Glass are completely unchanged.
+
 ## [0.1.14] — 2026-09-04
 
 ### Added (AI Hub)

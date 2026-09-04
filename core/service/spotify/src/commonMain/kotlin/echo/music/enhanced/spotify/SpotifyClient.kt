@@ -33,6 +33,10 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.serialization.kotlinx.protobuf.protobuf
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonObject
 import kotlinx.serialization.protobuf.ProtoBuf
 import kotlin.random.Random
 
@@ -242,6 +246,37 @@ class SpotifyClient {
                         ),
                     ),
             ),
+        )
+    }
+
+    /**
+     * Posts a GraphQL persisted-query request to Spotify's internal pathfinder v2 endpoint (the
+     * same one the real web player uses for library/playlist browsing). Unlike [searchSpotifyTrack]'s
+     * pathfinder v1 GET call, v2 is a POST with a JSON body and only needs the personal access
+     * token — no Client-Token header.
+     */
+    suspend fun graphqlQueryV2(
+        operationName: String,
+        sha256Hash: String,
+        variables: JsonObject,
+        accessToken: String,
+    ) = jsonClient.post("https://api-partner.spotify.com/pathfinder/v2/query") {
+        userAgent(USER_AGENT)
+        contentType(ContentType.Application.Json)
+        header("Authorization", "Bearer $accessToken")
+        header(HttpHeaders.AcceptEncoding, "gzip, deflate, br")
+        header("App-platform", "WebPlayer")
+        setBody(
+            buildJsonObject {
+                put("operationName", operationName)
+                put("variables", variables)
+                putJsonObject("extensions") {
+                    putJsonObject("persistedQuery") {
+                        put("version", 1)
+                        put("sha256Hash", sha256Hash)
+                    }
+                }
+            }.toString(),
         )
     }
 

@@ -1282,6 +1282,19 @@ internal class DataStoreManagerImpl(
         }
     }
 
+    override val spotifyImportPlaylistMap: Flow<String> =
+        settingsDataStore.data.map { preferences ->
+            preferences[SPOTIFY_IMPORT_PLAYLIST_MAP] ?: ""
+        }
+
+    override suspend fun setSpotifyImportPlaylistMap(serializedMap: String) {
+        withContext(Dispatchers.IO) {
+            settingsDataStore.edit { settings ->
+                settings[SPOTIFY_IMPORT_PLAYLIST_MAP] = serializedMap
+            }
+        }
+    }
+
     override val localPlaylistFilter: Flow<String> =
         settingsDataStore.data.map { preferences ->
             preferences[LOCAL_PLAYLIST_FILTER] ?: LOCAL_PLAYLIST_FILTER_OLDER_FIRST
@@ -1895,6 +1908,7 @@ internal class DataStoreManagerImpl(
         val CUSTOM_OPENAI_HEADERS = stringPreferencesKey("custom_openai_headers")
         val AI_RECOMMENDATIONS_PLAYLIST_ID = longPreferencesKey("ai_recommendations_playlist_id")
         val ENABLE_AI_RECOMMENDATIONS = booleanPreferencesKey("enable_ai_recommendations")
+        val SPOTIFY_IMPORT_PLAYLIST_MAP = stringPreferencesKey("spotify_import_playlist_map")
 
         val USE_AI_TRANSLATION = stringPreferencesKey("use_ai_translation")
 

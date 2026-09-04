@@ -365,6 +365,16 @@ interface DataStoreManager {
 
     suspend fun setEnableAiRecommendations(enabled: Boolean)
 
+    /**
+     * Maps each imported Spotify source's stable id (`SPOTIFY_PLAYLIST_<id>`/`SPOTIFY_LIKED_SONGS`)
+     * to the local playlist id it was mirrored into, serialized as `key=id,key=id,...` — so
+     * re-running the import refreshes those playlists in place instead of duplicating them. Empty
+     * string means nothing has been imported yet.
+     */
+    val spotifyImportPlaylistMap: Flow<String>
+
+    suspend fun setSpotifyImportPlaylistMap(serializedMap: String)
+
     val localPlaylistFilter: Flow<String>
 
     suspend fun setLocalPlaylistFilter(filter: String)

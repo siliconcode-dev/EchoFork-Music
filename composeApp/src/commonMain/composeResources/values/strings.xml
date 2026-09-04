@@ -77,6 +77,10 @@
     <string name="whats_new_ai_modify_description">Any local playlist\'s "more options" now has a Modify with AI action — describe the change, AI adds or removes songs for you.</string>
     <string name="whats_new_ai_recommendations_title">AI Recommendations</string>
     <string name="whats_new_ai_recommendations_description">Turn on AI Recommendations in Settings &gt; AI for a "Recommended by AI" playlist built from your most-played songs.</string>
+    <string name="whats_new_now_playing_controls_title">Restyled playback controls</string>
+    <string name="whats_new_now_playing_controls_description">Better Echo's Now Playing screen has a new play/pause "cookie" that spins while playing, translucent prev/next buttons, and its own shuffle/repeat row.</string>
+    <string name="whats_new_spotify_import_title">Import from Spotify</string>
+    <string name="whats_new_spotify_import_description">Library\'s Import menu now brings in every Spotify playlist and your Liked Songs in one tap, matched to real YouTube Music songs.</string>
     <string name="this_song_is_not_available">This song is not available</string>
     <string name="in_charts">in Charts</string>
     <string name="playlist_name_cannot_be_empty">Playlist name cannot be empty</string>
@@ -705,6 +709,11 @@
     <string name="analytics">Analytics</string>
     <string name="import_spotify_playlist">Import Spotify Playlist</string>
     <string name="import_spotify_playlist_url">Spotify Playlist URL</string>
+    <string name="spotify_import_preparing">Connecting to Spotify…</string>
+    <string name="spotify_import_source_progress">%1$s (%2$d of %3$d)</string>
+    <string name="spotify_import_track_progress">%1$d of %2$d tracks matched</string>
+    <string name="spotify_import_summary">Imported %1$d of %2$d tracks across %3$d playlists.</string>
+    <string name="spotify_import_unresolved">%1$d tracks couldn\'t be found on YouTube Music and were skipped.</string>
 
     <string name="listen_together">Listen Together (Beta)</string>
     <string name="lt_tagline">One song, one position, together. Create a room and share the code with friends.</string>

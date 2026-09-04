@@ -43,19 +43,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import echo.music.enhanced.ui.icon.AutoGraph
-import echo.music.enhanced.ui.icon.LibraryMusic
-import echo.music.enhanced.ui.icon.Sparks
+import echo.music.enhanced.ui.icon.Download
+import echo.music.enhanced.ui.icon.PlayCircle
 import echo.music.enhanced.ui.icon.echoIcons
 import echo.music.enhanced.ui.theme.typo
 import echomusic.composeapp.generated.resources.Res
-import echomusic.composeapp.generated.resources.whats_new_ai_hub_description
-import echomusic.composeapp.generated.resources.whats_new_ai_hub_title
-import echomusic.composeapp.generated.resources.whats_new_ai_modify_description
-import echomusic.composeapp.generated.resources.whats_new_ai_modify_title
-import echomusic.composeapp.generated.resources.whats_new_ai_recommendations_description
-import echomusic.composeapp.generated.resources.whats_new_ai_recommendations_title
 import echomusic.composeapp.generated.resources.whats_new_dismiss
+import echomusic.composeapp.generated.resources.whats_new_now_playing_controls_description
+import echomusic.composeapp.generated.resources.whats_new_now_playing_controls_title
+import echomusic.composeapp.generated.resources.whats_new_spotify_import_description
+import echomusic.composeapp.generated.resources.whats_new_spotify_import_title
 import echomusic.composeapp.generated.resources.whats_new_title
 import echomusic.composeapp.generated.resources.whats_new_version_format
 import kotlinx.coroutines.delay
@@ -70,12 +67,15 @@ private data class WhatsNewEntry(
 
 private val whatsNewEntries =
     listOf(
-        WhatsNewEntry(echoIcons.Sparks, Res.string.whats_new_ai_hub_title, Res.string.whats_new_ai_hub_description),
-        WhatsNewEntry(echoIcons.LibraryMusic, Res.string.whats_new_ai_modify_title, Res.string.whats_new_ai_modify_description),
         WhatsNewEntry(
-            echoIcons.AutoGraph,
-            Res.string.whats_new_ai_recommendations_title,
-            Res.string.whats_new_ai_recommendations_description,
+            echoIcons.PlayCircle,
+            Res.string.whats_new_now_playing_controls_title,
+            Res.string.whats_new_now_playing_controls_description,
+        ),
+        WhatsNewEntry(
+            echoIcons.Download,
+            Res.string.whats_new_spotify_import_title,
+            Res.string.whats_new_spotify_import_description,
         ),
     )
 

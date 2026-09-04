@@ -81,10 +81,13 @@ import echo.music.enhanced.ui.component.LibraryItem
 import echo.music.enhanced.ui.component.LibraryItemState
 import echo.music.enhanced.ui.component.LibraryItemType
 import echo.music.enhanced.ui.component.LibraryTilingBox
+import echo.music.enhanced.ui.component.SpotifyImportDialog
 import echo.music.enhanced.ui.icon.Add
+import echo.music.enhanced.ui.icon.Download
 import echo.music.enhanced.ui.icon.PeopleAlt
 import echo.music.enhanced.ui.icon.Sparks
 import echo.music.enhanced.ui.icon.echoIcons
+import echo.music.enhanced.ui.navigation.destination.login.SpotifyLoginDestination
 import echo.music.enhanced.ui.theme.typo
 import echo.music.enhanced.viewModel.LibraryViewModel
 import echo.music.enhanced.viewModel.SharedViewModel
@@ -110,6 +113,7 @@ import echomusic.composeapp.generated.resources.create_playlist_with_ai
 import echomusic.composeapp.generated.resources.downloaded_playlists
 import echomusic.composeapp.generated.resources.favorite_playlists
 import echomusic.composeapp.generated.resources.favorite_podcasts
+import echomusic.composeapp.generated.resources.import_spotify_playlist
 import echomusic.composeapp.generated.resources.library
 import echomusic.composeapp.generated.resources.mix_for_you
 import echomusic.composeapp.generated.resources.no_YouTube_playlists
@@ -186,6 +190,22 @@ fun LibraryScreen(
             onDismiss = {
                 showCreateWithAiDialog = false
                 viewModel.resetAiPlaylistState()
+            },
+        )
+    }
+
+    // "Import from Spotify" (v0.1.15): reuses the same Spotify session Canvas/Lyrics already log
+    // into — only routes to the login screen first if that session doesn't exist yet.
+    var showSpotifyImportDialog by remember { mutableStateOf(false) }
+    val spotifyLoggedIn by viewModel.spotifyLoggedIn.collectAsStateWithLifecycle(initialValue = false)
+    val spotifyImportState by viewModel.spotifyImportState.collectAsStateWithLifecycle()
+
+    if (showSpotifyImportDialog) {
+        SpotifyImportDialog(
+            state = spotifyImportState,
+            onDismiss = {
+                showSpotifyImportDialog = false
+                viewModel.resetSpotifyImportState()
             },
         )
     }
@@ -401,6 +421,19 @@ fun LibraryScreen(
                         onClick = {
                             showFabMenu = false
                             showCreatePlaylistOptionsDialog = true
+                        },
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(Res.string.import_spotify_playlist)) },
+                        leadingIcon = { Icon(imageVector = echoIcons.Download, contentDescription = null) },
+                        onClick = {
+                            showFabMenu = false
+                            if (spotifyLoggedIn) {
+                                showSpotifyImportDialog = true
+                                viewModel.importFromSpotify()
+                            } else {
+                                navController.navigate(SpotifyLoginDestination)
+                            }
                         },
                     )
                 }
