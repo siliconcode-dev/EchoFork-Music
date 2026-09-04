@@ -9,6 +9,118 @@ export const metadata: Metadata = {
 
 const RELEASES = [
   {
+    version: "0.1.16",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "New Now Playing backdrop styles in Settings → Interface (Better Echo): Gradient (today's look, unchanged), Blur, an animated Glow, and Artwork Blend — extended to the queue sheet too.",
+      "The Now Playing seek bar is back to a single, draggable Material 3 Expressive wavy bar — the stacked buffering-indicator-over-progress bug is fixed.",
+      "The app can now download and install its own updates instead of sending you to the browser: \"Install Now\" or \"Install Later\" after a check, live download progress in Settings → About Us, and a notification when it's ready — automatically picks the right APK for your device's CPU architecture.",
+      "\"Import from Spotify\" is now also reachable from Settings → Account, alongside the existing Library entry point.",
+      "Better Echo Home: the Moods & Genres chip rows and Chart's video carousel no longer show a partially cut-off card at the edge of their rounded container.",
+    ],
+  },
+  {
+    version: "0.1.15",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "The play/pause button is now a rotating \"cookie\" shape that spins while playing and settles into a plain circle when paused, with a spring press-scale — matching upstream's latest transport control design.",
+      "Previous/next buttons now sit inside translucent circle backgrounds, with shuffle/repeat moved into their own row below the main transport controls.",
+      "Library's Import menu now has a real \"Import from Spotify\" action: brings in every playlist you own or follow, plus your Liked Songs, as local playlists, with a live progress dialog.",
+      "Each Spotify track is matched to a real YouTube Music song by title, artist, and duration — reuses your existing Spotify session from Canvas/Lyrics, and re-running the import refreshes previously-imported playlists instead of duplicating them.",
+    ],
+  },
+  {
+    version: "0.1.14",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "AI Hub: describe what you want in Library's \"Create with AI\" tile, and a real OpenRouter-backed AI builds a playlist from your actual search results — no more \"coming soon.\"",
+      "Any local playlist's \"more options\" now has a \"Modify with AI\" action — describe the change, AI adds or removes songs for you.",
+      "New Settings → AI toggle creates (and lets you refresh) a \"Recommended by AI\" playlist built from your most-played songs.",
+      "OpenRouter joins Gemini, OpenAI, and Custom-OpenAI as a selectable AI provider — required for the three AI Hub features above, since they share the same provider/key as lyrics translation.",
+      "A couple of long-standing Better Echo bugs fixed too: overlapping Home section header text, and an imperfect ring-progress circle on the mini-player.",
+    ],
+  },
+  {
+    version: "0.1.13",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "Two real mini-player styles to choose from in Settings → Interface: a new ring-progress pill player, or the classic full-width bar — both ported from upstream's real designs.",
+      "A flip-card easter egg on the About screen — tap the app avatar.",
+      "The Player's \"more options\" sheet and the lyrics card's \"Show\" button now match Better Echo's squircle-card visual language.",
+      "Fixes carried over from v0.1.12's new Home sections: hero carousel side items, header text clipping, Speed Dial's blank space, and section title styling.",
+    ],
+  },
+  {
+    version: "0.1.12",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "Home's \"Quick Picks\" is now a hero carousel — ported from upstream's real current design — instead of a small grid.",
+      "Two new Better-Echo-only Home sections: Speed Dial (your most-played songs in a swipeable paged grid) and Keep Listening (a real recently-played row from your actual play history).",
+      "New \"Randomize Home Order\" toggle in Settings → Content (off by default) reshuffles Home's sections on pull-to-refresh.",
+      "Every top-level Home section now renders in the same rounded squircle-card style already used across Better Echo's Settings.",
+    ],
+  },
+  {
+    version: "0.1.11.2",
+    date: "September 2026",
+    tag: "Fix",
+    highlights: [
+      "The \"iOS 26 style\" nav is back for real this time — root-caused by vendoring the nav library's source instead of relying on a stale prebuilt binary.",
+      "New safety net: if an experimental nav style crashes on your device for any other reason, the app now automatically switches back to the reliable default nav bar on your next launch.",
+      "Refreshed the \"What's New\" dialog to reflect what's actually shipped recently.",
+    ],
+  },
+  {
+    version: "0.1.11.1",
+    date: "September 2026",
+    tag: "Fix",
+    highlights: [
+      "Fixed a launch crash (Better Echo) affecting the default floating nav bar on some devices.",
+      "Temporarily disabled the \"iOS 26 style\" nav after it was found to crash on switch — the real fix landed in v0.1.11.2.",
+    ],
+  },
+  {
+    version: "0.1.11",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "Better Echo gets a real nav bar, ported from upstream's actual current source: the default floating toolbar with a sliding selection pill and a \"More Options\" sheet (Shuffle, AI Hub shortcut), plus an alternate \"iOS 26 style\" floating pill nav bar you can switch to in Settings → Interface.",
+    ],
+  },
+  {
+    version: "0.1.10",
+    date: "September 2026",
+    tag: "Changed",
+    highlights: [
+      "Better Echo's Library FAB now opens a menu instead of jumping straight into a playlist name field: \"Create Playlist\" opens a two-tile chooser for a normal playlist or an AI-assisted one.",
+    ],
+  },
+  {
+    version: "0.1.9",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "Better Echo's Settings screen now uses upstream's actual current row component: every section renders as a proper squircle-stack card group with icon-tint boxes and badge support.",
+      "Added a Settings search bar (Better Echo only) that jumps straight to the matching section.",
+    ],
+  },
+  {
+    version: "0.1.8",
+    date: "September 2026",
+    tag: "New",
+    highlights: [
+      "Better Echo gets a real, consistent visual identity: a squircle-stack row-group shape language across Settings and Library, a softer rounded lyrics panel on Now Playing, a new floating rounded nav bar, and a larger corner-radius theme token app-wide.",
+      "A dedicated \"About Enhanced Echo Music\" screen in Better Echo mode: a scalloped Material 3 Expressive badge header, a wavy divider, developer credits, and a \"Community & Info\" card.",
+      "Multi-select in playlist detail screens (Better Echo mode).",
+      "Liquid Glass now also renders on the Settings screen's top bar.",
+    ],
+  },
+  {
     version: "0.1.7",
     date: "September 2026",
     tag: "New",

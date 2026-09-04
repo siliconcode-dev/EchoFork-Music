@@ -45,15 +45,18 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import echo.music.enhanced.ui.icon.Download
 import echo.music.enhanced.ui.icon.PlayCircle
+import echo.music.enhanced.ui.icon.Tune
 import echo.music.enhanced.ui.icon.echoIcons
 import echo.music.enhanced.ui.theme.typo
 import echomusic.composeapp.generated.resources.Res
 import echomusic.composeapp.generated.resources.whats_new_dismiss
-import echomusic.composeapp.generated.resources.whats_new_now_playing_controls_description
-import echomusic.composeapp.generated.resources.whats_new_now_playing_controls_title
-import echomusic.composeapp.generated.resources.whats_new_spotify_import_description
-import echomusic.composeapp.generated.resources.whats_new_spotify_import_title
+import echomusic.composeapp.generated.resources.whats_new_in_app_update_description
+import echomusic.composeapp.generated.resources.whats_new_in_app_update_title
+import echomusic.composeapp.generated.resources.whats_new_now_playing_background_description
+import echomusic.composeapp.generated.resources.whats_new_now_playing_background_title
 import echomusic.composeapp.generated.resources.whats_new_title
+import echomusic.composeapp.generated.resources.whats_new_wavy_seek_bar_description
+import echomusic.composeapp.generated.resources.whats_new_wavy_seek_bar_title
 import echomusic.composeapp.generated.resources.whats_new_version_format
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.StringResource
@@ -68,14 +71,19 @@ private data class WhatsNewEntry(
 private val whatsNewEntries =
     listOf(
         WhatsNewEntry(
+            echoIcons.Tune,
+            Res.string.whats_new_now_playing_background_title,
+            Res.string.whats_new_now_playing_background_description,
+        ),
+        WhatsNewEntry(
             echoIcons.PlayCircle,
-            Res.string.whats_new_now_playing_controls_title,
-            Res.string.whats_new_now_playing_controls_description,
+            Res.string.whats_new_wavy_seek_bar_title,
+            Res.string.whats_new_wavy_seek_bar_description,
         ),
         WhatsNewEntry(
             echoIcons.Download,
-            Res.string.whats_new_spotify_import_title,
-            Res.string.whats_new_spotify_import_description,
+            Res.string.whats_new_in_app_update_title,
+            Res.string.whats_new_in_app_update_description,
         ),
     )
 

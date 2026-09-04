@@ -2,6 +2,27 @@
 
 All notable changes to Enhanced Echo Music are documented here.
 
+## [0.1.16] — 2026-09-04
+
+### Added (Better Echo — Now Playing background)
+- New selectable Now Playing backdrop styles (Settings > Interface): Gradient (today's look, unchanged), Blur, an animated Glow, and Artwork Blend — extended to the queue sheet too.
+
+### Fixed (Now Playing seek bar)
+- The seek area no longer shows two stacked progress bars (a buffering indicator directly above the real one) — it's now a single, draggable Material 3 Expressive wavy seek bar.
+
+### Added (In-app updates)
+- The app can now download and install its own updates instead of sending you to the browser: "Install Now" or "Install Later" after a check, with live download progress (a Material 3 Expressive circular wavy indicator) in Settings > About Us, and a notification when it's ready to install.
+- Automatically picks the right APK for your device's CPU architecture.
+
+### Added (Settings)
+- "Import from Spotify" is now also reachable from Settings > Account, alongside the existing Library FAB entry point.
+
+### Fixed (Better Echo Home)
+- The Moods & Genres chip rows and Chart's video carousel no longer show a partially cut-off card at the edge of their rounded container — items now size themselves to the card's real width.
+
+### Unaffected
+- Classic and Liquid Glass are completely unchanged.
+
 ## [0.1.15] — 2026-09-04
 
 ### Added (Better Echo — Now Playing)

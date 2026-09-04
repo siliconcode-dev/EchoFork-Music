@@ -1,8 +1,10 @@
 package echo.music.enhanced.data.repository
 
+import echo.music.enhanced.domain.data.model.update.UpdateAsset
 import echo.music.enhanced.domain.data.model.update.UpdateData
 import echo.music.enhanced.domain.repository.UpdateRepository
 import echo.music.enhanced.domain.utils.Resource
+import echo.music.enhanced.kotlinytmusicscraper.Ytmusic
 import echo.music.enhanced.kotlinytmusicscraper.YtMusicScraper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +25,12 @@ internal class UpdateRepositoryImpl(
                                 tagName = response.tagName ?: "",
                                 releaseTime = response.publishedAt ?: "",
                                 body = response.body ?: "",
+                                assets =
+                                    response.assets.orEmpty().mapNotNull { asset ->
+                                        val url = asset?.browserDownloadUrl ?: return@mapNotNull null
+                                        val name = asset.name ?: return@mapNotNull null
+                                        UpdateAsset(name = name, downloadUrl = url, size = asset.size?.toLong() ?: 0L)
+                                    },
                             ),
                         ),
                     )
@@ -30,6 +38,11 @@ internal class UpdateRepositoryImpl(
                     emit(Resource.Error<UpdateData>(it.localizedMessage ?: "Unknown error"))
                 }
         }.flowOn(Dispatchers.IO)
+
+    override fun downloadApk(
+        downloadUrl: String,
+        destinationPath: String,
+    ): Flow<Triple<Boolean, Float, Int>> = Ytmusic().download(url = downloadUrl, pathString = destinationPath)
 
     override fun checkForFdroidUpdate(): Flow<Resource<UpdateData>> =
         flow {

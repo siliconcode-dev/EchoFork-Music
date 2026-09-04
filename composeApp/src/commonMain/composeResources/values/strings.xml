@@ -63,6 +63,11 @@
     <string name="better_echo_mini_player_style">Mini-Player Style</string>
     <string name="better_echo_mini_player_style_new">New (ring progress)</string>
     <string name="better_echo_mini_player_style_legacy">Legacy (bottom bar)</string>
+    <string name="now_playing_background">Now Playing Background</string>
+    <string name="now_playing_background_gradient">Gradient</string>
+    <string name="now_playing_background_blur">Blur</string>
+    <string name="now_playing_background_glow_animated">Glow (Animated)</string>
+    <string name="now_playing_background_artwork_blend">Artwork Blend</string>
     <string name="whats_new_home_hero_title">A Home that finally looks like Better Echo</string>
     <string name="whats_new_home_hero_description">Quick Picks is now a swipeable hero carousel, plus two new sections: Speed Dial (your most-played) and Keep Listening (your recent history) — with a Randomize Home Order toggle if you like it shuffled.</string>
     <string name="whats_new_mini_player_title">Pick your mini-player</string>
@@ -81,6 +86,12 @@
     <string name="whats_new_now_playing_controls_description">Better Echo's Now Playing screen has a new play/pause "cookie" that spins while playing, translucent prev/next buttons, and its own shuffle/repeat row.</string>
     <string name="whats_new_spotify_import_title">Import from Spotify</string>
     <string name="whats_new_spotify_import_description">Library\'s Import menu now brings in every Spotify playlist and your Liked Songs in one tap, matched to real YouTube Music songs.</string>
+    <string name="whats_new_now_playing_background_title">A Now Playing screen with real backdrops</string>
+    <string name="whats_new_now_playing_background_description">Pick a new backdrop style for Now Playing and the queue sheet — Gradient, Blur, an animated Glow, or Artwork Blend — from Settings.</string>
+    <string name="whats_new_wavy_seek_bar_title">One real seek bar, not two</string>
+    <string name="whats_new_wavy_seek_bar_description">Fixed the doubled-up progress bar on Now Playing — it\'s now a single draggable Material 3 Expressive wavy seek bar.</string>
+    <string name="whats_new_in_app_update_title">Updates, handled for you</string>
+    <string name="whats_new_in_app_update_description">The app can now download and install its own updates — pick Install Now or Install Later, and watch progress from Settings > About Us.</string>
     <string name="this_song_is_not_available">This song is not available</string>
     <string name="in_charts">in Charts</string>
     <string name="playlist_name_cannot_be_empty">Playlist name cannot be empty</string>
@@ -254,6 +265,14 @@
     <string name="update_available">New update available</string>
     <string name="update_message">Version %1$s available\nRelease: %2$s\n</string>
     <string name="check_for_update">Check for update</string>
+    <string name="install_now">Install Now</string>
+    <string name="install_later">Install Later</string>
+    <string name="update_downloading_toast">Downloading update in background — check About Us for progress</string>
+    <string name="update_in_progress">Update In Progress</string>
+    <string name="update_ready_to_install">Update Ready — Tap to Install</string>
+    <string name="update_failed">Update Failed</string>
+    <string name="update_download_progress_format">%1$d%% • %2$d KB/s</string>
+    <string name="updates_section_title">Updates</string>
     <string name="last_checked_at">Last checked at %1$s</string>
     <string name="checking">Checking</string>
     <string name="sponsorblock_skip_segment">SponsorBlock: Skip %1$s segment</string>
@@ -709,6 +728,7 @@
     <string name="analytics">Analytics</string>
     <string name="import_spotify_playlist">Import Spotify Playlist</string>
     <string name="import_spotify_playlist_url">Spotify Playlist URL</string>
+    <string name="import_spotify_playlist_settings_subtitle">Bring in every Spotify playlist and your Liked Songs</string>
     <string name="spotify_import_preparing">Connecting to Spotify…</string>
     <string name="spotify_import_source_progress">%1$s (%2$d of %3$d)</string>
     <string name="spotify_import_track_progress">%1$d of %2$d tracks matched</string>

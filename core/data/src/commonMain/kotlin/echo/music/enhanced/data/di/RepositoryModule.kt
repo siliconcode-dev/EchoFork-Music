@@ -20,6 +20,7 @@ import echo.music.enhanced.data.repository.SongRepositoryImpl
 import echo.music.enhanced.data.repository.SpotifyImportRepositoryImpl
 import echo.music.enhanced.data.repository.StreamRepositoryImpl
 import echo.music.enhanced.data.repository.UpdateRepositoryImpl
+import echo.music.enhanced.domain.manager.UpdateDownloadManager
 import echo.music.enhanced.domain.repository.AccountRepository
 import echo.music.enhanced.domain.repository.AiPlaylistRepository
 import echo.music.enhanced.domain.repository.AlbumRepository
@@ -113,6 +114,8 @@ val repositoryModule =
         single<UpdateRepository>(createdAtStart = true) {
             UpdateRepositoryImpl(get())
         }
+
+        single(createdAtStart = true) { UpdateDownloadManager() }
 
         single<AnalyticsRepository>(createdAtStart = true) {
             AnalyticsRepositoryImpl(get())

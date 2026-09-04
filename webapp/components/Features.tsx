@@ -15,6 +15,8 @@ import {
   Repeat2,
   Palette,
   ShieldCheck,
+  Import,
+  RefreshCw,
   type LucideIcon,
 } from "lucide-react";
 import Reveal from "./Reveal";
@@ -25,6 +27,29 @@ const FEATURES: {
   tag?: string;
   body: string;
 }[] = [
+  {
+    icon: Palette,
+    title: "Choose Your Interface",
+    body: "Classic, Better Echo — an ongoing port of upstream's real UI (hero carousel Home, real nav bar, dual mini-players, multi-select) — or Liquid Glass. Switch live in Settings, no restart.",
+  },
+  {
+    icon: Sparkles,
+    title: "AI Hub",
+    tag: "New",
+    body: "Create a playlist from a text prompt, AI-edit any existing playlist, or turn on an auto-refreshing \"Recommended by AI\" list. Bring your own OpenRouter, Gemini, or OpenAI key.",
+  },
+  {
+    icon: Import,
+    title: "Import from Spotify",
+    tag: "New",
+    body: "Bring in every Spotify playlist you own or follow, plus Liked Songs — each track matched to YouTube Music automatically. From Library or Settings.",
+  },
+  {
+    icon: RefreshCw,
+    title: "In-App Auto-Updates",
+    tag: "New",
+    body: "Download and install updates right from the app — architecture-matched APK, live progress, and a notification when it's ready.",
+  },
   {
     icon: Headphones,
     title: "Spatial Audio",
@@ -47,12 +72,6 @@ const FEATURES: {
     icon: AudioWaveform,
     title: "Wavy Expressive UI",
     body: "Player progress bars use Material 3's expressive wavy style.",
-  },
-  {
-    icon: Palette,
-    title: "Choose Your Interface",
-    tag: "New",
-    body: "Classic, Better Echo, or Liquid Glass — pick your look in Settings. Switches live, no restart.",
   },
   {
     icon: ShieldCheck,
@@ -93,11 +112,6 @@ const FEATURES: {
     icon: Car,
     title: "Android Auto",
     body: "Full in-car integration for hands-free listening.",
-  },
-  {
-    icon: Sparkles,
-    title: "AI Song Suggestions",
-    body: "Playback-aware recommendations and automated custom playlists.",
   },
   {
     icon: Radio,

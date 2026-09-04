@@ -65,7 +65,6 @@ import echo.music.enhanced.logger.Logger
 import echo.music.enhanced.expect.Orientation
 import echo.music.enhanced.expect.currentOrientation
 import echo.music.enhanced.expect.display.ApplyTrueMotionRefreshRate
-import echo.music.enhanced.expect.openUrl
 import echo.music.enhanced.expect.ui.layerBackdrop
 import echo.music.enhanced.expect.ui.rememberBackdrop
 import echo.music.enhanced.extension.copy
@@ -113,10 +112,10 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import echomusic.composeapp.generated.resources.Res
-import echomusic.composeapp.generated.resources.cancel
 import echomusic.composeapp.generated.resources.do_not_show_again
-import echomusic.composeapp.generated.resources.download
 import echomusic.composeapp.generated.resources.good_night
+import echomusic.composeapp.generated.resources.install_later
+import echomusic.composeapp.generated.resources.install_now
 import echomusic.composeapp.generated.resources.notification
 import echomusic.composeapp.generated.resources.sleep_timer_off
 import echomusic.composeapp.generated.resources.this_app_needs_to_access_your_notification
@@ -124,6 +123,7 @@ import echomusic.composeapp.generated.resources.nav_style_reverted_after_crash
 import echomusic.composeapp.generated.resources.this_link_is_not_supported
 import echomusic.composeapp.generated.resources.unknown
 import echomusic.composeapp.generated.resources.update_available
+import echomusic.composeapp.generated.resources.update_downloading_toast
 import echomusic.composeapp.generated.resources.update_message
 import echomusic.composeapp.generated.resources.yes
 import kotlin.time.ExperimentalTime
@@ -666,6 +666,7 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
 
                 if (shouldShowUpdateDialog) {
                     val response = updateData ?: return@Scaffold
+                    val installNowToastText = stringResource(Res.string.update_downloading_toast)
                     AlertDialog(
                         properties =
                             DialogProperties(
@@ -681,11 +682,12 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
                                 onClick = {
                                     shouldShowUpdateDialog = false
                                     viewModel.showedUpdateDialog = false
-                                    openUrl("https://github.com/siliconcode-dev/EchoFork-Music/releases/latest")
+                                    viewModel.downloadUpdate(installImmediately = true)
+                                    viewModel.makeToast(installNowToastText)
                                 },
                             ) {
                                 Text(
-                                    stringResource(Res.string.download),
+                                    stringResource(Res.string.install_now),
                                     style = typo().bodySmall,
                                 )
                             }
@@ -695,10 +697,12 @@ if (data.scheme == "wordbyword" && data.host == "lastfm-auth") {
                                 onClick = {
                                     shouldShowUpdateDialog = false
                                     viewModel.showedUpdateDialog = false
+                                    viewModel.downloadUpdate(installImmediately = false)
+                                    viewModel.makeToast(installNowToastText)
                                 },
                             ) {
                                 Text(
-                                    stringResource(Res.string.cancel),
+                                    stringResource(Res.string.install_later),
                                     style = typo().bodySmall,
                                 )
                             }

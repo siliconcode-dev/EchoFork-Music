@@ -96,10 +96,14 @@ export default function DocsPage() {
             <li>Open the downloaded APK and tap Install.</li>
           </ol>
           <p>
-            <strong>Updating</strong> works the same way — download a newer
-            release and install over the existing app. Android treats it as
-            an update as long as the signing key matches, which it will for
-            any release built by this project&apos;s own CI.
+            <strong>Updating</strong> is easiest from inside the app — as of
+            v0.1.16, it checks GitHub Releases for you, downloads the APK
+            matching your device&apos;s CPU architecture, and installs it
+            directly, with progress shown in Settings → About Us. You can
+            still update manually the same way as a first install: download a
+            newer release and install over the existing app. Android treats
+            it as an update as long as the signing key matches, which it will
+            for any release built by this project&apos;s own CI.
           </p>
         </Section>
 
@@ -126,6 +130,53 @@ cd EchoFork-Music
         </Section>
 
         <Section id="features" index="03 // DEEP-DIVE" title="Feature deep-dives">
+          <div>
+            <h3 className="font-display text-sm font-bold uppercase text-ink">
+              Choose Your Interface
+            </h3>
+            <p className="mt-1">
+              Settings → Interface switches the whole app&apos;s look live, no
+              restart: Classic (the original UI, always available), Better
+              Echo — an ongoing, deep port of upstream Echo Music&apos;s
+              actual current UI/UX (hero carousel Home with Speed Dial and
+              Keep Listening, squircle-card design language, a real nav bar
+              with two selectable styles, dual mini-player styles,
+              multi-select, a dedicated About screen, and — as of v0.1.16 —
+              four selectable Now Playing backdrop styles) — and Liquid Glass,
+              this fork&apos;s own glass-material system.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-display text-sm font-bold uppercase text-ink">
+              AI Hub
+            </h3>
+            <p className="mt-1">
+              Settings → AI connects an AI provider — OpenRouter, Gemini,
+              OpenAI, or a custom OpenAI-compatible endpoint — using your own
+              API key. It&apos;s bring-your-own-key: nothing is hosted or paid
+              for by this project. Once connected, Library&apos;s
+              &quot;Create with AI&quot; tile builds a playlist from a text
+              prompt, any local playlist&apos;s &quot;more options&quot; gets
+              a &quot;Modify with AI&quot; action, and a Settings → AI toggle
+              maintains a self-refreshing &quot;Recommended by AI&quot;
+              playlist based on your most-played songs.
+            </p>
+          </div>
+          <div>
+            <h3 className="font-display text-sm font-bold uppercase text-ink">
+              Import from Spotify
+            </h3>
+            <p className="mt-1">
+              Library&apos;s Import menu (or Settings → Account) has an
+              &quot;Import from Spotify&quot; action that pulls in every
+              playlist you own or follow, plus your Liked Songs, as local
+              playlists — each track matched to a YouTube Music song by
+              title, artist, and duration. It reuses the same Spotify session
+              used for Canvas/Lyrics, and re-running it refreshes
+              previously-imported playlists in place instead of creating
+              duplicates.
+            </p>
+          </div>
           <div>
             <h3 className="font-display text-sm font-bold uppercase text-ink">
               Spatial Audio (Beta)

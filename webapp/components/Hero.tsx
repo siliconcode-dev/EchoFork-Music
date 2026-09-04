@@ -12,7 +12,7 @@ export default function Hero() {
       <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 sm:py-28 lg:grid-cols-2 lg:items-center">
         <Reveal className="text-center lg:text-left">
           <p className="font-mono text-xs font-medium uppercase tracking-widest text-accent">
-            [ REV 0.1.7 // ANDROID 8.0+ ]
+            [ REV 0.1.16 // ANDROID 8.0+ ]
           </p>
           <h1 className="mt-4 font-display text-4xl font-black uppercase leading-[0.95] tracking-tight text-ink sm:text-5xl lg:text-6xl">
             Your music,
@@ -21,9 +21,9 @@ export default function Hero() {
           </h1>
           <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-body lg:mx-0">
             Enhanced Echo Music is a free, open-source YouTube Music client
-            for Android — Spatial Audio, adaptive refresh rate, synced
-            lyrics, and a violet Material 3 Expressive UI. No ads, no
-            subscriptions, ever.
+            for Android — three selectable interfaces, an AI Hub, Spotify
+            import, Spatial Audio, and a violet Material 3 Expressive UI. No
+            ads, no subscriptions, ever.
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">

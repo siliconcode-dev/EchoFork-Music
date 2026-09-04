@@ -1195,15 +1195,26 @@ fun MoodMomentAndGenre(
     mood: Mood,
     navController: NavController,
 ) {
+    // Chip width used to be a hardcoded 160.dp that never divided evenly into the squircle card's
+    // actual (post-padding, clipped) width, so the trailing chip in each row was cut off mid-chip
+    // by the card's rounded corner instead of the row ending cleanly. Measuring the real available
+    // width and sizing 2 chips per row to fill it exactly (matching the responsive pattern already
+    // used by ChartData/QuickPicks below) removes the cut-off entirely.
+    var containerWidthDp by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
     Column(
         Modifier
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .onGloballyPositioned { coordinates ->
+                with(density) { containerWidthDp = coordinates.size.width.toDp() }
+            },
     ) {
         Text(
             text = stringResource(Res.string.let_s_pick_a_playlist_for_you),
             style = typo().bodyMedium,
             modifier = Modifier.padding(bottom = 3.dp),
         )
+        val chipWidth = if (containerWidthDp > 0.dp) containerWidthDp / 2 else 160.dp
         // One block per section YouTube returned, headed by ITS OWN title. Hard-coding
         // "Moods & moment" / "Genre" here (and reading mood.moodsMoments / mood.genres by
         // index) mislabelled every row as soon as a signed-in account got an extra
@@ -1223,7 +1234,7 @@ fun MoodMomentAndGenre(
             )
             LazyHorizontalGrid(
                 rows = GridCells.Fixed(3),
-                modifier = Modifier.height(210.dp),
+                modifier = Modifier.fillMaxWidth().height(210.dp),
                 state = gridState,
                 flingBehavior = flingBehavior,
             ) {
@@ -1232,6 +1243,7 @@ fun MoodMomentAndGenre(
                     MoodMomentAndGenreHomeItem(
                         title = item.title,
                         stripeColor = item.stripeColor,
+                        width = chipWidth,
                     ) {
                         navController.navigate(
                             MoodDestination(
@@ -1299,12 +1311,18 @@ fun ChartData(
             )
             val lazyListState = rememberLazyListState()
             val snapperFlingBehavior = rememberSnapFlingBehavior(SnapLayoutInfoProvider(lazyListState = lazyListState))
-            LazyRow(flingBehavior = snapperFlingBehavior) {
+            // Was an unconstrained thumbSize = 160.dp default that didn't divide evenly into the
+            // squircle card's real width, cutting the trailing card off mid-thumbnail. 2 cards per
+            // row, sized to the same measured gridWidthDp the artist grid below already uses.
+            val playlistThumbSize =
+                if (gridWidthDp > 0.dp) ((gridWidthDp - 40.dp) / 2).coerceAtLeast(120.dp) else 160.dp
+            LazyRow(modifier = Modifier.fillMaxWidth(), flingBehavior = snapperFlingBehavior) {
                 items(item.playlists.size, key = { index ->
                     val data = item.playlists[index]
                     data.id + data.title + index
                 }) {
                     HomeItemContentPlaylist(
+                        thumbSize = playlistThumbSize,
                         onClick = {
                             navController.navigate(
                                 PlaylistDestination(

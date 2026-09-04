@@ -9,10 +9,12 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -27,6 +29,8 @@ import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -69,10 +73,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -102,7 +105,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -110,7 +116,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -136,6 +141,7 @@ import echo.music.enhanced.extension.GradientOffset
 import echo.music.enhanced.extension.KeepScreenOn
 import echo.music.enhanced.extension.formatDuration
 import echo.music.enhanced.extension.getColorFromPalette
+import echo.music.enhanced.extension.getGlowSwatches
 import echo.music.enhanced.extension.getScreenSizeInfo
 import echo.music.enhanced.extension.hsvToColor
 import echo.music.enhanced.extension.isElementVisible
@@ -151,6 +157,7 @@ import echo.music.enhanced.ui.component.FullscreenLyricsSheet
 import echo.music.enhanced.ui.component.HeartCheckBox
 import echo.music.enhanced.ui.component.InfoPlayerBottomSheet
 import echo.music.enhanced.ui.component.LyricsView
+import echo.music.enhanced.ui.component.NowPlayingBackground
 import echo.music.enhanced.ui.component.NowPlayingBottomSheet
 import echo.music.enhanced.ui.component.PlayPauseButton
 import echo.music.enhanced.ui.component.PlayerControlLayout
@@ -304,6 +311,9 @@ fun NowPlayingScreenContent(
     val translatedVoteState by sharedViewModel.translatedVoteState.collectAsStateWithLifecycle()
     val lyricsVoteState by sharedViewModel.lyricsVoteState.collectAsStateWithLifecycle()
     val interfaceMode by sharedViewModel.getInterfaceMode().collectAsStateWithLifecycle(echo.music.enhanced.domain.manager.DataStoreManager.INTERFACE_BETTER_ECHO)
+    val nowPlayingBackgroundStyle by sharedViewModel.getBetterEchoNowPlayingBackground().collectAsStateWithLifecycle(
+        echo.music.enhanced.domain.manager.DataStoreManager.BETTER_ECHO_NOW_PLAYING_BG_GRADIENT,
+    )
 
     // Artwork Pager state — Spotify-style horizontal swipe between queue tracks.
     // The pager wraps the Canvas + Thumbnail layers. Controller layout below stays fixed.
@@ -460,6 +470,13 @@ fun NowPlayingScreenContent(
         mutableStateOf(Color.White)
     }
 
+    // Better Echo's GLOW_ANIMATED background style: richer than startColor/endColor's single
+    // dominant-color pair — up to 6 distinct swatches, one per drifting blob.
+    var glowSwatches by remember {
+        mutableStateOf<List<Color>>(emptyList())
+    }
+    val isLightTheme = MaterialTheme.colorScheme.background.luminance() > 0.5f
+
     LaunchedEffect(screenDataState) {
         Logger.d(TAG, "ScreenDataState: $screenDataState")
         showHideMiddleLayout = screenDataState.canvasData == null
@@ -479,6 +496,7 @@ fun NowPlayingScreenContent(
                 // Lands on the same backdrop colour the fade and the area below the gradient
                 // use, so the palette ramp resolves into the surface instead of a black patch.
                 endColor.animateTo(PlayerBackdropColor)
+                glowSwatches = it.getGlowSwatches(PlayerBackdropColor)
             }
     }
 
@@ -770,7 +788,28 @@ fun NowPlayingScreenContent(
     if (screenDataState.lyricsData != null && controllerState.isPlaying) {
         KeepScreenOn()
     }
+    // Better Echo's BLUR/GLOW_ANIMATED/Artwork Blend backdrop styles render as a fixed sibling
+    // layer behind the scrollable Column below, rather than inside its own Modifier chain —
+    // those styles need real Image/Haze composables, not just Canvas drawing. GRADIENT is
+    // deliberately NOT routed through here: it stays on the Column's own existing Modifier
+    // (unchanged below) so that style remains pixel-identical to what every mode already renders
+    // today, scroll behavior included.
+    val useNowPlayingBackgroundLayer =
+        interfaceMode == echo.music.enhanced.domain.manager.DataStoreManager.INTERFACE_BETTER_ECHO &&
+            nowPlayingBackgroundStyle != echo.music.enhanced.domain.manager.DataStoreManager.BETTER_ECHO_NOW_PLAYING_BG_GRADIENT &&
+            showHideMiddleLayout
     Box {
+        if (useNowPlayingBackgroundLayer) {
+            NowPlayingBackground(
+                style = nowPlayingBackgroundStyle,
+                glowSwatches = glowSwatches,
+                thumbnailBitmap = screenDataState.bitmap,
+                backdropColor = PlayerBackdropColor,
+                isPlaying = controllerState.isPlaying,
+                isLightTheme = isLightTheme,
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
         Column(
             Modifier
                 .verticalScroll(
@@ -781,7 +820,10 @@ fun NowPlayingScreenContent(
                 // Spacers in this Column have no pointer input and don't block hits, so
                 // drags fall through to the Pager.
                 .then(
-                    if (showHideMiddleLayout) {
+                    if (useNowPlayingBackgroundLayer) {
+                        // Already painted by the sibling NowPlayingBackground layer above.
+                        Modifier
+                    } else if (showHideMiddleLayout) {
                         Modifier
                             // The backdrop fills the whole scrollable content, then the gradient
                             // is drawn over just the first screen height. Using background() for
@@ -1628,7 +1670,7 @@ fun NowPlayingScreenContent(
                                         }
                                     }
                                     if (getPlatform() == Platform.Android) {
-                                        // Real Slider
+                                        // Seek bar
                                         Column(
                                             Modifier
                                                 .padding(
@@ -1638,122 +1680,72 @@ fun NowPlayingScreenContent(
                                                     shouldShowToolbar = !it && isExpanded && mainScrollState.value > 0
                                                 },
                                         ) {
-                                            // Drawn above (not underneath) the slider — the slider's opaque
-                                            // track would otherwise fully cover this wave.
+                                            // A single wavy seek bar (Material 3 Expressive's real
+                                            // LinearWavyProgressIndicator) instead of the old stacked pair —
+                                            // a separate buffering bar directly above the Slider with no gap
+                                            // between them, which read as two lines. Loading feedback still
+                                            // comes from the CircularProgressIndicator over the play/pause
+                                            // button below; this bar is seek-position only.
+                                            // LinearWavyProgressIndicator itself has no drag/seek callback
+                                            // (it's display-only, like the plain LinearProgressIndicator it
+                                            // replaces) — the pointerInput blocks below add real drag-to-seek
+                                            // and tap-to-seek on top of it, reusing the same sliderValue/
+                                            // isSliding/UIEvent.UpdateProgress plumbing the old Slider used.
+                                            val seekBarPressScale by
+                                                animateFloatAsState(
+                                                    targetValue = if (isSliding) 1.6f else 1f,
+                                                    animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+                                                    label = "seekBarPressScale",
+                                                )
                                             Box(
                                                 modifier =
                                                     Modifier
                                                         .fillMaxWidth()
-                                                        .height(8.dp),
+                                                        .height(32.dp)
+                                                        .pointerInput(Unit) {
+                                                            detectTapGestures { offset ->
+                                                                val fraction = (offset.x / size.width).coerceIn(0f, 1f)
+                                                                isSliding = false
+                                                                sliderValue = fraction * 100f
+                                                                sharedViewModel.onUIEvent(
+                                                                    UIEvent.UpdateProgress(sliderValue),
+                                                                )
+                                                            }
+                                                        }.pointerInput(Unit) {
+                                                            detectHorizontalDragGestures(
+                                                                onDragStart = { offset ->
+                                                                    isSliding = true
+                                                                    sliderValue = (offset.x / size.width).coerceIn(0f, 1f) * 100f
+                                                                },
+                                                                onDragEnd = {
+                                                                    isSliding = false
+                                                                    sharedViewModel.onUIEvent(
+                                                                        UIEvent.UpdateProgress(sliderValue),
+                                                                    )
+                                                                },
+                                                                onDragCancel = { isSliding = false },
+                                                            ) { change, _ ->
+                                                                change.consume()
+                                                                sliderValue = (change.position.x / size.width).coerceIn(0f, 1f) * 100f
+                                                            }
+                                                        },
                                                 contentAlignment = Alignment.Center,
                                             ) {
-                                                Crossfade(timelineState.loading) {
-                                                    if (it) {
-                                                        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
-                                                            LinearWavyProgressIndicator(
-                                                                modifier =
-                                                                    Modifier
-                                                                        .fillMaxWidth()
-                                                                        .height(4.dp)
-                                                                        .padding(
-                                                                            horizontal = 3.dp,
-                                                                        ),
-                                                                color = BrandViolet,
-                                                                trackColor = Color.DarkGray,
-                                                                amplitude = if (controllerState.isPlaying) 1f else 0f,
-                                                            )
-                                                        }
-                                                    } else {
-                                                        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
-                                                            LinearWavyProgressIndicator(
-                                                                progress = { timelineState.bufferedPercent.toFloat() / 100 },
-                                                                modifier =
-                                                                    Modifier
-                                                                        .fillMaxWidth()
-                                                                        .height(4.dp)
-                                                                        .padding(
-                                                                            horizontal = 3.dp,
-                                                                        ),
-                                                                color = BrandViolet,
-                                                                trackColor =
-                                                                    Color.Gray.copy(
-                                                                        alpha = 0.6f,
-                                                                    ),
-                                                                amplitude = {
-                                                                    if (controllerState.isPlaying) 1f else 0f
+                                                CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
+                                                    LinearWavyProgressIndicator(
+                                                        progress = { sliderValue / 100f },
+                                                        modifier =
+                                                            Modifier
+                                                                .fillMaxWidth()
+                                                                .height(5.dp)
+                                                                .graphicsLayer {
+                                                                    scaleY = seekBarPressScale
                                                                 },
-                                                            )
-                                                        }
-                                                    }
+                                                        color = sliderTrackColor,
+                                                        trackColor = Color.Gray.copy(alpha = 0.4f),
+                                                        amplitude = { if (controllerState.isPlaying) 1f else 0f },
+                                                    )
                                                 }
-                                            }
-                                            CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
-                                                Slider(
-                                                    // material3 1.5.0-alpha25 keeps a
-                                                    // binary-compatibility overload of Slider that
-                                                    // accepts valueRange and then forwards without
-                                                    // it, so the slider silently runs on the
-                                                    // default 0f..1f and anything larger is clamped
-                                                    // to a full track. Hand it a fraction instead;
-                                                    // sliderValue stays on the 0..100 scale that
-                                                    // UIEvent.UpdateProgress and the time labels
-                                                    // are built around.
-                                                    value = sliderValue / 100f,
-                                                    onValueChangeFinished = {
-                                                        isSliding = false
-                                                        sharedViewModel.onUIEvent(
-                                                            UIEvent.UpdateProgress(sliderValue),
-                                                        )
-                                                    },
-                                                    onValueChange = {
-                                                        isSliding = true
-                                                        sliderValue = it * 100f
-                                                    },
-                                                    modifier =
-                                                        Modifier
-                                                            .fillMaxWidth(),
-                                                    track = { sliderState ->
-                                                        SliderDefaults.Track(
-                                                            modifier =
-                                                                Modifier
-                                                                    .height(5.dp),
-                                                            enabled = true,
-                                                            sliderState = sliderState,
-                                                            colors =
-                                                                SliderDefaults.colors().copy(
-                                                                    thumbColor = sliderTrackColor,
-                                                                    activeTrackColor = sliderTrackColor,
-                                                                    inactiveTrackColor = Color.Transparent,
-                                                                ),
-                                                            thumbTrackGapSize = 0.dp,
-                                                            drawTick = { _, _ -> },
-                                                            drawStopIndicator = null,
-                                                        )
-                                                    },
-                                                    thumb = {
-                                                        SliderDefaults.Thumb(
-                                                            modifier =
-                                                                Modifier
-                                                                    .height(18.dp)
-                                                                    .width(8.dp)
-                                                                    .padding(
-                                                                        vertical = 4.dp,
-                                                                    ),
-                                                            thumbSize = DpSize(8.dp, 8.dp),
-                                                            interactionSource =
-                                                                remember {
-                                                                    MutableInteractionSource()
-                                                                },
-                                                            colors =
-                                                                SliderDefaults.colors().copy(
-                                                                    thumbColor = sliderTrackColor,
-                                                                    activeTrackColor = sliderTrackColor,
-                                                                    inactiveTrackColor = Color.Transparent,
-                                                                ),
-                                                            enabled = true,
-                                                        )
-                                                    },
-                                                )
                                             }
                                         }
                                         // Time Layout

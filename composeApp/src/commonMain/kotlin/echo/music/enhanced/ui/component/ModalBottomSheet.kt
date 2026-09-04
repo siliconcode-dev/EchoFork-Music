@@ -1,5 +1,6 @@
 package echo.music.enhanced.ui.component
 
+import androidx.compose.animation.Animatable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -91,6 +92,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -114,6 +116,7 @@ import coil3.compose.LocalPlatformContext
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.kmpalette.rememberPaletteState
 import echo.music.enhanced.domain.data.entities.DownloadState
 import echo.music.enhanced.domain.data.entities.LocalPlaylistEntity
 import echo.music.enhanced.domain.data.entities.SongEntity
@@ -133,6 +136,8 @@ import echo.music.enhanced.expect.copyToClipboard
 import echo.music.enhanced.expect.shareUrl
 import echo.music.enhanced.expect.ui.photoPickerResult
 import echo.music.enhanced.extension.displayNameRes
+import echo.music.enhanced.extension.getColorFromPalette
+import echo.music.enhanced.extension.getGlowSwatches
 import echo.music.enhanced.extension.greyScale
 import echo.music.enhanced.getPlatform
 import echo.music.enhanced.ui.icon.AccessAlarm
@@ -932,6 +937,32 @@ fun QueueBottomSheet(
     val screenDataState by sharedViewModel.nowPlayingScreenData.collectAsStateWithLifecycle()
     val songEntity by sharedViewModel.nowPlayingState.map { it?.songEntity }.collectAsState(null)
     val queueData by musicServiceHandler.queueData.collectAsStateWithLifecycle()
+    val interfaceMode by sharedViewModel.getInterfaceMode().collectAsStateWithLifecycle(DataStoreManager.INTERFACE_BETTER_ECHO)
+    val controllerState by sharedViewModel.controllerState.collectAsStateWithLifecycle()
+    val nowPlayingBackgroundStyle by sharedViewModel.getBetterEchoNowPlayingBackground().collectAsStateWithLifecycle(
+        DataStoreManager.BETTER_ECHO_NOW_PLAYING_BG_GRADIENT,
+    )
+    val isLightTheme = MaterialTheme.colorScheme.background.luminance() > 0.5f
+
+    // Own local palette extraction (same self-contained per-screen idiom NowPlayingScreen.kt
+    // uses) so the Queue sheet's background can match whatever style is selected there,
+    // including GRADIENT — this sheet has no prior gradient look of its own to preserve.
+    val queuePaletteState = rememberPaletteState()
+    val queueStartColor = remember { Animatable(Color.Black) }
+    val queueEndColor = remember { Animatable(Color.Black) }
+    var queueGlowSwatches by remember { mutableStateOf<List<Color>>(emptyList()) }
+    LaunchedEffect(screenDataState.bitmap) {
+        screenDataState.bitmap?.let { queuePaletteState.generate(it) }
+    }
+    LaunchedEffect(Unit) {
+        snapshotFlow { queuePaletteState.palette }
+            .distinctUntilChanged()
+            .collectLatest {
+                queueStartColor.animateTo(it.getColorFromPalette())
+                queueEndColor.animateTo(Color.Black)
+                queueGlowSwatches = it.getGlowSwatches(Color.Black)
+            }
+    }
     val queue by remember {
         derivedStateOf {
             queueData?.data?.listTracks ?: emptyList()
@@ -1010,17 +1041,41 @@ fun QueueBottomSheet(
                     .fillMaxWidth()
                     .fillMaxHeight(),
             shape = RectangleShape,
-            colors = CardDefaults.cardColors().copy(containerColor = Color.Black),
+            colors =
+                CardDefaults.cardColors().copy(
+                    containerColor =
+                        if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                            Color.Transparent
+                        } else {
+                            Color.Black
+                        },
+                ),
         ) {
-            Column(
-                modifier =
-                    Modifier.padding(
-                        top =
-                            with(localDensity) {
-                                windowInsets.getTop(localDensity).toDp()
-                            },
-                    ),
-            ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
+                    NowPlayingBackground(
+                        style = nowPlayingBackgroundStyle,
+                        glowSwatches = queueGlowSwatches,
+                        thumbnailBitmap = screenDataState.bitmap,
+                        backdropColor = Color.Black,
+                        isPlaying = controllerState.isPlaying,
+                        isLightTheme = isLightTheme,
+                        modifier = Modifier.fillMaxSize(),
+                        startColor = queueStartColor.value,
+                        endColor = queueEndColor.value,
+                    )
+                } else {
+                    Box(modifier = Modifier.fillMaxSize().background(Color.Black))
+                }
+                Column(
+                    modifier =
+                        Modifier.padding(
+                            top =
+                                with(localDensity) {
+                                    windowInsets.getTop(localDensity).toDp()
+                                },
+                        ),
+                ) {
                 TopAppBar(
                     windowInsets = WindowInsets(0, 0, 0, 0),
                     colors =
@@ -1211,6 +1266,7 @@ fun QueueBottomSheet(
                         EndOfPage()
                     }
                 }
+            }
             }
         }
     }

@@ -105,6 +105,7 @@ import echo.music.enhanced.common.SUPPORTED_LANGUAGE
 import echo.music.enhanced.common.SUPPORTED_LOCATION
 import echo.music.enhanced.common.SponsorBlockType
 import echo.music.enhanced.common.VIDEO_QUALITY
+import echo.music.enhanced.domain.data.model.update.UpdateDownloadState
 import echo.music.enhanced.domain.extension.now
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.TRUE
@@ -133,6 +134,8 @@ import echo.music.enhanced.expect.ui.rememberBackdrop
 import echo.music.enhanced.ui.component.RippleIconButton
 import echo.music.enhanced.ui.component.Material3SettingsGroup
 import echo.music.enhanced.ui.component.SettingItem
+import echo.music.enhanced.ui.component.SpotifyImportDialog
+import echo.music.enhanced.ui.component.UpdateProgressIndicator
 import echo.music.enhanced.ui.component.ThirdPartyLibrariesSheet
 import echo.music.enhanced.ui.component.liquidGlass
 import echo.music.enhanced.ui.icon.ArrowBackIosNew
@@ -152,6 +155,7 @@ import echo.music.enhanced.ui.theme.parseThemeColorHex
 import echo.music.enhanced.ui.theme.typo
 import echo.music.enhanced.utils.VersionManager
 import echo.music.enhanced.viewModel.ImportViewModel
+import echo.music.enhanced.viewModel.LibraryViewModel
 import echo.music.enhanced.viewModel.SettingAlertState
 import echo.music.enhanced.viewModel.SettingBasicAlertState
 import echo.music.enhanced.viewModel.SettingsViewModel
@@ -231,6 +235,10 @@ import echomusic.composeapp.generated.resources.categories_sponsor_block
 import echomusic.composeapp.generated.resources.change
 import echomusic.composeapp.generated.resources.change_language_warning
 import echomusic.composeapp.generated.resources.check_for_update
+import echomusic.composeapp.generated.resources.update_download_progress_format
+import echomusic.composeapp.generated.resources.update_failed
+import echomusic.composeapp.generated.resources.update_in_progress
+import echomusic.composeapp.generated.resources.update_ready_to_install
 import echomusic.composeapp.generated.resources.checking
 import echomusic.composeapp.generated.resources.clear
 import echomusic.composeapp.generated.resources.clear_canvas_cache
@@ -276,6 +284,11 @@ import echomusic.composeapp.generated.resources.better_echo_mini_player_style
 import echomusic.composeapp.generated.resources.better_echo_mini_player_style_legacy
 import echomusic.composeapp.generated.resources.better_echo_mini_player_style_new
 import echomusic.composeapp.generated.resources.better_echo_nav_style_ios_pill
+import echomusic.composeapp.generated.resources.now_playing_background
+import echomusic.composeapp.generated.resources.now_playing_background_artwork_blend
+import echomusic.composeapp.generated.resources.now_playing_background_blur
+import echomusic.composeapp.generated.resources.now_playing_background_glow_animated
+import echomusic.composeapp.generated.resources.now_playing_background_gradient
 import echomusic.composeapp.generated.resources.enable_rich_presence
 import echomusic.composeapp.generated.resources.enable_sponsor_block
 import echomusic.composeapp.generated.resources.enable_spotify_lyrics
@@ -297,6 +310,7 @@ import echomusic.composeapp.generated.resources.import_reading_file
 import echomusic.composeapp.generated.resources.import_result
 import echomusic.composeapp.generated.resources.import_result_skipped
 import echomusic.composeapp.generated.resources.import_spotify_playlist
+import echomusic.composeapp.generated.resources.import_spotify_playlist_settings_subtitle
 import echomusic.composeapp.generated.resources.import_spotify_playlist_url
 import echomusic.composeapp.generated.resources.enable_scrobbling
 import echomusic.composeapp.generated.resources.intro_login_to_discord
@@ -522,6 +536,22 @@ fun SettingScreen(
             }
         }
 
+    // Second entry point for v0.1.15's Import from Spotify (the first is Library's FAB dropdown)
+    // — same LibraryViewModel state/flow, just injected here too (mirrors the ImportViewModel
+    // inline-injection precedent right above).
+    val libraryViewModel: LibraryViewModel = koinViewModel()
+    var showSpotifyImportDialog by remember { mutableStateOf(false) }
+    val spotifyImportState by libraryViewModel.spotifyImportState.collectAsStateWithLifecycle()
+    if (showSpotifyImportDialog) {
+        SpotifyImportDialog(
+            state = spotifyImportState,
+            onDismiss = {
+                showSpotifyImportDialog = false
+                libraryViewModel.resetSpotifyImportState()
+            },
+        )
+    }
+
 
     val language by viewModel.language.collectAsStateWithLifecycle()
     val location by viewModel.location.collectAsStateWithLifecycle()
@@ -586,6 +616,7 @@ fun SettingScreen(
     val interfaceMode by viewModel.interfaceMode.collectAsStateWithLifecycle()
     val betterEchoNavStyle by viewModel.betterEchoNavStyle.collectAsStateWithLifecycle()
     val betterEchoMiniPlayerStyle by sharedViewModel.getBetterEchoMiniPlayerStyle().collectAsStateWithLifecycle(DataStoreManager.BETTER_ECHO_MINI_PLAYER_STYLE_NEW)
+    val betterEchoNowPlayingBackground by sharedViewModel.getBetterEchoNowPlayingBackground().collectAsStateWithLifecycle(DataStoreManager.BETTER_ECHO_NOW_PLAYING_BG_GRADIENT)
     val randomizeHomeOrder by sharedViewModel.getRandomizeHomeOrder().collectAsStateWithLifecycle(false)
     val themeMode by sharedViewModel.getThemeMode().collectAsStateWithLifecycle(DataStoreManager.THEME_MODE_DARK)
     val themeColorSource by sharedViewModel.getThemeColorSource().collectAsStateWithLifecycle(DataStoreManager.THEME_COLOR_WALLPAPER)
@@ -607,6 +638,7 @@ fun SettingScreen(
     val castState by viewModel.castState.collectAsStateWithLifecycle()
 
     val isCheckingUpdate by sharedViewModel.isCheckingUpdate.collectAsStateWithLifecycle()
+    val updateDownloadState by sharedViewModel.updateDownloadState.collectAsStateWithLifecycle()
 
     val hazeState =
         rememberHazeState(
@@ -795,6 +827,20 @@ fun SettingScreen(
                                         viewModel.confirmLogOut(
                                             confirmLabel = runBlocking { getString(Res.string.log_out_from_spotify) },
                                         ) { viewModel.setSpotifyLogIn(false) }
+                                    } else {
+                                        navController.navigate(SpotifyLoginDestination)
+                                    }
+                                },
+                            )
+                        }
+                        add {
+                            SettingItem(
+                                title = stringResource(Res.string.import_spotify_playlist),
+                                subtitle = stringResource(Res.string.import_spotify_playlist_settings_subtitle),
+                                onClick = {
+                                    if (spotifyLoggedIn) {
+                                        showSpotifyImportDialog = true
+                                        libraryViewModel.importFromSpotify()
                                     } else {
                                         navController.navigate(SpotifyLoginDestination)
                                     }
@@ -1076,6 +1122,47 @@ fun SettingScreen(
                                                         val selected = state.selectOne?.getSelected()
                                                         miniPlayerStyleLabels.firstOrNull { it.second == selected }?.first?.let {
                                                             sharedViewModel.setBetterEchoMiniPlayerStyle(it)
+                                                        }
+                                                    },
+                                                dismiss = runBlocking { getString(Res.string.cancel) },
+                                            ),
+                                        )
+                                    },
+                                )
+                            }
+                            val nowPlayingBackgroundLabels =
+                                listOf(
+                                    DataStoreManager.BETTER_ECHO_NOW_PLAYING_BG_GRADIENT to
+                                        stringResource(Res.string.now_playing_background_gradient),
+                                    DataStoreManager.BETTER_ECHO_NOW_PLAYING_BG_BLUR to
+                                        stringResource(Res.string.now_playing_background_blur),
+                                    DataStoreManager.BETTER_ECHO_NOW_PLAYING_BG_GLOW_ANIMATED to
+                                        stringResource(Res.string.now_playing_background_glow_animated),
+                                    DataStoreManager.BETTER_ECHO_NOW_PLAYING_BG_ARTWORK_BLEND to
+                                        stringResource(Res.string.now_playing_background_artwork_blend),
+                                )
+                            add {
+                                SettingItem(
+                                    title = stringResource(Res.string.now_playing_background),
+                                    subtitle =
+                                        nowPlayingBackgroundLabels.firstOrNull { it.first == betterEchoNowPlayingBackground }?.second
+                                            ?: nowPlayingBackgroundLabels.first().second,
+                                    onClick = {
+                                        viewModel.setAlertData(
+                                            SettingAlertState(
+                                                title = runBlocking { getString(Res.string.now_playing_background) },
+                                                selectOne =
+                                                    SettingAlertState.SelectData(
+                                                        listSelect =
+                                                            nowPlayingBackgroundLabels.map {
+                                                                (it.first == betterEchoNowPlayingBackground) to it.second
+                                                            },
+                                                    ),
+                                                confirm =
+                                                    runBlocking { getString(Res.string.change) } to { state ->
+                                                        val selected = state.selectOne?.getSelected()
+                                                        nowPlayingBackgroundLabels.firstOrNull { it.second == selected }?.first?.let {
+                                                            sharedViewModel.setBetterEchoNowPlayingBackground(it)
                                                         }
                                                     },
                                                 dismiss = runBlocking { getString(Res.string.cancel) },
@@ -2803,6 +2890,39 @@ fun SettingScreen(
                                     sharedViewModel.checkForUpdate()
                                 },
                             )
+                        }
+                        when (val downloadState = updateDownloadState) {
+                            is UpdateDownloadState.Downloading -> {
+                                add {
+                                    SettingItem(
+                                        title = stringResource(Res.string.update_in_progress),
+                                        subtitle =
+                                            stringResource(
+                                                Res.string.update_download_progress_format,
+                                                (downloadState.progress * 100).toInt(),
+                                                downloadState.speedKbps,
+                                            ),
+                                        otherView = { UpdateProgressIndicator(progress = downloadState.progress) },
+                                    )
+                                }
+                            }
+                            is UpdateDownloadState.ReadyToInstall -> {
+                                add {
+                                    SettingItem(
+                                        title = stringResource(Res.string.update_ready_to_install),
+                                        onClick = { sharedViewModel.installReadyUpdate() },
+                                    )
+                                }
+                            }
+                            is UpdateDownloadState.Failed -> {
+                                add {
+                                    SettingItem(
+                                        title = stringResource(Res.string.update_failed),
+                                        subtitle = downloadState.message,
+                                    )
+                                }
+                            }
+                            UpdateDownloadState.Idle -> Unit
                         }
                         if (interfaceMode == DataStoreManager.INTERFACE_BETTER_ECHO) {
                             add {

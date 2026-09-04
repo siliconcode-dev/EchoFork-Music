@@ -27,6 +27,7 @@ import echo.music.enhanced.domain.data.model.intent.GenericIntent
 import echo.music.enhanced.domain.data.model.metadata.Lyrics
 import echo.music.enhanced.domain.data.model.streams.TimeLine
 import echo.music.enhanced.domain.data.model.update.UpdateData
+import echo.music.enhanced.domain.data.model.update.UpdateDownloadState
 import echo.music.enhanced.domain.data.player.GenericCastState
 import echo.music.enhanced.domain.extension.decodeHtmlEntities
 import echo.music.enhanced.domain.extension.isSong
@@ -35,6 +36,7 @@ import echo.music.enhanced.domain.extension.toGenericMediaItem
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.FALSE
 import echo.music.enhanced.domain.manager.DataStoreManager.Values.TRUE
+import echo.music.enhanced.domain.manager.UpdateDownloadManager
 import echo.music.enhanced.domain.mediaservice.handler.ControlState
 import echo.music.enhanced.domain.mediaservice.handler.DownloadHandler
 import echo.music.enhanced.domain.mediaservice.handler.NowPlayingTrackState
@@ -63,6 +65,8 @@ import echo.music.enhanced.logger.LogLevel
 import echo.music.enhanced.logger.Logger
 import echo.music.enhanced.Platform
 import echo.music.enhanced.expect.getDownloadFolderPath
+import echo.music.enhanced.expect.installDownloadedApk
+import echo.music.enhanced.expect.startApkUpdateDownload
 import echo.music.enhanced.expect.ui.toByteArray
 import echo.music.enhanced.getPlatform
 import echo.music.enhanced.utils.VersionManager
@@ -119,6 +123,7 @@ class SharedViewModel(
     private val playlistRepository: PlaylistRepository,
     private val lyricsCanvasRepository: LyricsCanvasRepository,
     private val cacheRepository: CacheRepository,
+    private val updateDownloadManager: UpdateDownloadManager,
 ) : BaseViewModel() {
     var isFirstLiked: Boolean = false
     var isFirstMiniplayer: Boolean = false
@@ -1014,7 +1019,36 @@ class SharedViewModel(
                     }
                     _isCheckingUpdate.value = false
                 }
+            } else {
+                // GITHUB_FOSS_NIGHTLY has no distinct check today — previously fell through
+                // every branch silently, leaving isCheckingUpdate stuck true forever.
+                log("Check for update: no handler for channel $updateChannel", LogLevel.WARN)
+                _isCheckingUpdate.value = false
             }
+        }
+    }
+
+    val updateDownloadState = updateDownloadManager.state
+
+    /**
+     * Starts (or resumes watching) the real APK download for the currently fetched [updateResponse]
+     * on Android — the automatic-ABI-matched asset from GitHub is picked in the platform actual.
+     * [installImmediately] mirrors the Update-dialog's Install Now (auto-launch the installer once
+     * the download finishes) vs Install Later (download the same way, just notify instead) choice.
+     */
+    fun downloadUpdate(installImmediately: Boolean) {
+        val data = _updateResponse.value ?: return
+        startApkUpdateDownload(
+            assets = data.assets,
+            versionTag = data.tagName,
+            installImmediately = installImmediately,
+        )
+    }
+
+    fun installReadyUpdate() {
+        val state = updateDownloadState.value
+        if (state is UpdateDownloadState.ReadyToInstall) {
+            installDownloadedApk(state.apkPath)
         }
     }
 
@@ -1949,6 +1983,12 @@ class SharedViewModel(
 
     fun setBetterEchoMiniPlayerStyle(style: String) {
         viewModelScope.launch { dataStoreManager.setBetterEchoMiniPlayerStyle(style) }
+    }
+
+    fun getBetterEchoNowPlayingBackground() = dataStoreManager.betterEchoNowPlayingBackground
+
+    fun setBetterEchoNowPlayingBackground(style: String) {
+        viewModelScope.launch { dataStoreManager.setBetterEchoNowPlayingBackground(style) }
     }
 
     fun getTrueMotionEnabled() = dataStoreManager.trueMotionEnabled

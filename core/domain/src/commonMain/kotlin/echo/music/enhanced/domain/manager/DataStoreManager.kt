@@ -499,6 +499,16 @@ interface DataStoreManager {
 
     suspend fun setBetterEchoMiniPlayerStyle(style: String)
 
+    /**
+     * Better Echo only: one of [BETTER_ECHO_NOW_PLAYING_BG_GRADIENT],
+     * [BETTER_ECHO_NOW_PLAYING_BG_BLUR], [BETTER_ECHO_NOW_PLAYING_BG_GLOW_ANIMATED],
+     * [BETTER_ECHO_NOW_PLAYING_BG_ARTWORK_BLEND] — which Now Playing backdrop style to render.
+     * Defaults to Gradient (matches today's existing look).
+     */
+    val betterEchoNowPlayingBackground: Flow<String>
+
+    suspend fun setBetterEchoNowPlayingBackground(style: String)
+
     /** Whether the player should use the ring/vinyl UI instead of the normal layout. */
     val ringPlayerEnabled: Flow<String>
 
@@ -613,6 +623,11 @@ interface DataStoreManager {
         const val BETTER_ECHO_NAV_STYLE_IOS_PILL = "ios_pill"
         const val BETTER_ECHO_MINI_PLAYER_STYLE_NEW = "new"
         const val BETTER_ECHO_MINI_PLAYER_STYLE_LEGACY = "legacy"
+
+        const val BETTER_ECHO_NOW_PLAYING_BG_GRADIENT = "gradient"
+        const val BETTER_ECHO_NOW_PLAYING_BG_BLUR = "blur"
+        const val BETTER_ECHO_NOW_PLAYING_BG_GLOW_ANIMATED = "glow_animated"
+        const val BETTER_ECHO_NOW_PLAYING_BG_ARTWORK_BLEND = "artwork_blend"
 
         const val FDROID = "fdroid"
         const val GITHUB_FOSS_NIGHTLY = "github_foss_nightly"

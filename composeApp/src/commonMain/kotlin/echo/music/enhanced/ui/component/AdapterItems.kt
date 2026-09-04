@@ -921,6 +921,7 @@ fun HomeItemArtist(
 fun MoodMomentAndGenreHomeItem(
     title: String,
     stripeColor: Long,
+    width: Dp = 160.dp,
     onClick: () -> Unit,
 ) {
     ElevatedCard(
@@ -932,7 +933,7 @@ fun MoodMomentAndGenreHomeItem(
         shape = RoundedCornerShape(5.dp),
         modifier =
             Modifier
-                .width(160.dp)
+                .width(width)
                 .height(50.dp)
                 .padding(8.dp),
     ) {

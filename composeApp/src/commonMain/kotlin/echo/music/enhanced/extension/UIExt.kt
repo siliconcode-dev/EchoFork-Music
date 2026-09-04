@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -460,6 +461,28 @@ fun Palette?.getColorFromPalette(): Color {
         }
     }
     return Color(startColor)
+}
+
+/**
+ * Up to 6 distinct swatches (vibrant/muted, each with a light/dark variant) for the Now Playing
+ * background system's animated Glow style — each blob gets its own swatch so the drift reads as
+ * multi-toned rather than one repeated hue. Any swatch the source artwork doesn't have falls back
+ * to [fallback], then the whole list is deduped so a flat/monochrome artwork doesn't produce 6
+ * identical blobs.
+ */
+fun Palette?.getGlowSwatches(fallback: Color): List<Color> {
+    val p = this ?: return listOf(fallback)
+    val fallbackArgb = fallback.toArgb()
+    val swatches =
+        listOf(
+            p.getVibrantColor(fallbackArgb),
+            p.getLightVibrantColor(fallbackArgb),
+            p.getDarkVibrantColor(fallbackArgb),
+            p.getMutedColor(fallbackArgb),
+            p.getLightMutedColor(fallbackArgb),
+            p.getDarkMutedColor(fallbackArgb),
+        ).map { Color(it) }.distinct()
+    return swatches.ifEmpty { listOf(fallback) }
 }
 
 /**

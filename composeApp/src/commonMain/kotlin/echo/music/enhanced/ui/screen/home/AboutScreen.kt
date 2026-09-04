@@ -28,6 +28,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -48,13 +49,16 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import echo.music.enhanced.domain.data.model.update.UpdateDownloadState
 import echo.music.enhanced.domain.manager.DataStoreManager
 import echo.music.enhanced.ui.component.RippleIconButton
 import echo.music.enhanced.ui.component.Material3SettingsGroup
 import echo.music.enhanced.ui.component.ScallopedShape
 import echo.music.enhanced.ui.component.ThirdPartyLibrariesSheet
+import echo.music.enhanced.ui.component.UpdateProgressIndicator
 import echo.music.enhanced.ui.component.WavyDivider
 import echo.music.enhanced.ui.icon.ArrowBackIosNew
 import echo.music.enhanced.ui.icon.Info
@@ -63,6 +67,8 @@ import echo.music.enhanced.ui.icon.LogoDev
 import echo.music.enhanced.ui.icon.echoIcons
 import echo.music.enhanced.ui.theme.typo
 import echo.music.enhanced.utils.VersionManager
+import echo.music.enhanced.viewModel.SettingsViewModel
+import echo.music.enhanced.viewModel.SharedViewModel
 import echomusic.composeapp.generated.resources.Res
 import echomusic.composeapp.generated.resources.about_community_info
 import echomusic.composeapp.generated.resources.about_flip_developed_by
@@ -74,11 +80,22 @@ import echomusic.composeapp.generated.resources.about_us
 import echomusic.composeapp.generated.resources.about_view_repository
 import echomusic.composeapp.generated.resources.about_view_repository_description
 import echomusic.composeapp.generated.resources.app_name
+import echomusic.composeapp.generated.resources.auto_check_for_update
+import echomusic.composeapp.generated.resources.auto_check_for_update_description
 import echomusic.composeapp.generated.resources.based_on_description
+import echomusic.composeapp.generated.resources.check_for_update
+import echomusic.composeapp.generated.resources.checking
 import echomusic.composeapp.generated.resources.description_and_licenses
 import echomusic.composeapp.generated.resources.third_party_libraries
+import echomusic.composeapp.generated.resources.update_download_progress_format
+import echomusic.composeapp.generated.resources.update_failed
+import echomusic.composeapp.generated.resources.update_in_progress
+import echomusic.composeapp.generated.resources.update_ready_to_install
+import echomusic.composeapp.generated.resources.updates_section_title
 import echomusic.composeapp.generated.resources.version_format
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 private const val REPO_URL = "https://github.com/siliconcode-dev/EchoFork-Music"
 private const val DEVELOPER_GITHUB = "siliconcode-dev"
@@ -95,9 +112,14 @@ private const val DEVELOPER_GITHUB = "siliconcode-dev"
 fun AboutScreen(
     navController: NavController,
     innerPadding: PaddingValues,
+    sharedViewModel: SharedViewModel = koinInject(),
+    settingsViewModel: SettingsViewModel = koinViewModel(),
 ) {
     val uriHandler = LocalUriHandler.current
     var showThirdPartyLibraries by rememberSaveable { mutableStateOf(false) }
+    val autoCheckUpdate by settingsViewModel.autoCheckUpdate.collectAsStateWithLifecycle()
+    val isCheckingUpdate by sharedViewModel.isCheckingUpdate.collectAsStateWithLifecycle()
+    val updateDownloadState by sharedViewModel.updateDownloadState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -270,6 +292,73 @@ fun AboutScreen(
             item {
                 Column {
                     Text(
+                        text = stringResource(Res.string.updates_section_title),
+                        style = typo().labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    val updateItems =
+                        buildList<@Composable () -> Unit> {
+                            add {
+                                AboutInfoRow(
+                                    icon = echoIcons.Info,
+                                    title = stringResource(Res.string.auto_check_for_update),
+                                    subtitle = stringResource(Res.string.auto_check_for_update_description),
+                                    switch = autoCheckUpdate to { settingsViewModel.setAutoCheckUpdate(it) },
+                                )
+                            }
+                            add {
+                                AboutInfoRow(
+                                    icon = echoIcons.Info,
+                                    title = stringResource(Res.string.check_for_update),
+                                    subtitle = if (isCheckingUpdate) stringResource(Res.string.checking) else null,
+                                    onClick = { sharedViewModel.checkForUpdate() },
+                                )
+                            }
+                            when (val downloadState = updateDownloadState) {
+                                is UpdateDownloadState.Downloading -> {
+                                    add {
+                                        AboutInfoRow(
+                                            icon = echoIcons.Info,
+                                            title = stringResource(Res.string.update_in_progress),
+                                            subtitle =
+                                                stringResource(
+                                                    Res.string.update_download_progress_format,
+                                                    (downloadState.progress * 100).toInt(),
+                                                    downloadState.speedKbps,
+                                                ),
+                                            trailing = { UpdateProgressIndicator(progress = downloadState.progress) },
+                                        )
+                                    }
+                                }
+                                is UpdateDownloadState.ReadyToInstall -> {
+                                    add {
+                                        AboutInfoRow(
+                                            icon = echoIcons.Info,
+                                            title = stringResource(Res.string.update_ready_to_install),
+                                            onClick = { sharedViewModel.installReadyUpdate() },
+                                        )
+                                    }
+                                }
+                                is UpdateDownloadState.Failed -> {
+                                    add {
+                                        AboutInfoRow(
+                                            icon = echoIcons.Info,
+                                            title = stringResource(Res.string.update_failed),
+                                            subtitle = downloadState.message,
+                                        )
+                                    }
+                                }
+                                UpdateDownloadState.Idle -> Unit
+                            }
+                        }
+                    Material3SettingsGroup(interfaceMode = DataStoreManager.INTERFACE_BETTER_ECHO, items = updateItems)
+                }
+            }
+
+            item {
+                Column {
+                    Text(
                         text = stringResource(Res.string.about_community_info),
                         style = typo().labelLarge,
                         color = MaterialTheme.colorScheme.primary,
@@ -325,18 +414,30 @@ fun AboutScreen(
 private fun AboutInfoRow(
     icon: ImageVector,
     title: String,
-    subtitle: String,
-    onClick: () -> Unit,
+    subtitle: String? = null,
+    onClick: (() -> Unit)? = null,
+    switch: Pair<Boolean, (Boolean) -> Unit>? = null,
+    trailing: (@Composable () -> Unit)? = null,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 14.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .let { if (onClick != null) it.clickable(onClick = onClick) else it }
+                .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(imageVector = icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.width(16.dp))
-        Column {
+        Column(Modifier.weight(1f)) {
             Text(text = title, style = typo().bodyLarge)
-            Text(text = subtitle, style = typo().bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (subtitle != null) {
+                Text(text = subtitle, style = typo().bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
+        if (switch != null) {
+            Switch(checked = switch.first, onCheckedChange = switch.second)
+        }
+        trailing?.invoke()
     }
 }
